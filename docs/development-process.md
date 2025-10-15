@@ -15,23 +15,24 @@ A development methodology where humans just write documentation and instructions
 
 ## create a high-level plan outline loosely outlining proposed PRs
 
-## work on a single PR (branch)
-
-### step 1: **plan/document** – write a document with a highly-detailed plan for the code change
-
 **Directory structure**:
 
 ```text
 development/
 ├── user-story-1-feature-a/
-│   ├── task-1-setup/
-│   ├── task-2-configuration/
-│   └── task-3-integration/
+|   ├── overview.md
+│   ├── task-1-setup.md
+│   ├── task-2-configuration.md
+│   └── task-3-integration.md
 └── user-story-2-feature-b/
-    └── task-1-implementation/
+    └── task-1-implementation.md
 ```
 
 > Note: `__drafts__/` can be used anywhere and will be gitignored.
+
+## work on a single PR (branch)
+
+### step 1: **plan/document** – write a document with a highly-detailed plan for the code change
 
 **Includes**:
 
@@ -80,4 +81,4 @@ BUT... I think longer-term planning (beyond the current PR branch) might justify
 
 #### One *planning* branch* per user-story
 
-This idea is kinda compelling in cases where we break a user story into a bunch of different PRs, but we might want to flesh out our ideas for those PRs 
+This idea is kinda compelling in cases where we break a user story into a bunch of different PRs, but we might want to flesh out our ideas for those PRs
