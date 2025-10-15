@@ -11,15 +11,27 @@ A development methodology where humans just write documentation and instructions
 - test && commit || revert (TCR)
 - Test-driven Development (TDD)
 
-## start with a goal in mind (i.e. [[user story]])
+## start with a goal in mind (i.e. "user story")
 
 ## create a high-level plan outline loosely outlining proposed PRs
-
-see also: [[an ideal change]]
 
 ## work on a single PR (branch)
 
 ### step 1: **plan/document** – write a document with a highly-detailed plan for the code change
+
+**Directory structure**:
+
+```text
+development/
+├── user-story-1-feature-a/
+│   ├── task-1-setup/
+│   ├── task-2-configuration/
+│   └── task-3-integration/
+└── user-story-2-feature-b/
+    └── task-1-implementation/
+```
+
+> Note: `__drafts__/` can be used anywhere and will be gitignored.
 
 **Includes**:
 
@@ -32,7 +44,7 @@ prompts provided to LLM to create the code change
 
 new context via documentation and/or rules to provide LLM with what it needs to succeed
 
-#### Possible additional step of actually describing the change as code, such that it can be replayed (codemod-style, etc...).
+#### Possible additional step of actually describing the change as code, such that it can be replayed (codemod-style, etc.)
 
 **pros**: *better* than vibe-code in that we have more control, and it can be better played back. LLM can help create the code mod, but this is a repeatable documented change.
 
@@ -62,7 +74,7 @@ if the *docs* & *commits* are structured enough, we should be able to generate p
 
 ### branch workflow
 
-This is intended to closely mirror [[trunk-based development]]
+This is intended to closely mirror trunk-based development
 I think it'll work best if all changes are 'up-to-date' with `master`
 BUT... I think longer-term planning (beyond the current PR branch) might justify other long-lived branch(s) *just* for planning.
 
