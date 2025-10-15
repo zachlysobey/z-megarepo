@@ -30,20 +30,30 @@ development/
 
 > Note: `__drafts__/` can be used anywhere and will be gitignored.
 
-## work on a single PR (branch)
+Templates are provided in `development/__templates__`
+
+## work on a single PR (branch) at a time
 
 ### step 1: **plan/document** – write a document with a highly-detailed plan for the code change
 
 **Includes**:
 
-references to needed context
+- references to needed context
+- prompts provided to LLM to create the code change
+- new context via documentation and/or rules to provide LLM with what it needs to succeed
 
-prompts provided to LLM to create the code change
+#### For "features" (changes that will update production code to change functionality)
 
-1) to create automated tests
-2) to make those tests pass
+These changes should include exactly two prompts
 
-new context via documentation and/or rules to provide LLM with what it needs to succeed
+1) to create automated tests (tests only - no production code)
+2) to make those tests pass (implementation only - no test changes)
+
+#### For "chores" or "refactor" changes which do not change product functionality
+
+Some changes will not follow the red/green (test/implement) pattern.
+Those might include stuff like updates to a CI/CD harness, linting/testing configuration, etc...
+For such tasks, a single "implement" prompt without testing is OK.
 
 #### Possible additional step of actually describing the change as code, such that it can be replayed (codemod-style, etc.)
 
@@ -78,6 +88,8 @@ if the *docs* & *commits* are structured enough, we should be able to generate p
 This is intended to closely mirror trunk-based development
 I think it'll work best if all changes are 'up-to-date' with `master`
 BUT... I think longer-term planning (beyond the current PR branch) might justify other long-lived branch(s) *just* for planning.
+
+**Note**: The primary branch is `master` (not `main`). See [Git Conventions](../development-conventions/git/README.md) for full branch naming standards.
 
 #### One *planning* branch* per user-story
 
