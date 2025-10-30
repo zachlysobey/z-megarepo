@@ -24,4 +24,4 @@ npm pkg set description='Awesome package'
 
 Use `npm help pkg` to see even more usage examples.
 
-If you do make direct changes to `package.json`, its good practice to do `npm pkg fix` which will format the file.
+If you do make direct changes to `package.json`, it's good practice to do `npm pkg fix` which will format the file.
