@@ -1,5 +1,9 @@
 # JavaScript Development Conventions
 
+## Use the Templates
+
+`z-megarepo` includes a `project-templates/` directory which includes common scaffolding which codifies our best practices. Rather than re-creating boilerplate from scratch each time, use the templates!
+
 ## Node.js & Package Management
 
 ### Node Version Management
