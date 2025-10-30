@@ -4,16 +4,14 @@
 
 ### Node Version Management
 
-- Use NVM for Node.js version management
-- Specify Node version in `.nvmrc` file
-- Use LTS versions (i.e. `lts/jod`)
+see the [Node.js Version Management Guide](./node-version-management-guide.md)
 
 ### Package Management
 
 - Use npm (not yarn/pnpm) for consistency
-- Include `.npmrc` with standard configurations
-- Use exact versions in package.json for critical dependencies
+- Include `.npmrc` with standard configurations (see [Guidance for the `.npmrc` File](./npmrc-guidance.md))
 - Use `npm ci` in CI/CD pipelines
+- Use exact versions in package.json for dependencies
 
 ## Testing
 
