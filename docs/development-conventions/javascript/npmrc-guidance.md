@@ -1,5 +1,9 @@
 # Guidance for the `.npmrc` File
 
+## Registry Configuration
+
+Set `registry=https://registry.npmjs.org/` to explicitly use the public npm registry, preventing accidental use of private registries.
+
 ## `engine-strict` and `package.json`'s `engines` field
 
 If we put `engine-strict=true` in `.npmrc`, `npm` will fail any `install` commands if the current `npm` or `node` versions do not satisfy the version ranges specified in the `engines` field of the project's `package.json` file.
@@ -7,6 +11,8 @@ If we put `engine-strict=true` in `.npmrc`, `npm` will fail any `install` comman
 ## Example `.npmrc` file
 
 ```txt
+registry=https://registry.npmjs.org/
+
 # Makes it so that failing to adhere to the npm and node versions set in the
 # package.json file fails the build.
 engine-strict=true
