@@ -4,11 +4,16 @@
 
 `z-megarepo` includes a `project-templates/` directory which includes common scaffolding which codifies our best practices. Rather than re-creating boilerplate from scratch each time, use the templates!
 
+## Module & Coding Conventions
+
+- [JavaScript Module Conventions](./js-module-conventions.md)
+- [Node.js Conventions](./nodejs-conventions.md)
+
 ## Node.js & Package Management
 
 ### Node Version Management
 
-see the [Node.js Version Management Guide](./node-version-management-guide.md)
+See the [Node.js Version Management Guide](./node-version-management-guide.md)
 
 ### Package Management
 
@@ -19,4 +24,4 @@ see the [Node.js Version Management Guide](./node-version-management-guide.md)
 
 ## Testing
 
-see the JavaScript [testing guide](./testing-guide.md).
+See the JavaScript [Testing Guide](./testing-guide.md).
