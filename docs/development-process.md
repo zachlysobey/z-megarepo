@@ -13,7 +13,7 @@ Development methodologies at a glance:
 
 - **Dialog-driven vibe-coding**
 
-  A looser approach to development, more reminisent of traditional vibe-coding.
+  A looser approach to development, more reminiscent of traditional vibe-coding.
 
 ## Mode: LLM spec-driven test && commit || revert
 
