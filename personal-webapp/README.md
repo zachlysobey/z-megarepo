@@ -73,7 +73,7 @@ personal-webapp/
 │   └── globals.css     # Global styles
 ├── public/             # Static assets
 ├── .env.local          # Environment variables (git-ignored)
-├── .eslintrc.json      # ESLint configuration
+├── eslint.config.mjs   # ESLint configuration
 ├── .gitignore          # Git ignore rules
 ├── .npmrc              # npm configuration
 ├── .nvmrc              # Node version specification
