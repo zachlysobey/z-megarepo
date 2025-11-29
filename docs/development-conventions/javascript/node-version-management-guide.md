@@ -5,5 +5,7 @@
 Document with an `.nvmrc` file in the root of the project by listing the LTS codename.
 
 ```txt
-lts/jod
+lts/krypton
 ```
+
+_See the [official Node.js release docs](https://nodejs.org/en/download/releases/) for more information._
