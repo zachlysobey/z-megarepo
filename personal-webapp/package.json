@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
-    "test:unit": "jest --testMatch '**/*.unit.test.{js,ts}'",
-    "test:component": "jest --testMatch '**/*.component.test.{jsx,tsx}'",
+    "test:all": "jest",
+    "test:unit": "jest --selectProjects unit",
+    "test:component": "jest --selectProjects component",
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
