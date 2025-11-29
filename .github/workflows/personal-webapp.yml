@@ -8,7 +8,7 @@ on:
 
 jobs:
   personal-webapp-ci:
-    name: Build and Test Web App
+    name: Personal Webapp CI
     runs-on: ubuntu-latest
     
     permissions:

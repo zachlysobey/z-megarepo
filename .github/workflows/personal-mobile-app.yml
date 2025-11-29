@@ -8,7 +8,7 @@ on:
 
 jobs:
   personal-mobile-app-ci:
-    name: Build and Test Mobile App
+    name: Personal Mobile App CI
     runs-on: ubuntu-latest
     
     permissions:
