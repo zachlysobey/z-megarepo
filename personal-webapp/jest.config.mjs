@@ -44,7 +44,7 @@ const config = {
             ...baseConfig,
             displayName: 'component',
             testEnvironment: 'jest-environment-jsdom',
-            setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+            setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
             testMatch: ['**/*.component.test.{jsx,tsx}'],
         },
     ],
