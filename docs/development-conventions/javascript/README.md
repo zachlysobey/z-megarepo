@@ -24,4 +24,10 @@ See the [Node.js Version Management Guide](./node-version-management-guide.md)
 
 ## Testing
 
-See the JavaScript [Testing Guide](./testing-guide.md).
+- [JavaScript Testing Guide](./testing-guide.md)
+- [Jest Testing Style Guide](./jest-testing-style-guide.md)
+
+## NPM Run-Scripts
+
+- [NPM Run-Script Conventions](./npm-run-script-conventions.md)
+- [NPM Run-Script Naming Conventions](./npm-run-script-naming-conventions.md)

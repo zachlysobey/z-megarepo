@@ -1,5 +1,9 @@
 # Guidance for the `.npmrc` File
 
+See also:
+
+- [`package.json` guide](./package-json-guide.md)
+
 ## Registry Configuration
 
 Set `registry=https://registry.npmjs.org/` to explicitly use the public npm registry, preventing accidental use of private registries.
