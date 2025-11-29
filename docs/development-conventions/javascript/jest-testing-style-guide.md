@@ -4,8 +4,8 @@ A style guide for the Jest JavaScript software testing framework.
 
 See also:
 
-- [nodejs conventions](./nodejs-conventions.md)
-- [testing guide](./testing-guide.md)
+- [Node.js Conventions](./nodejs-conventions.md)
+- [Testing Guide](./testing-guide.md)
 
 ## Standards
 
