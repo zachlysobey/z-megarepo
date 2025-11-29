@@ -48,8 +48,10 @@ Build a minimal webapp scaffold with Google OAuth that only allows access to a s
 
 ## Tasks
 
-1) Initialize Next.js project
-1) Built & test project in CI
+1) [Initialize Next.js project](./task-1-initialize-nextjs-project.md)
+2) [Built & test project in CI](./task-2-built-and-test-project-in-ci.md)
+3) [Add unit & component testing harness](./task-3-add-unit-and-component-testing-harness.md)
+1) add end-to-end testing harness
 1) Install and configure NextAuth.js
 1) Set up Google Cloud OAuth credentials
 1) Configure NextAuth with Google provider
