@@ -2,7 +2,7 @@
 
 See also:
 
-- [NPM run-script conventions](./npm-run-script-conventions.md)
+- [NPM Run-Script Conventions](./npm-run-script-conventions.md)
 - [`.npmrc` guidance](./npmrc-guidance.md)
 
 ## Use Exact Versions
