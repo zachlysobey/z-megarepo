@@ -10,6 +10,12 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: read
+    
+    env:
+      CI: true
+    
     defaults:
       run:
         working-directory: personal-webapp
