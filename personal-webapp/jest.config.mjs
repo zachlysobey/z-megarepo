@@ -1,5 +1,9 @@
 // Multi-project Jest configuration for Next.js app
 // This configuration separates unit tests (node environment) from component tests (jsdom environment)
+// 
+// Note: We use babel-jest with next/babel instead of next/jest's createJestConfig helper
+// because next/jest doesn't properly support multi-project configurations. The transform
+// configuration needs to be explicitly defined for each project to work correctly.
 
 const baseConfig = {
     moduleNameMapper: {
