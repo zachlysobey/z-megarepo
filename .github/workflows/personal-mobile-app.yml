@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  mobile-app-ci:
+  personal-mobile-app-ci:
     name: Build and Test Mobile App
     runs-on: ubuntu-latest
     
