@@ -9,6 +9,17 @@ on:
 jobs:
   architectural-fitness-tests:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    env:
+      CI: true
+    
+    defaults:
+      run:
+        working-directory: architecture-tests
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,13 +27,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/krypton'
+          node-version-file: 'architecture-tests/.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'architecture-tests/package-lock.json'
       
       - name: Install dependencies
-        working-directory: architecture-tests
         run: npm ci
       
       - name: Run tests
-        working-directory: architecture-tests
         run: npm test
 
