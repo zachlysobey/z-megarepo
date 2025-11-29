@@ -1,0 +1,38 @@
+name: Personal Mobile App CI
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    env:
+      EXPO_NO_TELEMETRY: 1
+    
+    defaults:
+      run:
+        working-directory: personal-mobile-app
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'personal-mobile-app/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check Expo configuration
+        run: npx expo config --type public
