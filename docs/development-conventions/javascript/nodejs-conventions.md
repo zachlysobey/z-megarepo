@@ -53,3 +53,5 @@ console.log(stdout);
 - [Node Version Management Guide](./node-version-management-guide.md)
 - [`.npmrc` guidance](./npmrc-guidance.md)
 - [JavaScript module conventions](./js-module-conventions.md)
+- [Testing guide](./testing-guide.md)
+- [NPM run-script conventions](./npm-run-script-conventions.md)

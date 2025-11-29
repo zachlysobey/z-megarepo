@@ -1,5 +1,10 @@
 # `package.json` Guide
 
+See also:
+
+- [NPM run-script conventions](./npm-run-script-conventions.md)
+- [`.npmrc` guidance](./npmrc-guidance.md)
+
 ## Use Exact Versions
 
 All dependencies must be installed with exact versions `--save-exact`.

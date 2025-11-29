@@ -1,5 +1,10 @@
 # Testing Guide
 
+See also:
+
+- [Jest testing style guide](./jest-testing-style-guide.md)
+- [NPM run-script naming conventions](./npm-run-script-naming-conventions.md)
+
 ## Commands
 
 ```bash
