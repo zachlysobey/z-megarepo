@@ -68,4 +68,54 @@ Create example tests to validate the testing setup and update CI workflow:
 
 ### Notes & Retrospective
 
-[to be added once this task-work is completed]
+**Completed**: 2025-11-29
+
+Successfully implemented a comprehensive unit and component testing harness for the Next.js personal-webapp project.
+
+#### Key Implementation Details
+
+**Jest Multi-Project Configuration**:
+- Configured Jest with separate projects for unit tests (node environment) and component tests (jsdom environment)
+- Used babel-jest with next/babel preset instead of next/jest's createJestConfig helper because the latter doesn't properly support multi-project configurations
+- Unit tests run in node environment (faster, no DOM overhead)
+- Component tests run in jsdom environment with React Testing Library support
+
+**Test Scripts**:
+- `npm test` - Runs all tests (unit + component)
+- `npm run test:all` - Runs all tests (follows project conventions)
+- `npm run test:unit` - Runs only unit tests using `--selectProjects unit`
+- `npm run test:component` - Runs only component tests using `--selectProjects component`
+- `npm run test:coverage` - Runs all tests with unified coverage report
+
+**Example Tests Created**:
+- `lib/example.ts` with `lib/example.unit.test.ts` - Demonstrates unit testing
+- `components/Example.tsx` with `components/Example.component.test.tsx` - Demonstrates component testing
+- Both tests follow the Jest testing style guide conventions (describe/it blocks, lowercase descriptions, co-located with source)
+
+**Configuration Updates**:
+- Updated eslint.config.mjs to ignore coverage directory
+- Converted jest.setup.mjs to jest.setup.js (CommonJS) for compatibility with babel-jest
+- Updated .nvmrc from "lts/krypton" to "24.11.1" to match package.json requirements
+- CI workflow already configured correctly to run tests before build
+
+#### Challenges & Solutions
+
+**Challenge**: Next.js's `next/jest` helper doesn't work with Jest's multi-project configuration. When using `projects` array, the transform configuration wasn't being applied to individual projects.
+
+**Solution**: Used babel-jest directly with `next/babel` preset. This provides the same functionality but works correctly with multi-project setup.
+
+**Challenge**: jest.setup.mjs using ES modules caused issues with babel-jest.
+
+**Solution**: Converted to CommonJS (jest.setup.js) using `require()` instead of `import`. Added eslint-disable comment to suppress the no-require-imports warning.
+
+#### Verification
+
+All test commands verified working:
+- ✅ `npm run lint` - Passes
+- ✅ `npm test` - All tests pass (2/2)
+- ✅ `npm run test:unit` - Unit test passes (1/1)  
+- ✅ `npm run test:component` - Component test passes (1/1)
+- ✅ `npm run test:all` - All tests pass (2/2)
+- ✅ `npm run test:coverage` - Shows 100% coverage
+- ✅ CodeQL security scan - No vulnerabilities found
+
