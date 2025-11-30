@@ -63,7 +63,7 @@ Build a web-based development dashboard that aggregates, visualizes, and present
 - [cloc](https://github.com/AlDanial/cloc) - Count lines of code by language
 - [tokei](https://github.com/XAMPPRocky/tokei) - Fast code statistics
 - [madge](https://github.com/pahen/madge) - JavaScript/TypeScript dependency analysis
-- [ESLint metrics](https://eslint.org/docs/latest/use/integrations) - Code quality metrics
+- [ESLint](https://eslint.org/) - Code quality metrics (error/warning counts, rule violations)
 
 ### Dashboard Frameworks & Inspiration
 - [GitHub Insights](https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-summary-of-repository-activity) - GitHub's built-in repository insights
