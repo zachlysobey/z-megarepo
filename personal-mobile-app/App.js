@@ -1,20 +1,63 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SessionProvider } from './context/SessionContext';
+import HomeScreen from './screens/HomeScreen';
+import StrengthSessionScreen from './screens/StrengthSessionScreen';
+import SessionTypeSelectionScreen from './screens/SessionTypeSelectionScreen';
+import SessionInputScreen from './screens/SessionInputScreen';
+import SessionDetailScreen from './screens/SessionDetailScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <SessionProvider>
+        <NavigationContainer>
+          <StatusBar style="auto" />
+          <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#007AFF',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: '600',
+          },
+        }}
+      >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Home' }}
+        />
+        <Stack.Screen
+          name="StrengthSession"
+          component={StrengthSessionScreen}
+          options={{ title: 'Strength Sessions' }}
+        />
+        <Stack.Screen
+          name="SessionTypeSelection"
+          component={SessionTypeSelectionScreen}
+          options={{ title: 'Choose Session Template' }}
+        />
+        <Stack.Screen
+          name="SessionInput"
+          component={SessionInputScreen}
+          options={{ title: 'Session Input' }}
+        />
+        <Stack.Screen
+          name="SessionDetail"
+          component={SessionDetailScreen}
+          options={{ title: 'Session Details' }}
+        />
+      </Stack.Navigator>
+        </NavigationContainer>
+      </SessionProvider>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
