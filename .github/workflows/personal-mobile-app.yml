@@ -14,19 +14,22 @@ jobs:
     permissions:
       contents: read
     
-    env:
-      CI: true
-      EXPO_NO_TELEMETRY: 1
-    
-    defaults:
-      run:
-        working-directory: personal-mobile-app
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Check if personal-mobile-app exists
+        id: check
+        run: |
+          if [ -f "personal-mobile-app/package.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "personal-mobile-app directory is empty - skipping CI checks"
+          fi
+      
       - name: Setup Node.js
+        if: steps.check.outputs.exists == 'true'
         uses: actions/setup-node@v4
         with:
           node-version-file: 'personal-mobile-app/.nvmrc'
@@ -34,7 +37,11 @@ jobs:
           cache-dependency-path: 'personal-mobile-app/package-lock.json'
       
       - name: Install dependencies
+        if: steps.check.outputs.exists == 'true'
         run: npm ci
+        working-directory: personal-mobile-app
       
       - name: Check Expo configuration
+        if: steps.check.outputs.exists == 'true'
         run: npx expo config --type public
+        working-directory: personal-mobile-app
