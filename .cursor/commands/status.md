@@ -6,8 +6,8 @@ Provide a clear, scannable status report. Balance readability with conciseness â
 
 ```bash
 git branch --show-current
-git rev-list --left-right --count origin/master...HEAD
-git log origin/master..HEAD --oneline --format="%h %s (%ar)"
+git rev-list --left-right --count HEAD...origin/master
+git log origin/master..HEAD --format="%h %s (%ar)"
 ```
 
 - Current branch and relationship to `origin/master` (ahead/behind)
