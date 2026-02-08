@@ -10,7 +10,8 @@ git rev-list --left-right --count HEAD...origin/master
 git log origin/master..HEAD --format="%h %s (%ar)"
 ```
 
-- Current branch and relationship to `origin/master` (ahead/behind)
+- Current branch and relationship to `origin/master`
+- `git rev-list --left-right --count HEAD...origin/master` outputs two numbers: commits ahead, then commits behind
 - List commits ahead of origin/master with relative timestamps
 - For vague commit messages ("wip", "progress"), add a brief description of what the commit does
 
