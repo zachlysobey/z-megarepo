@@ -59,7 +59,7 @@ Skip entirely if nothing relevant.
 
 Example with feature branch and changes:
 
-```
+````
 ## Git: feature/auth
 ↳ 3 commits ahead of origin/master, 0 behind
 
@@ -94,11 +94,11 @@ Last commit: 2 hours ago
 
 ## Tasks
 ⚠ TODO in middleware.ts:14 — "implement rate limit config"
-```
+````
 
 Example for clean master branch:
 
-```
+````
 ## Git: master = origin/master
 
 ## Uncommitted Changes
@@ -106,4 +106,4 @@ None
 
 ## Timeline
 Last commit: 3 days ago
-```
+````
