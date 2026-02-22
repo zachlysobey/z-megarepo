@@ -19,6 +19,6 @@
   "author": "Zachary Lysobey <zach@lysobey.com> (https://github.com/zachlysobey)",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@marp-team/marp-cli": "^4.2.3"
+    "@marp-team/marp-cli": "4.2.3"
   }
 }
