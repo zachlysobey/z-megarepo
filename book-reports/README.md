@@ -31,7 +31,7 @@ paginate: true
 ---
 ```
 
-Use `---` to separate slides. See `slides/example.md` for a template.
+Use `---` to separate slides. See `slides/tidy-first.md` for an example.
 
 ## Contributing
 
