@@ -17,11 +17,11 @@ export NVM_DIR="/opt/nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 EOF
 
-# Install Node LTS via nvm (needed for Claude Code)
+# Install Node LTS via nvm (needed for Anthropic Claude CLI)
 . "$NVM_DIR/nvm.sh"
 nvm install --lts
 
-# Claude Code
+# Anthropic Claude CLI (claude-code)
 npm install -g @anthropic-ai/claude-code
 
 # Helix editor

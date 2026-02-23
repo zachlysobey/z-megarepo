@@ -23,6 +23,11 @@ provider "google" {
   zone    = var.zone
 }
 
+resource "google_compute_address" "dev_vm" {
+  name   = "cloud-dev-vm-ip"
+  region = var.region
+}
+
 resource "google_compute_instance" "dev_vm" {
   name         = "cloud-dev-vm"
   machine_type = "e2-medium"
@@ -39,7 +44,7 @@ resource "google_compute_instance" "dev_vm" {
   network_interface {
     network = "default"
     access_config {
-      # Ephemeral public IP
+      nat_ip = google_compute_address.dev_vm.address
     }
   }
 
@@ -61,6 +66,6 @@ resource "google_compute_firewall" "dev_vm_allow_ssh" {
     ports    = ["22"]
   }
 
-  source_ranges = ["0.0.0.0/0"]
+  source_ranges = var.ssh_source_ranges
   target_tags   = ["cloud-dev-vm"]
 }

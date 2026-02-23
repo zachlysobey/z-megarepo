@@ -1,6 +1,6 @@
 output "external_ip" {
-  description = "Public IP address — use this in Termius"
-  value       = google_compute_instance.dev_vm.network_interface[0].access_config[0].nat_ip
+  description = "Static public IP — use this in Termius (persists across stop/start)"
+  value       = google_compute_address.dev_vm.address
 }
 
 output "ssh_command" {
