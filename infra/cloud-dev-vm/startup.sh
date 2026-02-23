@@ -10,6 +10,7 @@ apt-get install -y git xz-utils
 export NVM_DIR="/opt/nvm"
 mkdir -p "$NVM_DIR"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | NVM_DIR="$NVM_DIR" bash
+chmod -R 755 "$NVM_DIR"
 
 cat > /etc/profile.d/nvm.sh << 'EOF'
 export NVM_DIR="/opt/nvm"
