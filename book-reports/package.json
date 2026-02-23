@@ -1,0 +1,24 @@
+{
+  "name": "book-reports",
+  "version": "0.0.1",
+  "description": "Markdown-based slideshow book reports, powered by Marp",
+  "directories": {
+    "doc": "docs"
+  },
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "dev": "marp --server --watch slides/",
+    "build": "marp --input-dir slides/ --output dist/",
+    "build:pdf": "marp --pdf --input-dir slides/ --output dist/",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Zachary Lysobey <zach@lysobey.com> (https://github.com/zachlysobey)",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@marp-team/marp-cli": "4.2.3"
+  }
+}
