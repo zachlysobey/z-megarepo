@@ -1,0 +1,16 @@
+name: "Terraform: cloud-dev-vm"
+
+on:
+  push:
+    branches: [ "master" ]
+    paths: [ "infra/cloud-dev-vm/**" ]
+  pull_request:
+    branches: [ "master" ]
+    paths: [ "infra/cloud-dev-vm/**" ]
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform-shared.yml
+    with:
+      working-directory: infra/cloud-dev-vm
+      tf-state-prefix: cloud-dev-vm
