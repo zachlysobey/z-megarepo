@@ -6,6 +6,9 @@ terraform {
       version = "~> 5.0"
     }
   }
+  # "Partial backend config" — bucket, prefix, etc. are injected via
+  # -backend-config flags at `terraform init` time (see CI workflow).
+  # This keeps environment-specific values out of checked-in code.
   backend "gcs" {}
 }
 
