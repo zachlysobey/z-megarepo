@@ -12,5 +12,4 @@ credentials and remote state. See [`bootstrap/README.md`](bootstrap/README.md).
 - **[`bootstrap/`](bootstrap/)** — One-time script that sets up GCP
   credentials, remote state, and Workload Identity Federation for CI.
 - **[`cloud-dev-vm/`](cloud-dev-vm/)** — Terraform root module for a
-  persistent GCE development VM (Debian, static IP, SSH via OS Login).
-  Used as a remote dev environment for Claude Code, VS Code Remote, etc.
+  persistent GCE instance used as a remote dev environment.
