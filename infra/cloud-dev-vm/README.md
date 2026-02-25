@@ -13,7 +13,7 @@ Claude Code, VS Code Remote SSH, or just a Linux box in the cloud.
 ## Usage
 
 This module is applied automatically by CI on pushes to `master`
-(see the `terraform-cloud-dev-vm` workflow). To run locally:
+(see [`terraform-cloud-dev-vm.yml`](../../.github/workflows/terraform-cloud-dev-vm.yml)). To run locally:
 
 ```bash
 terraform init \
