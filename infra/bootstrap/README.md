@@ -42,11 +42,10 @@ Example:
 The script prints four values. Set them as **GitHub repo variables**
 (Settings > Secrets and variables > Actions > Variables tab):
 
-| GitHub variable | Example value |
-|-----------------|---------------|
-| `GCP_PROJECT_ID` | `my-project-123` |
-| `GCP_WIF_PROVIDER` | `projects/123456/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider` |
-| `GCP_SERVICE_ACCOUNT` | `terraform-ci@my-project-123.iam.gserviceaccount.com` |
-| `GCP_TF_STATE_BUCKET` | `my-project-123-tfstate` |
+- **`GCP_PROJECT_ID`** — e.g. `my-project-123`
+- **`GCP_WIF_PROVIDER`** — the full provider path, e.g.
+  `projects/123456/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider`
+- **`GCP_SERVICE_ACCOUNT`** — e.g. `terraform-ci@my-project-123.iam.gserviceaccount.com`
+- **`GCP_TF_STATE_BUCKET`** — e.g. `my-project-123-tfstate`
 
 Once those are set, CI will authenticate and manage state automatically.
