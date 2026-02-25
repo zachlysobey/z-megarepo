@@ -9,7 +9,5 @@ credentials and remote state. See [`bootstrap/README.md`](bootstrap/README.md).
 
 ## Directory layout
 
-| Path | Purpose |
-|------|---------|
-| `bootstrap/` | One-time GCP + GitHub setup script |
-| `cloud-dev-vm/` | Terraform root module for the dev VM |
+- **`bootstrap/`** — One-time GCP + GitHub setup script
+- **`cloud-dev-vm/`** — Terraform root module for the dev VM
