@@ -1,4 +1,6 @@
-# Git Conventions
+# CLAUDE.md
+
+## Git Conventions
 
 Use [Conventional Commits](https://www.conventionalcommits.org/).
 Format: `<type>[(<scope>)]: <description>` (scope is optional)
