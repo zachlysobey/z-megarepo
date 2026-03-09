@@ -21,7 +21,7 @@ import { readFile } from 'node:fs/promises';
 const content = await readFile('file.txt', 'utf8');
 ```
 
-## Wrap callback-based async functions with `promisify` when 'Promises' versions do not exist
+## Use `promisify` for callback-based async functions
 
 When no promise-based API exists, use `promisify` to wrap
 callback-based functions for consistent async/await usage.
