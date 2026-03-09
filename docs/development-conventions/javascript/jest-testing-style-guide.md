@@ -65,8 +65,7 @@ Ultimately, this guide chooses the second option, mostly for simplicity.
 
 #### Package.json run-script conventions
 
-See
-[NPM run-script naming conventions](./npm-run-script-naming-conventions.md).
+See [NPM run-script naming conventions](./npm-run-script-naming-conventions.md).
 
 ##### By run-script
 
@@ -110,7 +109,7 @@ test('logs a warning', () => {
 
 ## Open questions
 
-### How should I handle location of x-module tests (integration / e2e / etc..)?
+### How should I handle location of x-module tests (integration / e2e / etc.)?
 
 It probably makes sense to keep things at the top level (either right
 under `src/` or as a sibling to it).
