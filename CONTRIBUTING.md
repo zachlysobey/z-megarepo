@@ -45,9 +45,9 @@ with [markdownlint].
 
 - **Framework**: Jest (preset varies by subproject)
 - **File naming** (co-located with source):
-    - `moduleName.unit.test.ts`
-    - `ComponentName.component.test.tsx`
-    - `featureName.e2e.test.ts`
+  - `moduleName.unit.test.ts`
+  - `ComponentName.component.test.tsx`
+  - `featureName.e2e.test.ts`
 
 See [testing guide] and [Jest style guide].
 
