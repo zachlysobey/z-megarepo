@@ -84,7 +84,7 @@ several flavors of:
 
 ## Create useful aliases (*within reason*)
 
-### ⚠️ Warning: consider inefficiencies for run-scripts that reference other run-scripts
+### ⚠️ Warning: inefficiencies in run-scripts that call other scripts
 
 As engineers, we tend to be trained to keep things DRY, and there's a
 real beauty in having scripts reference each other.
