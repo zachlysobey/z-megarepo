@@ -49,5 +49,5 @@ BUT... I think longer-term planning (beyond the current PR branch)
 might justify other long-lived branch(s) *just* for planning.
 
 **Note**: The primary branch is `master` (not `main`). See
-[Git Conventions](../development-conventions/git/README.md) for full
+[Git Conventions](development-conventions/git/README.md) for full
 branch naming standards.
