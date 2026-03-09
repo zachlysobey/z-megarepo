@@ -1,10 +1,16 @@
-# Markdown Conventions
+# Markdown conventions
 
-## Documentation Philosophy
+## Documentation philosophy
 
-**Less is more!** This project is *documentation driven*, but it's easy to overdo it.
+**Less is more!** This project is *documentation driven*, but it's easy
+to overdo it.
 
-## Linting Rules
+## Style guide
+
+This project follows the
+[Google Markdown style guide](https://google.github.io/styleguide/docguide/style.html).
+
+## Linting rules
 
 This project uses `markdownlint` to ensure consistent formatting.
 
