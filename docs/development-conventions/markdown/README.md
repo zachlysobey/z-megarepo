@@ -7,8 +7,9 @@ to overdo it.
 
 ## Style guide
 
-This project follows the
-[Google Markdown style guide](https://google.github.io/styleguide/docguide/style.html).
+This project follows the [Google Markdown style guide][google-style].
+
+[google-style]: https://google.github.io/styleguide/docguide/style.html
 
 ## Linting rules
 
