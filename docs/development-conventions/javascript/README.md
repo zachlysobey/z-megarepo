@@ -15,8 +15,7 @@ re-creating boilerplate from scratch each time, use the templates!
 
 ### Node version management
 
-See the
-[Node.js Version Management Guide](./node-version-management-guide.md)
+See the [Node.js Version Management Guide](./node-version-management-guide.md)
 
 ### Package management
 
