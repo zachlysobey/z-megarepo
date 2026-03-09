@@ -13,5 +13,4 @@ See also:
 
 ## Naming conventions
 
-See
-[NPM run-script naming conventions](./npm-run-script-naming-conventions.md).
+See [NPM run-script naming conventions](./npm-run-script-naming-conventions.md).
