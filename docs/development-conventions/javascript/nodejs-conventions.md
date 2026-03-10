@@ -1,9 +1,11 @@
-# Node.js Development Conventions
+# Node.js development conventions
 
-## Use 'Promises' Modules Over Synchronous Versions Where They Exist
+## Use 'Promises' modules over synchronous versions where they exist
 
-Prefer async/await-friendly promise-based APIs to avoid blocking the event loop and improve performance.
-Even where event loop blocking or performance aren't concerns, a single consistent approach is preferable.
+Prefer async/await-friendly promise-based APIs to avoid blocking the
+event loop and improve performance. Even where event loop blocking or
+performance aren't concerns, a single consistent approach is
+preferable.
 
 Avoid:
 
@@ -19,9 +21,10 @@ import { readFile } from 'node:fs/promises';
 const content = await readFile('file.txt', 'utf8');
 ```
 
-## Wrap Callback-Based Async Functions with 'Promisify' When 'Promises' Versions Do Not Exist
+## Use `promisify` for callback-based async functions
 
-When no promise-based API exists, use `promisify` to wrap callback-based functions for consistent async/await usage.
+When no promise-based API exists, use `promisify` to wrap
+callback-based functions for consistent async/await usage.
 
 Avoid:
 
@@ -48,7 +51,7 @@ const { stdout } = await execAsync('some-command');
 console.log(stdout);
 ```
 
-## Other Node.js-Specific Conventions
+## Other Node.js-specific conventions
 
 - [Node Version Management Guide](./node-version-management-guide.md)
 - [`.npmrc` guidance](./npmrc-guidance.md)
