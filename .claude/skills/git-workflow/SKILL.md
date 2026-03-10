@@ -65,7 +65,7 @@ Guidelines:
 - PR title follows Conventional Commits format, under 70 characters
 - Description section: concise bullets describing what changed and why
 - Testing & risks: how to verify the changes and any risks to call out
-- If the PR relates to an issue, mention it in the summary (e.g., "Closes #42")
+- If the PR relates to an issue, mention it in the description (e.g., "Closes #42")
 
 ## Updating branches with open PRs
 
