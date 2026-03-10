@@ -1,4 +1,4 @@
-# Engineering Principles
+# Engineering principles
 
 - Collaboration produces the best outcomes
 - Less is more (Don't be too clever)
