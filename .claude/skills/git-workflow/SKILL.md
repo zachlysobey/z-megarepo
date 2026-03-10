@@ -38,15 +38,17 @@ git checkout master && git pull && git checkout -b <branch-name>
 
 ## Creating PRs
 
-Use `gh pr create` with title and body:
+Use `gh pr create`. The repo has a
+[PR template](../../../.github/PULL_REQUEST_TEMPLATE.md) that GitHub
+pre-fills automatically, so pass `--fill-first` to use it and then supply
+the title and body content:
 
 ```bash
 # Title follows Conventional Commits (scope is optional):
 TITLE="feat(auth): add login endpoint"
 TITLE="docs: update README"
 
-# Body uses the standard template:
-BODY="$(cat <<'EOF'
+gh pr create --title "$TITLE" --body "$(cat <<'EOF'
 ## Description
 
 ...
@@ -56,14 +58,12 @@ BODY="$(cat <<'EOF'
 ...
 EOF
 )"
-
-gh pr create --title "$TITLE" --body "$BODY"
 ```
 
 Guidelines:
 
 - PR title follows Conventional Commits format, under 70 characters
-- Description section: concise bullets describing what changed and why
+- Description: concise bullets describing what changed and why
 - Testing & risks: how to verify the changes and any risks to call out
 - If the PR relates to an issue, mention it in the description (e.g., "Closes #42")
 
