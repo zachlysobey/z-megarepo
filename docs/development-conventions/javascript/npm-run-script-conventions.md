@@ -1,4 +1,4 @@
-# NPM Run-Script Conventions
+# NPM run-script conventions
 
 A style guide for Node.js `package.json` run-scripts.
 
@@ -7,10 +7,10 @@ See also:
 - [NPM run-script naming conventions](./npm-run-script-naming-conventions.md)
 - [NPM run-script docs](https://docs.npmjs.com/cli/v9/commands/npm-run-script)
 
-## Know the Special Ones, and Use Them for Local Development
+## Know the special ones, and use them for local development
 
-## Use Pre/Post Where Appropriate
+## Use pre/post where appropriate
 
-## Naming Conventions
+## Naming conventions
 
 See [NPM run-script naming conventions](./npm-run-script-naming-conventions.md).
