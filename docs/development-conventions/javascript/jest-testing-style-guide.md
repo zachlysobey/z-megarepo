@@ -107,16 +107,16 @@ test('logs a warning', () => {
 });
 ```
 
-## Open questions
-
-### How should I handle location of x-module tests (integration / e2e / etc.)?
-
-It probably makes sense to keep things at the top level (either right
-under `src/` or as a sibling to it).
-
 This became available in
 [Jest v30](https://jestjs.io/blog/2025/06/04/jest-30#spies-and-the-using-keyword).
 `using` is part of the
 [Explicit Resource Management TC-39 proposal](https://github.com/tc39/proposal-explicit-resource-management).
 It hit
 [TypeScript in 5.2](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html).
+
+## Open questions
+
+### How should I handle location of x-module tests (integration / e2e / etc.)?
+
+It probably makes sense to keep things at the top level (either right
+under `src/` or as a sibling to it).
