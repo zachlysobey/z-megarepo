@@ -47,11 +47,11 @@ TITLE="docs: update README"
 
 # Body uses the standard template:
 BODY="$(cat <<'EOF'
-## Summary
+## Description
 
 ...
 
-## Test plan
+## Testing & risks
 
 ...
 EOF
@@ -63,8 +63,8 @@ gh pr create --title "$TITLE" --body "$BODY"
 Guidelines:
 
 - PR title follows Conventional Commits format, under 70 characters
-- Summary section: concise bullets describing what changed and why
-- Test plan: checklist of verification steps
+- Description section: concise bullets describing what changed and why
+- Testing & risks: how to verify the changes and any risks to call out
 - If the PR relates to an issue, mention it in the summary (e.g., "Closes #42")
 
 ## Updating branches with open PRs
