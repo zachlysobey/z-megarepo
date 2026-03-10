@@ -20,17 +20,6 @@ The Node-based subprojects (`architecture-tests/`, `personal-mobile-app/`,
 `personal-webapp/`) are self-contained with their own `package.json`,
 `.nvmrc`, and CI workflow.
 
-## Getting started
-
-Each Node-based subproject manages its own Node.js version via `.nvmrc`.
-To work in a subproject:
-
-```bash
-cd <subproject>
-nvm use
-npm install
-```
-
 ## Documentation
 
 - [Vision](./docs/vision.md) — platform goals and technical direction
