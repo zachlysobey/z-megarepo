@@ -1,6 +1,6 @@
-# JavaScript Module Conventions
+# JavaScript module conventions
 
-## Avoid `default` Exports
+## Avoid `default` exports
 
 Prefer named exports for better tree-shaking and explicit imports.
 
@@ -16,9 +16,10 @@ Prefer:
 export function myFunction() { }
 ```
 
-## One Named Export Per File
+## One named export per file
 
-Keep files focused on a single export to maintain clear module boundaries and improve maintainability.
+Keep files focused on a single export to maintain clear module
+boundaries and improve maintainability.
 
 Avoid:
 
@@ -37,9 +38,11 @@ export function helperA() { }
 export function helperB() { }
 ```
 
-## File Name Matches Export Name
+## File name matches export name
 
-File names must exactly match their export name, using whatever casing convention the export uses. Kebab-case is reserved for non-JS/TS files or JS/TS files with no exports.
+File names must exactly match their export name, using whatever casing
+convention the export uses. Kebab-case is reserved for non-JS/TS files
+or JS/TS files with no exports.
 
 Avoid:
 
@@ -65,9 +68,10 @@ export function myHelper() { }
 export class SomeClass { }
 ```
 
-## Always Prepend `node:` to NodeJS Core Library Imports
+## Always prepend `node:` to Node.js core library imports
 
-The `node:` prefix explicitly identifies Node.js built-in modules and prevents potential naming conflicts with npm packages of the same name.
+The `node:` prefix explicitly identifies Node.js built-in modules and
+prevents potential naming conflicts with npm packages of the same name.
 
 Avoid:
 
