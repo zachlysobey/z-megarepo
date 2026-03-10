@@ -6,6 +6,17 @@ All changes should follow the [engineering principles] and
 [engineering principles]: ./docs/engineering-principles.md
 [development process]: ./docs/development-process.md
 
+## Getting started
+
+Each Node-based subproject manages its own Node.js version via `.nvmrc`.
+To work in a subproject:
+
+```bash
+cd <subproject>
+nvm use
+npm install
+```
+
 ## Git conventions
 
 Use [Conventional Commits](https://www.conventionalcommits.org/).
