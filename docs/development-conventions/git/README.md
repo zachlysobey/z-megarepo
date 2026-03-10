@@ -1,14 +1,15 @@
-# Git Conventions
+# Git conventions
 
-## Branch Naming
+## Branch naming
 
-### Primary Branch
+### Primary branch
 
 - **`master`** - The main development branch (not `main`)
 
-### Feature Branches
+### Feature branches
 
-Right now, there are no explicit conventions for branch naming outside of `master`.
+Right now, there are no explicit conventions for branch naming outside
+of `master`.
 
 ## Workflow
 
