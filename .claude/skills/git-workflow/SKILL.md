@@ -2,7 +2,7 @@
 name: git-workflow
 description: >
   Git workflow for branching, committing, pushing, and creating/updating PRs.
-  Auto-triggers when making code changes that need committing or PRing.
+  Auto-triggers when making code changes that need committing or creating/updating PRs.
 ---
 
 # Git workflow
@@ -14,8 +14,8 @@ conventions. This skill covers the *mechanics* of executing the workflow.
 
 - Create feature branches from `master` (the primary branch, not `main`)
 - Keep branches up-to-date with `master`
-- Use descriptive branch names (e.g., `feat/add-auth`, `fix/login-redirect`,
-  `docs/update-readme`)
+- Use descriptive branch names; there is no required convention, but patterns
+  like `feat/add-auth`, `fix/login-redirect`, `docs/update-readme` work well
 
 ```bash
 git checkout master && git pull && git checkout -b <branch-name>
@@ -26,7 +26,7 @@ git checkout master && git pull && git checkout -b <branch-name>
 - Use [Conventional Commits](https://www.conventionalcommits.org/):
   `<type>[(<scope>)]: <description>`
 - Common types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`
-- Stage specific files by name — never use `git add -A` or `git add .`
+- Prefer staging specific files by name over `git add -A` or `git add .`
 - Never commit unless the user explicitly asks
 - Never amend commits unless the user explicitly asks
 
@@ -41,7 +41,28 @@ git checkout master && git pull && git checkout -b <branch-name>
 Use `gh pr create` with this body format:
 
 ```bash
-gh pr create --title "<type>(<scope>): <description>" --body "$(cat <<'EOF'
+# With scope:
+gh pr create --title "feat(auth): add login endpoint" --body "$(cat <<'EOF'
+## Summary
+...
+## Test plan
+...
+EOF
+)"
+
+# Without scope:
+gh pr create --title "docs: update README" --body "$(cat <<'EOF'
+## Summary
+...
+## Test plan
+...
+EOF
+)"
+```
+
+PR body template:
+
+```markdown
 ## Summary
 
 - <bullet describing change>
@@ -51,8 +72,6 @@ gh pr create --title "<type>(<scope>): <description>" --body "$(cat <<'EOF'
 
 - [ ] <verification step>
 - [ ] <verification step>
-EOF
-)"
 ```
 
 Guidelines:
