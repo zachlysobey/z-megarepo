@@ -1,4 +1,4 @@
-# Jest Testing Style Guide
+# Jest testing style guide
 
 A style guide for the Jest JavaScript software testing framework.
 
@@ -9,13 +9,13 @@ See also:
 
 ## Standards
 
-### Use `describe` and `it`, with Conservative Nesting
+### Use `describe` and `it`, with conservative nesting
 
 For consistency, use `it` and `describe` and avoid `test`.
 
-### The `describe` Should Be the Exported Name of the Unit Under Test
+### The `describe` should be the exported name of the unit under test
 
-### Use All Lowercase in `it`
+### Use all lowercase in `it`
 
 ### Avoid the word `should`
 
@@ -37,61 +37,67 @@ it('does something', () => {
 });
 ```
 
-### Avoid Blank Lines in `it` Blocks
+### Avoid blank lines in `it` blocks
 
 There are different schools of thought on this.
 
 Two I like:
-- Split tests logically into given/when/then or arrange/act/assert, separating those parts with blank lines
-- Don't use blank lines at all. The rationale is two-fold: 1) an ideal test is very short. If you need blank lines to make it readable, it's too long. 2) It's a simple rule to follow and enforce.
+
+- Split tests logically into given/when/then or arrange/act/assert,
+  separating those parts with blank lines
+- Don't use blank lines at all. The rationale is two-fold: 1) an ideal
+  test is very short. If you need blank lines to make it readable, it's
+  too long. 2) It's a simple rule to follow and enforce.
 
 Ultimately, this guide chooses the second option, mostly for simplicity.
 
-### Strive for Short Tests with a Single `expect`
+### Strive for short tests with a single `expect`
 
-### Separate *Pure* Unit Tests from DOM-Dependent (jsx/tsx) Tests
+### Separate *pure* unit tests from DOM-dependent (jsx/tsx) tests
 
-### Configuration File Style Guide
+### Configuration file style guide
 
-#### Write Configuration in TypeScript
+#### Write configuration in TypeScript
 
-#### Use Multi-Project Config
+#### Use multi-project config
 
 [Jest Configuration: Projects](https://jestjs.io/docs/configuration#projects-arraystring--projectconfig)
 
-#### Package.json Run-Script Conventions
+#### Package.json run-script conventions
 
 See [NPM run-script naming conventions](./npm-run-script-naming-conventions.md).
 
-##### By Run-Script
+##### By run-script
 
-- `npm test` - Should run all *fast* tests. This is the most useful command for local development so should be optimized as a command that can and will be run frequently.
+- `npm test` - Should run all *fast* tests. This is the most useful
+  command for local development so should be optimized as a command
+  that can and will be run frequently.
 - `npm run test:all`
 - `npm run test:unit`
 - `npm run test:component`
 - `npm run test:coverage`
 
-### Naming Conventions
+### Naming conventions
 
-#### Differentiate Between Test Types by File Extension
+#### Differentiate between test types by file extension
 
 - `[something].unit.test.tsx`
 - `[something].component.test.tsx`
 - `[something].api.test.tsx`
 - `[something].e2e.test.tsx`
 
-#### One Unit/Component Test Per Module, Same (Base) Name as Module
+#### One unit/component test per module, same (base) name as module
 
 ##### Examples
 
 - `someModule.unit.test.ts`
 - `SomeComponent.component.test.tsx`
 
-### Prefer Co-Locating Test Files Over Separate `tests/` Directories
+### Prefer co-locating test files over separate `tests/` directories
 
 For lower level (unit/component) tests.
 
-### Use `using` for Auto-Cleanup of `spy`s
+### Use `using` for auto-cleanup of `spy`s
 
 ```js
 test('logs a warning', () => {
@@ -101,14 +107,16 @@ test('logs a warning', () => {
 });
 ```
 
-## Open Questions
+## Open questions
 
-### How Should I Handle Location of X-Module Tests (Integration / E2E / etc..)?
+### How should I handle location of x-module tests (integration / e2e / etc.)?
 
-It probably makes sense to keep things at the top level (either right under `src/` or as a sibling to it).
+It probably makes sense to keep things at the top level (either right
+under `src/` or as a sibling to it).
 
-
-
-This became available in [Jest v30](https://jestjs.io/blog/2025/06/04/jest-30#spies-and-the-using-keyword).
-`using` is part of the [Explicit Resource Management TC-39 proposal](https://github.com/tc39/proposal-explicit-resource-management).
-It hit [TypeScript in 5.2](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html).
+This became available in
+[Jest v30](https://jestjs.io/blog/2025/06/04/jest-30#spies-and-the-using-keyword).
+`using` is part of the
+[Explicit Resource Management TC-39 proposal](https://github.com/tc39/proposal-explicit-resource-management).
+It hit
+[TypeScript in 5.2](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html).
