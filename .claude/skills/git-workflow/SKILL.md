@@ -49,13 +49,11 @@ TITLE="docs: update README"
 BODY="$(cat <<'EOF'
 ## Summary
 
-- <bullet describing change>
-- <bullet describing change>
+...
 
 ## Test plan
 
-- [ ] <verification step>
-- [ ] <verification step>
+...
 EOF
 )"
 
