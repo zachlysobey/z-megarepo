@@ -1,4 +1,4 @@
-# Testing Guide
+# Testing guide
 
 See also:
 
@@ -16,26 +16,27 @@ npm run test:coverage   # Run all tests with unified coverage
 
 ## Standards
 
-### File Naming
+### File naming
 
 - **Test files by type:**
-  - `moduleName.unit.test.ts` - Pure unit tests
-  - `ComponentName.component.test.tsx` - React component tests
-  - `apiName.api.test.ts` - API tests
-  - `featureName.e2e.test.ts` - End-to-end tests
-- **Co-locate** test files with source files (not separate `__tests__/` directories)
+    - `moduleName.unit.test.ts` - Pure unit tests
+    - `ComponentName.component.test.tsx` - React component tests
+    - `apiName.api.test.ts` - API tests
+    - `featureName.e2e.test.ts` - End-to-end tests
+- **Co-locate** test files with source files (not separate `__tests__/`
+  directories)
 - **One test file per module** with same base name as module
 
-### Test Organization
+### Test organization
 
 - **Use `describe` and `it` with conservative nesting**
 - **All lowercase in `it` descriptions**
 - **Avoid blank lines in `it` blocks**
 - **Strive for short tests with single `expect`**
 
-## Best Practices
+## Best practices
 
-### ✅ Test Behavior, Not Implementation
+### ✅ Test behavior, not implementation
 
 ```javascript
 it('calls onPress when button is pressed', () => {
@@ -46,7 +47,7 @@ it('calls onPress when button is pressed', () => {
 });
 ```
 
-### ✅ Mock External Dependencies
+### ✅ Mock external dependencies
 
 ```javascript
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -55,7 +56,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 }));
 ```
 
-### ✅ Use waitFor for Async Operations
+### ✅ Use `waitFor` for async operations
 
 ```javascript
 it('loads data on mount', async () => {
@@ -66,9 +67,9 @@ it('loads data on mount', async () => {
 });
 ```
 
-## Anti-Patterns
+## Anti-patterns
 
-### ❌ Don't Test Implementation Details
+### ❌ Don't test implementation details
 
 ```javascript
 // Bad: Testing internal state
