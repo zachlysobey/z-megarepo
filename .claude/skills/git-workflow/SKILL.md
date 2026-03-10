@@ -38,31 +38,15 @@ git checkout master && git pull && git checkout -b <branch-name>
 
 ## Creating PRs
 
-Use `gh pr create` with this body format:
+Use `gh pr create` with title and body:
 
 ```bash
-# With scope:
-gh pr create --title "feat(auth): add login endpoint" --body "$(cat <<'EOF'
-## Summary
-...
-## Test plan
-...
-EOF
-)"
+# Title follows Conventional Commits (scope is optional):
+TITLE="feat(auth): add login endpoint"
+TITLE="docs: update README"
 
-# Without scope:
-gh pr create --title "docs: update README" --body "$(cat <<'EOF'
-## Summary
-...
-## Test plan
-...
-EOF
-)"
-```
-
-PR body template:
-
-```markdown
+# Body uses the standard template:
+BODY="$(cat <<'EOF'
 ## Summary
 
 - <bullet describing change>
@@ -72,6 +56,10 @@ PR body template:
 
 - [ ] <verification step>
 - [ ] <verification step>
+EOF
+)"
+
+gh pr create --title "$TITLE" --body "$BODY"
 ```
 
 Guidelines:
