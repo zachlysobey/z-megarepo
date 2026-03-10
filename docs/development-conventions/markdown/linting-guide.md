@@ -1,4 +1,4 @@
-# Markdown Linting Guide
+# Markdown linting guide
 
 This project uses `markdownlint` to enforce Markdown code style.
 
