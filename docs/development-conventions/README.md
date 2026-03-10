@@ -1,9 +1,11 @@
-# Development Conventions
+# Development conventions
 
-This directory contains language-specific development conventions and standards.
+This directory contains language-specific development conventions and
+standards.
 
-## Language-Specific Conventions
+## Language-specific conventions
 
-- [JavaScript](./javascript/) - JavaScript/TypeScript development standards
+- [JavaScript](./javascript/) - JavaScript/TypeScript development
+  standards
 - [Markdown](./markdown/) - Markdown formatting and linting standards
 - [Git](./git/) - Git workflow and branch conventions
