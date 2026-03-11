@@ -1,0 +1,11 @@
+# infra/
+
+Infrastructure-as-code (Terraform) for GCP resources in the `z-megarepo`
+project.
+
+## Directory layout
+
+- **[`bootstrap/`](bootstrap/)** — One-time GCP project setup: remote state
+  bucket, service account, and Workload Identity Federation for CI.
+- **[`cloud-dev-vm/`](cloud-dev-vm/)** — Terraform root module for a remote
+  development environment.
