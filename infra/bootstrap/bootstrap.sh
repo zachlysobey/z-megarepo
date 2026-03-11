@@ -18,6 +18,14 @@ run() {
   fi
 }
 
+exists() {
+  if $DRY_RUN; then
+    return 1
+  else
+    "$@" &>/dev/null
+  fi
+}
+
 STATE_BUCKET="${PROJECT_ID}-tfstate"
 SA_NAME="terraform-ci"
 SA_EMAIL="${SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
@@ -34,7 +42,7 @@ run gcloud services enable \
   sts.googleapis.com
 
 # State bucket
-if run gcloud storage buckets describe "gs://${STATE_BUCKET}" &>/dev/null; then
+if exists gcloud storage buckets describe "gs://${STATE_BUCKET}"; then
   echo "Bucket gs://${STATE_BUCKET} already exists"
 else
   run gcloud storage buckets create "gs://${STATE_BUCKET}" \
@@ -43,7 +51,7 @@ fi
 run gcloud storage buckets update "gs://${STATE_BUCKET}" --versioning
 
 # Service account
-if run gcloud iam service-accounts describe "$SA_EMAIL" &>/dev/null; then
+if exists gcloud iam service-accounts describe "$SA_EMAIL"; then
   echo "Service account ${SA_EMAIL} already exists"
 else
   run gcloud iam service-accounts create "$SA_NAME" --display-name="Terraform CI"
@@ -54,14 +62,14 @@ for role in roles/compute.admin roles/iam.serviceAccountUser roles/storage.admin
 done
 
 # Workload Identity Federation
-if run gcloud iam workload-identity-pools describe "$WIF_POOL" --location=global &>/dev/null; then
+if exists gcloud iam workload-identity-pools describe "$WIF_POOL" --location=global; then
   echo "WIF pool ${WIF_POOL} already exists"
 else
   run gcloud iam workload-identity-pools create "$WIF_POOL" \
     --location=global --display-name="GitHub Actions"
 fi
-if run gcloud iam workload-identity-pools providers describe "$WIF_PROVIDER" \
-    --location=global --workload-identity-pool="$WIF_POOL" &>/dev/null; then
+if exists gcloud iam workload-identity-pools providers describe "$WIF_PROVIDER" \
+    --location=global --workload-identity-pool="$WIF_POOL"; then
   echo "WIF provider ${WIF_PROVIDER} already exists"
 else
   run gcloud iam workload-identity-pools providers create-oidc "$WIF_PROVIDER" \
