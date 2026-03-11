@@ -28,6 +28,6 @@ jobs:
       - name: ${{ inputs.action }} VM
         run: |
           gcloud compute instances ${{ inputs.action }} cloud-dev-vm \
-            --zone=us-east1-b \
+            --zone=${{ vars.GCP_ZONE }} \
             --project=${{ vars.GCP_PROJECT_ID }}
 

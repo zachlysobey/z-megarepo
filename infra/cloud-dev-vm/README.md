@@ -33,7 +33,7 @@ Under the hood this workflow authenticates with the same Workload Identity
 Federation setup used by Terraform CI and runs:
 
 ```bash
-gcloud compute instances stop cloud-dev-vm --zone=us-east1-b --project=z-megarepo
-gcloud compute instances start cloud-dev-vm --zone=us-east1-b --project=z-megarepo
+gcloud compute instances stop cloud-dev-vm --zone=<ZONE> --project=<PROJECT_ID>
+gcloud compute instances start cloud-dev-vm --zone=<ZONE> --project=<PROJECT_ID>
 ```
 
