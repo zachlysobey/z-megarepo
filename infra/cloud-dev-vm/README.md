@@ -1,26 +1,22 @@
 # cloud-dev-vm
 
-A persistent GCE instance used as a remote development environment — for
-Claude Code, VS Code Remote SSH, or just a Linux box in the cloud.
+Terraform root module for a remote development environment — intended for
+Claude Code, VS Code Remote SSH, or a general-purpose Linux box in the cloud.
 
-## What it provisions
+Currently a minimal scaffold (provider config, GCS backend, no resources).
+Actual VM provisioning will be added in a follow-up.
 
-- A Compute Engine VM with a static external IP
-- A firewall rule allowing SSH access
-- OS Login for SSH authentication (no manually managed keys)
-- A startup script (`startup.sh`) for initial machine setup
+## CI
 
-## Usage
+Applied automatically on pushes to `master` via
+[`terraform-cloud-dev-vm.yml`](../../.github/workflows/terraform-cloud-dev-vm.yml).
 
-This module is applied automatically by CI on pushes to `master`
-(see [`terraform-cloud-dev-vm.yml`](../../.github/workflows/terraform-cloud-dev-vm.yml)). To run locally:
+To run locally:
 
 ```bash
 terraform init \
-  -backend-config="bucket=<project-id>-tfstate" \
+  -backend-config="bucket=z-megarepo-tfstate" \
   -backend-config="prefix=cloud-dev-vm"
 
-terraform plan -var="project_id=<project-id>"
+terraform plan -var="project_id=z-megarepo"
 ```
-
-See [`../bootstrap/README.md`](../bootstrap/README.md) for first-time setup.

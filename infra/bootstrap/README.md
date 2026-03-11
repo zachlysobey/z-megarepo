@@ -1,10 +1,24 @@
 # Bootstrap
 
-One-time setup that prepares a GCP project and GitHub repo for Terraform CI.
+One-time GCP project setup for Terraform CI. This has already been run
+against the `z-megarepo` project. The script is idempotent and safe to re-run
+if needed.
 
-Run this **before** your first `terraform init` or CI run.
+## What the script does
+
+`bootstrap.sh` configures:
+
+1. Required GCP APIs (Compute, IAM, STS, etc.).
+2. A GCS bucket (`z-megarepo-tfstate`) for Terraform remote state, with
+   versioning enabled.
+3. A `terraform-ci` service account with the roles Terraform needs
+   (`compute.admin`, `iam.serviceAccountUser`, `storage.admin`).
+4. **Workload Identity Federation** (WIF) so GitHub Actions can authenticate
+   as that service account — no long-lived keys required.
 
 ## Prerequisites
+
+To re-run or run against a new project:
 
 1. The [**`gcloud` CLI**](https://docs.cloud.google.com/sdk/docs/install-sdk),
    authenticated as a user with Owner or Editor role (`gcloud auth login`).
@@ -19,18 +33,6 @@ Run this **before** your first `terraform init` or CI run.
 3. Your **GitHub repo name** in `owner/repo` format
    (e.g. `zachlysobey/z-megarepo`).
 
-## What the script does
-
-`bootstrap.sh` is idempotent — safe to re-run. It:
-
-1. Enables the required GCP APIs (Compute, IAM, STS, etc.).
-2. Creates a GCS bucket (`<project-id>-tfstate`) for Terraform remote state,
-   with versioning enabled.
-3. Creates a `terraform-ci` service account and grants it the roles Terraform
-   needs (`compute.admin`, `iam.serviceAccountUser`, `storage.admin`).
-4. Sets up **Workload Identity Federation** (WIF) so GitHub Actions can
-   authenticate as that service account — no long-lived keys required.
-
 ## Usage
 
 ```bash
@@ -44,9 +46,9 @@ Example:
 ./bootstrap.sh z-megarepo zachlysobey/z-megarepo
 ```
 
-## After running
+## GitHub repo variables
 
-The script prints four values. Set them as **GitHub repo variables**
+The script outputs four values that are configured as **GitHub repo variables**
 (Settings > Secrets and variables > Actions > Variables tab):
 
 - **`GCP_PROJECT_ID`** — `z-megarepo`
@@ -54,5 +56,3 @@ The script prints four values. Set them as **GitHub repo variables**
   `projects/<number>/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider`
 - **`GCP_SERVICE_ACCOUNT`** — `terraform-ci@z-megarepo.iam.gserviceaccount.com`
 - **`GCP_TF_STATE_BUCKET`** — `z-megarepo-tfstate`
-
-Once those are set, CI will authenticate and manage state automatically.
