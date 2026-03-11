@@ -6,9 +6,16 @@ Run this **before** your first `terraform init` or CI run.
 
 ## Prerequisites
 
-1. A **GCP project** with billing enabled.
-2. The **`gcloud` CLI**, authenticated as a user with Owner or Editor role
-   on that project (`gcloud auth login`).
+1. The [**`gcloud` CLI**](https://docs.cloud.google.com/sdk/docs/install-sdk),
+   authenticated as a user with Owner or Editor role (`gcloud auth login`).
+2. A **GCP project** with billing enabled.
+
+   ```bash
+   gcloud projects create z-megarepo
+   gcloud billing accounts list
+   gcloud billing projects link z-megarepo --billing-account=<ACCOUNT_ID>
+   ```
+
 3. Your **GitHub repo name** in `owner/repo` format
    (e.g. `zachlysobey/z-megarepo`).
 
@@ -34,7 +41,7 @@ cd infra/bootstrap
 Example:
 
 ```bash
-./bootstrap.sh my-project-123 zachlysobey/z-megarepo
+./bootstrap.sh z-megarepo zachlysobey/z-megarepo
 ```
 
 ## After running
@@ -42,10 +49,10 @@ Example:
 The script prints four values. Set them as **GitHub repo variables**
 (Settings > Secrets and variables > Actions > Variables tab):
 
-- **`GCP_PROJECT_ID`** — e.g. `my-project-123`
+- **`GCP_PROJECT_ID`** — `z-megarepo`
 - **`GCP_WIF_PROVIDER`** — the full provider path, e.g.
-  `projects/123456/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider`
-- **`GCP_SERVICE_ACCOUNT`** — e.g. `terraform-ci@my-project-123.iam.gserviceaccount.com`
-- **`GCP_TF_STATE_BUCKET`** — e.g. `my-project-123-tfstate`
+  `projects/<number>/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider`
+- **`GCP_SERVICE_ACCOUNT`** — `terraform-ci@z-megarepo.iam.gserviceaccount.com`
+- **`GCP_TF_STATE_BUCKET`** — `z-megarepo-tfstate`
 
 Once those are set, CI will authenticate and manage state automatically.
