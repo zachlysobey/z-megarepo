@@ -16,19 +16,8 @@ z-megarepo/
 └── project-templates/      # Scaffolding templates for new projects
 ```
 
-Application subdirectories are self-contained Node subprojects with their
-own `package.json`, `.nvmrc`, and CI workflow.
-
-## Getting started
-
-Each subproject manages its own Node.js version via `.nvmrc`. To work in a
-subproject:
-
-```bash
-cd <subproject>
-nvm use
-npm install
-```
+Several subdirectories are Node-based subprojects, each self-contained with
+its own `package.json`, `.nvmrc`, and CI workflow.
 
 ## Documentation
 
