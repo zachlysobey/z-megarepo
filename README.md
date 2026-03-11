@@ -16,9 +16,8 @@ z-megarepo/
 └── project-templates/      # Scaffolding templates for new projects
 ```
 
-The Node-based subprojects (`architecture-tests/`, `personal-mobile-app/`,
-`personal-webapp/`) are self-contained with their own `package.json`,
-`.nvmrc`, and CI workflow.
+Several of these are Node-based subprojects, each self-contained with its
+own `package.json`, `.nvmrc`, and CI workflow.
 
 ## Documentation
 
