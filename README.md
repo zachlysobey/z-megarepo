@@ -11,6 +11,7 @@ z-megarepo/
 ├── architecture-tests/     # Architectural fitness tests (Jest + ts-jest)
 ├── book-reports/           # Marp markdown slideshows
 ├── docs/                   # Conventions and reference documentation
+├── infra/                  # GCP infrastructure (Terraform)
 ├── personal-mobile-app/    # Expo/React Native mobile app
 ├── personal-webapp/        # Next.js + React 19 + TypeScript
 └── project-templates/      # Scaffolding templates for new projects
