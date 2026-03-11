@@ -56,10 +56,12 @@ if exists gcloud iam service-accounts describe "$SA_EMAIL"; then
 else
   run gcloud iam service-accounts create "$SA_NAME" --display-name="Terraform CI"
 fi
-for role in roles/compute.admin roles/iam.serviceAccountUser roles/storage.admin; do
+for role in roles/compute.admin roles/iam.serviceAccountUser; do
   run gcloud projects add-iam-policy-binding "$PROJECT_ID" \
-    --member="serviceAccount:${SA_EMAIL}" --role="$role" --condition=None --quiet
+    --member="serviceAccount:${SA_EMAIL}" --role="$role" --quiet
 done
+run gcloud storage buckets add-iam-policy-binding "gs://${STATE_BUCKET}" \
+  --member="serviceAccount:${SA_EMAIL}" --role="roles/storage.objectAdmin"
 
 # Workload Identity Federation
 if exists gcloud iam workload-identity-pools describe "$WIF_POOL" --location=global; then

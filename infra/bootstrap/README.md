@@ -11,8 +11,9 @@ if needed.
 1. Required GCP APIs (Compute, IAM, STS, etc.).
 2. A GCS bucket (`z-megarepo-tfstate`) for Terraform remote state, with
    versioning enabled.
-3. A `terraform-ci` service account with the roles Terraform needs
-   (`compute.admin`, `iam.serviceAccountUser`, `storage.admin`).
+3. A `terraform-ci` service account with project-level roles
+   (`compute.admin`, `iam.serviceAccountUser`) and bucket-scoped
+   `storage.objectAdmin` on the state bucket.
 4. **Workload Identity Federation** (WIF) so GitHub Actions can authenticate
    as that service account — no long-lived keys required.
 
