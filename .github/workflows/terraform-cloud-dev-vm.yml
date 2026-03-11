@@ -2,6 +2,7 @@ name: "Terraform: cloud-dev-vm"
 
 on:
   push:
+    branches: [master]
     paths: [infra/cloud-dev-vm/**, .github/workflows/terraform-cloud-dev-vm.yml]
   pull_request:
     paths: [infra/cloud-dev-vm/**, .github/workflows/terraform-cloud-dev-vm.yml]
