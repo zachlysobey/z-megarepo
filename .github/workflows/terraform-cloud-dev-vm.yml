@@ -6,6 +6,10 @@ on:
   pull_request:
     paths: [infra/cloud-dev-vm/**, .github/workflows/terraform-cloud-dev-vm.yml]
 
+concurrency:
+  group: terraform-cloud-dev-vm-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
   id-token: write
