@@ -16,8 +16,8 @@ z-megarepo/
 └── project-templates/      # Scaffolding templates for new projects
 ```
 
-Several of these are Node-based subprojects, each self-contained with its
-own `package.json`, `.nvmrc`, and CI workflow.
+Several subdirectories are Node-based subprojects, each self-contained with
+its own `package.json`, `.nvmrc`, and CI workflow.
 
 ## Documentation
 
