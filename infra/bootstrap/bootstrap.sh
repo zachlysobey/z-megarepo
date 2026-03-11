@@ -1,30 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-DRY_RUN=false
-if [[ "${1:-}" == "--dry-run" ]]; then
-  DRY_RUN=true
-  shift
-fi
-
-PROJECT_ID="${1:?Usage: ./bootstrap.sh [--dry-run] <project-id> <github-repo>}"
-GITHUB_REPO="${2:?Usage: ./bootstrap.sh [--dry-run] <project-id> <github-repo>}"
-
-run() {
-  if $DRY_RUN; then
-    echo "[dry-run] $*"
-  else
-    "$@"
-  fi
-}
-
-exists() {
-  if $DRY_RUN; then
-    return 1
-  else
-    "$@" &>/dev/null
-  fi
-}
+PROJECT_ID="${1:?Usage: ./bootstrap.sh <project-id> <github-repo>}"
+GITHUB_REPO="${2:?Usage: ./bootstrap.sh <project-id> <github-repo>}"
 
 STATE_BUCKET="${PROJECT_ID}-tfstate"
 SA_NAME="terraform-ci"
@@ -32,9 +10,9 @@ SA_EMAIL="${SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 WIF_POOL="github-actions-pool"
 WIF_PROVIDER="github-actions-provider"
 
-run gcloud config set project "$PROJECT_ID"
+gcloud config set project "$PROJECT_ID"
 
-run gcloud services enable \
+gcloud services enable \
   compute.googleapis.com \
   iam.googleapis.com \
   cloudresourcemanager.googleapis.com \
@@ -42,39 +20,39 @@ run gcloud services enable \
   sts.googleapis.com
 
 # State bucket
-if exists gcloud storage buckets describe "gs://${STATE_BUCKET}"; then
+if gcloud storage buckets describe "gs://${STATE_BUCKET}" &>/dev/null; then
   echo "Bucket gs://${STATE_BUCKET} already exists"
 else
-  run gcloud storage buckets create "gs://${STATE_BUCKET}" \
+  gcloud storage buckets create "gs://${STATE_BUCKET}" \
     --location=us-east1 --uniform-bucket-level-access
 fi
-run gcloud storage buckets update "gs://${STATE_BUCKET}" --versioning
+gcloud storage buckets update "gs://${STATE_BUCKET}" --versioning
 
 # Service account
-if exists gcloud iam service-accounts describe "$SA_EMAIL"; then
+if gcloud iam service-accounts describe "$SA_EMAIL" &>/dev/null; then
   echo "Service account ${SA_EMAIL} already exists"
 else
-  run gcloud iam service-accounts create "$SA_NAME" --display-name="Terraform CI"
+  gcloud iam service-accounts create "$SA_NAME" --display-name="Terraform CI"
 fi
 for role in roles/compute.admin roles/iam.serviceAccountUser; do
-  run gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
     --member="serviceAccount:${SA_EMAIL}" --role="$role" --quiet
 done
-run gcloud storage buckets add-iam-policy-binding "gs://${STATE_BUCKET}" \
+gcloud storage buckets add-iam-policy-binding "gs://${STATE_BUCKET}" \
   --member="serviceAccount:${SA_EMAIL}" --role="roles/storage.objectAdmin"
 
 # Workload Identity Federation
-if exists gcloud iam workload-identity-pools describe "$WIF_POOL" --location=global; then
+if gcloud iam workload-identity-pools describe "$WIF_POOL" --location=global &>/dev/null; then
   echo "WIF pool ${WIF_POOL} already exists"
 else
-  run gcloud iam workload-identity-pools create "$WIF_POOL" \
+  gcloud iam workload-identity-pools create "$WIF_POOL" \
     --location=global --display-name="GitHub Actions"
 fi
-if exists gcloud iam workload-identity-pools providers describe "$WIF_PROVIDER" \
-    --location=global --workload-identity-pool="$WIF_POOL"; then
+if gcloud iam workload-identity-pools providers describe "$WIF_PROVIDER" \
+    --location=global --workload-identity-pool="$WIF_POOL" &>/dev/null; then
   echo "WIF provider ${WIF_PROVIDER} already exists"
 else
-  run gcloud iam workload-identity-pools providers create-oidc "$WIF_PROVIDER" \
+  gcloud iam workload-identity-pools providers create-oidc "$WIF_PROVIDER" \
     --location=global --workload-identity-pool="$WIF_POOL" \
     --display-name="GitHub Actions" \
     --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository" \
@@ -82,13 +60,8 @@ else
     --issuer-uri="https://token.actions.githubusercontent.com"
 fi
 
-if $DRY_RUN; then
-  echo "[dry-run] gcloud projects describe $PROJECT_ID --format=value(projectNumber)"
-  PROJECT_NUMBER="<PROJECT_NUMBER>"
-else
-  PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)")
-fi
-run gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL" \
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)")
+gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL" \
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/attribute.repository/${GITHUB_REPO}"
 
