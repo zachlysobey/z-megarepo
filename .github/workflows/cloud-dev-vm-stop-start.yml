@@ -1,0 +1,33 @@
+name: "Cloud dev VM: stop or start"
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Stop or start the VM"
+        required: true
+        type: choice
+        options:
+          - stop
+          - start
+        default: stop
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  vm-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: ${{ inputs.action }} VM
+        run: |
+          gcloud compute instances ${{ inputs.action }} cloud-dev-vm \
+            --zone=${{ vars.GCP_ZONE }} \
+            --project=${{ vars.GCP_PROJECT_ID }}
+
