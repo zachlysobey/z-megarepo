@@ -1,10 +1,7 @@
 # cloud-dev-vm
 
-Terraform root module for a remote development environment — intended for
-Claude Code, VS Code Remote SSH, or a general-purpose Linux box in the cloud.
-
-Currently a minimal scaffold (provider config, GCS backend, no resources).
-Actual VM provisioning will be added in a follow-up.
+Terraform root module for a cloud development VM with a static IP, OS Login,
+and dev tooling.
 
 ## CI
 
