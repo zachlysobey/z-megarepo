@@ -26,7 +26,6 @@ infra modules in this repo).
    - Variable: `GCP_WIF_PROVIDER`
    - Variable: `GCP_BILLING_SERVICE_ACCOUNT`
    - Variable: `GCP_TF_STATE_BUCKET`
-   - Variable: `GCP_BUDGET_AMOUNT_USD` (for example `50`)
    - Secret: `GCP_BILLING_ACCOUNT_ID`
 
    The bootstrap script prints copy/paste `gh variable set` and
@@ -39,6 +38,7 @@ infra modules in this repo).
 - Pushes to `master` touching `infra/billing/**` run `terraform apply`.
 - The workflow uses the dedicated `terraform-billing` service account rather
   than the project-level `terraform-ci` account.
+- Budget amount is currently hardcoded in workflow at `$50` per month.
 
 ## When alerts fire
 
