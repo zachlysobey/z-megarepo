@@ -1,0 +1,17 @@
+name: "Tests: GitHub scripts"
+
+on:
+  push:
+    branches: [master]
+    paths: [.github/scripts/**]
+  pull_request:
+    paths: [.github/scripts/**]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Run tests
+        run: node --test .github/scripts/**/*.unit.test.ts

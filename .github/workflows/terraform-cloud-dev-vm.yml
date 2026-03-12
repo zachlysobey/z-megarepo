@@ -48,7 +48,7 @@ jobs:
 
             const scriptPath = path.join(
               GITHUB_WORKSPACE,
-              '.github/scripts/terraform-plan-comment/index.ts',
+              '.github/scripts/terraform-plan-comment/terraformPlanComment.ts',
             );
 
             const { terraformPlanComment } = await import(scriptPath);

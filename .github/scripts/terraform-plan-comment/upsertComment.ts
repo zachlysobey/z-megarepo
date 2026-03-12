@@ -27,14 +27,14 @@ interface UpsertCommentParams {
   body: string;
 }
 
-export default async function upsertComment({ github, context, marker, body }: UpsertCommentParams) {
+export async function upsertComment({ github, context, marker, body }: UpsertCommentParams) {
   const comments = await github.paginate(
     github.rest.issues.listComments,
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
       issue_number: context.issue.number,
-    }
+    },
   );
   const existing = comments.find(c =>
     c.user.type === 'Bot' && c.body.includes(marker)

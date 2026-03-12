@@ -1,13 +1,13 @@
 const MAX_LEN = 60000;
 
-interface BuildCommentBodyParams {
+interface BuildPlanCommentBodyParams {
   moduleName: string;
   planText: string;
   actor: string;
   prUrl: string;
 }
 
-export default function buildCommentBody({ moduleName, planText, actor, prUrl }: BuildCommentBodyParams) {
+export function buildPlanCommentBody({ moduleName, planText, actor, prUrl }: BuildPlanCommentBodyParams) {
   const truncated = planText.length > MAX_LEN
     ? planText.substring(0, MAX_LEN) + '\n... (truncated, see Actions log for full output)'
     : planText;
@@ -21,7 +21,7 @@ export default function buildCommentBody({ moduleName, planText, actor, prUrl }:
     truncated,
     '```',
     '',
-    `*Triggered by @${actor} in ${prUrl}*`
+    `*Triggered by @${actor} in ${prUrl}*`,
   ].join('\n');
 
   return { marker, body };

@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import upsertComment from './upsert-comment.ts';
+import { upsertComment } from './upsertComment.ts';
 
 interface ApiCallRecord {
   owner?: string;
