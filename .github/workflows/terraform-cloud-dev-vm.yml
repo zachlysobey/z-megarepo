@@ -40,10 +40,12 @@ jobs:
       - name: Comment plan on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
+        env:
+          NODE_OPTIONS: --experimental-strip-types --experimental-transform-types
         with:
           script: |
             const path = require('path');
-            const { default: script } = await import(path.join(process.env.GITHUB_WORKSPACE || process.cwd(), '.github/scripts/terraform-plan-comment.ts'));
+            const { default: script } = await import(path.join(process.env.GITHUB_WORKSPACE || process.cwd(), '.github/scripts/terraform-plan-comment/index.ts'));
             await script({github, context, core}, {
               moduleName: 'cloud-dev-vm',
               workingDirectory: 'infra/cloud-dev-vm',
