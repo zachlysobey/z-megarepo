@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "personal-mobile-app",
-    "slug": "personal-mobile-app",
+    "name": "personal-mobile-app-prototype",
+    "slug": "personal-mobile-app-prototype",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
