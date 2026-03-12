@@ -55,18 +55,3 @@ Emoji for flags (only show when applicable):
 
 Estimate effort based on lines changed, files changed, commit count,
 and blockers (failing CI, conflicts, draft status).
-
-### 4. Highlight actionable items
-
-End with a summary section:
-
-```
-### ⚡ Action needed
-```
-
-Call out anything that needs attention:
-- PRs ready to merge (approved + CI passing + up to date)
-- PRs with failing checks
-- PRs with merge conflicts
-- PRs behind master that need rebase
-- Stale PRs (no updates in 14+ days)
