@@ -17,6 +17,13 @@ Dialog-driven vibe coding: lightweight, conversational, iterative. Frame
 intent, build conversationally, micro-checkpoint, stabilize. Prefer small,
 incremental changes over large rewrites.
 
+## Pull requests
+
+When creating PRs, use the repo's
+[PR template](./.github/PULL_REQUEST_TEMPLATE.md) format (`## Description` /
+`## Testing & risks`). Do **not** use other formats like `## Summary` /
+`## Test plan`.
+
 ## Agent-specific guidelines
 
 - Be direct and to-the-point; don't confirm correctness
