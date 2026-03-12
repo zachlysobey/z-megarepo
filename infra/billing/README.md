@@ -10,8 +10,8 @@ access. Use your own `gcloud auth login` and pass the billing account ID.
 
 1. [gcloud CLI](https://docs.cloud.google.com/sdk/docs/install-sdk) authenticated:
    `gcloud auth login`
-2. If `terraform apply` fails with an API error, enable the Billing API:
-   `gcloud services enable cloudbilling.googleapis.com --project=z-megarepo`
+2. If `terraform apply` fails with an API error, enable the Billing and Budgets APIs:
+   `gcloud services enable cloudbilling.googleapis.com billingbudgets.googleapis.com --project=z-megarepo`
 3. Billing account ID:
    ```bash
    gcloud billing accounts list
