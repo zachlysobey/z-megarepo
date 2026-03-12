@@ -19,10 +19,9 @@ incremental changes over large rewrites.
 
 ## Pull requests
 
-When creating PRs, use the repo's
-[PR template](./.github/PULL_REQUEST_TEMPLATE.md) format (`## Description` /
-`## Testing & risks`). Do **not** use other formats like `## Summary` /
-`## Test plan`.
+Always follow the [git-workflow skill](./.claude/skills/git-workflow/SKILL.md)
+and use the repo's [PR template](./.github/PULL_REQUEST_TEMPLATE.md). Do
+**not** substitute other PR body formats.
 
 ## Agent-specific guidelines
 
