@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+import { cli } from '../src/cli.ts';
+
+cli().catch(err => {
+  console.error(err.message);
+  process.exit(1);
+});
