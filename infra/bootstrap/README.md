@@ -65,7 +65,6 @@ The script outputs values that are configured as **GitHub repo variables**
 - **`GCP_SERVICE_ACCOUNT`** — `terraform-ci@z-megarepo.iam.gserviceaccount.com`
 - **`GCP_BILLING_SERVICE_ACCOUNT`** — `terraform-billing@z-megarepo.iam.gserviceaccount.com`
 - **`GCP_TF_STATE_BUCKET`** — `z-megarepo-tfstate`
-- **`GCP_BUDGET_AMOUNT_USD`** — default monthly budget value (for CI workflows)
 
 Also set this as a GitHub Actions secret:
 
