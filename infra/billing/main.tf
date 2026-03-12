@@ -17,7 +17,7 @@ provider "google" {
 # are sent to billing account administrators (no extra notification config).
 resource "google_billing_budget" "project" {
   billing_account = var.billing_account_id
-  display_name    = "z-megarepo project budget"
+  display_name    = "${var.project_id} project budget"
 
   budget_filter {
     projects = ["projects/${var.project_id}"]
@@ -26,7 +26,8 @@ resource "google_billing_budget" "project" {
   amount {
     specified_amount {
       currency_code = "USD"
-      units         = tostring(var.budget_amount_usd)
+      units         = tostring(floor(var.budget_amount_usd))
+      nanos         = floor((var.budget_amount_usd - floor(var.budget_amount_usd)) * 1000000000)
     }
   }
 
