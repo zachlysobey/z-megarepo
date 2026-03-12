@@ -3,42 +3,42 @@
 Terraform module for a **monthly budget** on the GCP project, with email alerts at
 50%, 90%, and 100% of the budget. Alerts go to billing account administrators.
 
-Apply this **locally** (not from CI): budget creation requires billing account
-access. Use your own `gcloud auth login` and pass the billing account ID.
+This module is managed through GitHub Actions CI (same GitOps flow as other
+infra modules in this repo).
 
 ## Prerequisites
 
-1. [gcloud CLI](https://docs.cloud.google.com/sdk/docs/install-sdk) authenticated:
-   `gcloud auth login`
-2. If `terraform apply` fails with an API error, enable the Billing and Budgets APIs:
-   `gcloud services enable cloudbilling.googleapis.com billingbudgets.googleapis.com --project=z-megarepo`
-3. Billing account ID:
+1. Re-run the bootstrap script with your billing account ID:
+
    ```bash
-   gcloud billing accounts list
+   cd infra/bootstrap
+   ./bootstrap.sh z-megarepo zachlysobey/z-megarepo <BILLING_ACCOUNT_ID>
    ```
-   Use the `ACCOUNT_ID` (not the name).
 
-## Usage
+   This ensures:
+   - `terraform-billing` service account exists
+   - `billingbudgets.googleapis.com` is enabled
+   - state bucket access is granted
+   - billing IAM binding (`roles/billing.costsManager`) is set for billing CI
 
-```bash
-cd infra/billing
-terraform init \
-  -backend-config="bucket=z-megarepo-tfstate" \
-  -backend-config="prefix=billing"
+2. Configure GitHub Actions variables/secrets:
+   - Variable: `GCP_PROJECT_ID`
+   - Variable: `GCP_WIF_PROVIDER`
+   - Variable: `GCP_BILLING_SERVICE_ACCOUNT`
+   - Variable: `GCP_TF_STATE_BUCKET`
+   - Variable: `GCP_BUDGET_AMOUNT_USD` (for example `50`)
+   - Secret: `GCP_BILLING_ACCOUNT_ID`
 
-terraform plan \
-  -var="project_id=z-megarepo" \
-  -var="billing_account_id=YOUR_ACCOUNT_ID" \
-  -var="budget_amount_usd=50"
+   The bootstrap script prints copy/paste `gh variable set` and
+   `gh secret set` commands.
 
-terraform apply \
-  -var="project_id=z-megarepo" \
-  -var="billing_account_id=YOUR_ACCOUNT_ID" \
-  -var="budget_amount_usd=50"
-```
+## CI behavior
 
-Or use a `terraform.tfvars` (gitignored) and run `terraform apply` without
-repeating `-var`. Default budget is $50/month; change `budget_amount_usd` as needed.
+- Pull requests that touch `infra/billing/**` run `terraform plan` and post the
+  plan as a PR comment.
+- Pushes to `master` touching `infra/billing/**` run `terraform apply`.
+- The workflow uses the dedicated `terraform-billing` service account rather
+  than the project-level `terraform-ci` account.
 
 ## When alerts fire
 
@@ -46,5 +46,5 @@ repeating `-var`. Default budget is $50/month; change `budget_amount_usd` as nee
 - **90%** — Nearing the limit.
 - **100%** — Budget reached (no automatic shutdown; this is alerting only).
 
-You can create this budget before any other resources (e.g. before merging the
-cloud-dev-vm PR); it applies to all spend in the project.
+The budget applies to all spend in the target project configured by
+`project_id`.
