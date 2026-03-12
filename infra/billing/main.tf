@@ -26,8 +26,7 @@ resource "google_billing_budget" "project" {
   amount {
     specified_amount {
       currency_code = "USD"
-      units         = tostring(floor(var.budget_amount_usd))
-      nanos         = floor((var.budget_amount_usd - floor(var.budget_amount_usd)) * 1000000000)
+      units         = "50"
     }
   }
 
