@@ -1,6 +1,28 @@
+interface IssueComment {
+  id: number;
+  user: { type: string };
+  body: string;
+}
+
+interface GitHubClient {
+  paginate: (method: object, params: object) => Promise<IssueComment[]>;
+  rest: {
+    issues: {
+      listComments: object;
+      createComment: (params: { owner: string; repo: string; issue_number: number; body: string }) => Promise<void>;
+      updateComment: (params: { owner: string; repo: string; comment_id: number; body: string }) => Promise<void>;
+    };
+  };
+}
+
+interface GitHubContext {
+  repo: { owner: string; repo: string };
+  issue: { number: number };
+}
+
 interface UpsertCommentParams {
-  github: any;
-  context: { repo: { owner: string; repo: string }; issue: { number: number } };
+  github: GitHubClient;
+  context: GitHubContext;
   marker: string;
   body: string;
 }
@@ -14,7 +36,7 @@ export default async function upsertComment({ github, context, marker, body }: U
       issue_number: context.issue.number,
     }
   );
-  const existing = comments.find((c: any) =>
+  const existing = comments.find(c =>
     c.user.type === 'Bot' && c.body.includes(marker)
   );
   if (existing) {

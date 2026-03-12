@@ -2,9 +2,22 @@ import { execSync } from 'child_process';
 import buildCommentBody from './build-plan-comment-body.ts';
 import upsertComment from './upsert-comment.ts';
 
+interface ActionToolkit {
+  github: Parameters<typeof upsertComment>[0]['github'];
+  context: Parameters<typeof upsertComment>[0]['context'];
+  core: { info: (msg: string) => void; warning: (msg: string) => void };
+}
+
+interface RunOptions {
+  moduleName: string;
+  workingDirectory: string;
+  actor: string;
+  prUrl: string;
+}
+
 export default async function run(
-  { github, context, core }: { github: any; context: any; core: any },
-  { moduleName, workingDirectory, actor, prUrl }: { moduleName: string; workingDirectory: string; actor: string; prUrl: string },
+  { github, context }: ActionToolkit,
+  { moduleName, workingDirectory, actor, prUrl }: RunOptions,
 ) {
   const planText = execSync(
     'terraform show -no-color tfplan',

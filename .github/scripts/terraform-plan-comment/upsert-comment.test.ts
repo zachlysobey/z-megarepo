@@ -2,9 +2,23 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import upsertComment from './upsert-comment.ts';
 
+interface ApiCallRecord {
+  owner?: string;
+  repo?: string;
+  issue_number?: number;
+  comment_id?: number;
+  body: string;
+}
+
+interface IssueComment {
+  id: number;
+  user: { type: string };
+  body: string;
+}
+
 describe('upsertComment', () => {
-  function makeGithub({ existingComments = [] as any[] } = {}) {
-    const calls = { created: [] as any[], updated: [] as any[] };
+  function makeGithub({ existingComments = [] as IssueComment[] } = {}) {
+    const calls = { created: [] as ApiCallRecord[], updated: [] as ApiCallRecord[] };
     return {
       calls,
       github: {
@@ -12,8 +26,8 @@ describe('upsertComment', () => {
         rest: {
           issues: {
             listComments: {},
-            createComment: async (params: any) => { calls.created.push(params); },
-            updateComment: async (params: any) => { calls.updated.push(params); },
+            createComment: async (params: ApiCallRecord) => { calls.created.push(params); },
+            updateComment: async (params: ApiCallRecord) => { calls.updated.push(params); },
           },
         },
       },
