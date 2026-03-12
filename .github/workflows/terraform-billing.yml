@@ -16,7 +16,7 @@ jobs:
     uses: ./.github/workflows/terraform.yml
     with:
       module_name: billing
-      terraform_vars: '-var="project_id=${{ vars.GCP_PROJECT_ID }}" -var="budget_amount_usd=${{ vars.GCP_BUDGET_AMOUNT_USD }}"'
+      terraform_vars: '-var="project_id=${{ vars.GCP_PROJECT_ID }}" -var="budget_amount_usd=50"'
       gcp_service_account: ${{ vars.GCP_BILLING_SERVICE_ACCOUNT }}
     secrets:
       terraform_secret_vars: '-var="billing_account_id=${{ secrets.GCP_BILLING_ACCOUNT_ID }}"'

@@ -104,7 +104,6 @@ echo "  gh variable set GCP_WIF_PROVIDER --body \"projects/${PROJECT_NUMBER}/loc
 echo "  gh variable set GCP_SERVICE_ACCOUNT --body \"${SA_EMAIL}\""
 echo "  gh variable set GCP_BILLING_SERVICE_ACCOUNT --body \"${SA_BILLING_EMAIL}\""
 echo "  gh variable set GCP_TF_STATE_BUCKET --body \"${STATE_BUCKET}\""
-echo "  gh variable set GCP_BUDGET_AMOUNT_USD --body \"50\""
 if [ -n "$BILLING_ACCOUNT_ID" ]; then
   echo "  gh secret set GCP_BILLING_ACCOUNT_ID --body \"${BILLING_ACCOUNT_ID}\""
 else
