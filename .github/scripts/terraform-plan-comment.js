@@ -1,15 +1,11 @@
 const { execSync } = require('child_process');
 
-module.exports = async ({ github, context, core }, { moduleName, workingDirectory, actor, prUrl }) => {
-  const plan = execSync(
-    'terraform show -no-color tfplan',
-    { cwd: workingDirectory, maxBuffer: 1024 * 1024 }
-  ).toString();
+const MAX_LEN = 60000;
 
-  const MAX_LEN = 60000;
-  const planText = plan.length > MAX_LEN
-    ? plan.substring(0, MAX_LEN) + '\n... (truncated, see Actions log for full output)'
-    : plan;
+function buildCommentBody({ moduleName, planText, actor, prUrl }) {
+  const truncated = planText.length > MAX_LEN
+    ? planText.substring(0, MAX_LEN) + '\n... (truncated, see Actions log for full output)'
+    : planText;
 
   const marker = `<!-- tf-plan:${moduleName} -->`;
   const body = [
@@ -17,12 +13,16 @@ module.exports = async ({ github, context, core }, { moduleName, workingDirector
     `#### Terraform Plan — \`${moduleName}\``,
     '',
     '```',
-    planText,
+    truncated,
     '```',
     '',
     `*Triggered by @${actor} in ${prUrl}*`
   ].join('\n');
 
+  return { marker, body };
+}
+
+async function upsertComment({ github, context, marker, body }) {
   const comments = await github.paginate(
     github.rest.issues.listComments,
     {
@@ -49,4 +49,18 @@ module.exports = async ({ github, context, core }, { moduleName, workingDirector
       body,
     });
   }
-};
+}
+
+async function run({ github, context, core }, { moduleName, workingDirectory, actor, prUrl }) {
+  const planText = execSync(
+    'terraform show -no-color tfplan',
+    { cwd: workingDirectory, maxBuffer: 1024 * 1024 }
+  ).toString();
+
+  const { marker, body } = buildCommentBody({ moduleName, planText, actor, prUrl });
+  await upsertComment({ github, context, marker, body });
+}
+
+module.exports = run;
+module.exports.buildCommentBody = buildCommentBody;
+module.exports.upsertComment = upsertComment;
