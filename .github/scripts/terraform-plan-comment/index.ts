@@ -5,7 +5,6 @@ import upsertComment from './upsert-comment.ts';
 interface ActionToolkit {
   github: Parameters<typeof upsertComment>[0]['github'];
   context: Parameters<typeof upsertComment>[0]['context'];
-  core: { info: (msg: string) => void; warning: (msg: string) => void };
 }
 
 interface RunOptions {

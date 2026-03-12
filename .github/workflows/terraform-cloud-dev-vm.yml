@@ -54,7 +54,7 @@ jobs:
             const { terraformPlanComment } = await import(scriptPath);
 
             await terraformPlanComment(
-              { github, context, core },
+              { github, context },
               {
                 moduleName: 'cloud-dev-vm',
                 workingDirectory: 'infra/cloud-dev-vm',
