@@ -43,13 +43,25 @@ jobs:
         with:
           script: |
             const path = require('path');
-            const { default: script } = await import(path.join(process.env.GITHUB_WORKSPACE, '.github/scripts/terraform-plan-comment/index.ts'));
-            await script({github, context, core}, {
-              moduleName: 'cloud-dev-vm',
-              workingDirectory: 'infra/cloud-dev-vm',
-              actor: '${{ github.actor }}',
-              prUrl: '${{ github.event.pull_request.html_url }}',
-            });
+
+            const { GITHUB_WORKSPACE } = process.env;
+
+            const scriptPath = path.join(
+              GITHUB_WORKSPACE,
+              '.github/scripts/terraform-plan-comment/index.ts',
+            );
+
+            const { default: script } = await import(scriptPath);
+
+            await script(
+              { github, context, core },
+              {
+                moduleName: 'cloud-dev-vm',
+                workingDirectory: 'infra/cloud-dev-vm',
+                actor: '${{ github.actor }}',
+                prUrl: '${{ github.event.pull_request.html_url }}',
+              },
+            );
       - name: Fail if plan failed
         if: steps.plan.outcome == 'failure'
         run: exit 1
