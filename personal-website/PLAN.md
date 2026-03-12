@@ -3,8 +3,8 @@
 ## Overview
 
 Migrate <https://github.com/zachlysobey/personal-site> into z-megarepo as a
-new top-level subproject (`personal-site/`), preserving full git history and
-conforming to existing monorepo conventions.
+new top-level subproject (`personal-website/`), preserving full git history
+and conforming to existing monorepo conventions.
 
 The personal-site is a Gatsby 2 static blog (React 16, Markdown content,
 ~119 commits, active 2018-2021). It is currently deployed to GitHub Pages at
@@ -31,7 +31,7 @@ The personal-site is a Gatsby 2 static blog (React 16, Markdown content,
 
 Use `git subtree` (or `git merge --allow-unrelated-histories` with a
 subdirectory filter) to bring the full history of `personal-site` into
-z-megarepo under `personal-site/`.
+z-megarepo under `personal-website/`.
 
 ### Steps
 
@@ -46,11 +46,11 @@ z-megarepo under `personal-site/`.
 2. Import using `git subtree add`:
 
    ```bash
-   git subtree add --prefix=personal-site \
+   git subtree add --prefix=personal-website \
      personal-site-origin master --squash=false
    ```
 
-   This places all files under `personal-site/` and preserves the full
+   This places all files under `personal-website/` and preserves the full
    commit history (119 commits) as part of the monorepo's history.
 
 3. Remove the temporary remote:
@@ -62,14 +62,14 @@ z-megarepo under `personal-site/`.
 4. Verify the history is intact:
 
    ```bash
-   git log --oneline -- personal-site/ | wc -l   # expect ~119
-   git log --oneline -- personal-site/ | tail -5  # earliest commits visible
+   git log --oneline -- personal-website/ | wc -l   # expect ~119
+   git log --oneline -- personal-website/ | tail -5  # earliest commits visible
    ```
 
 ### Outcome
 
-All personal-site files live under `personal-site/` with full git history
-accessible via `git log -- personal-site/`.
+All personal-site files live under `personal-website/` with full git
+history accessible via `git log -- personal-website/`.
 
 ---
 
@@ -99,7 +99,7 @@ Update configuration files to match existing subproject conventions
 3. **Update `package.json`**:
    - Ensure `"private": true`
    - Update `engines` to match `.nvmrc` choice
-   - Verify `name` is `personal-site` (already matches)
+   - Update `name` to `personal-website`
 
 4. **Remove Travis CI config** — delete `.travis.yml` (CI will move to
    GitHub Actions in the next phase).
@@ -114,7 +114,7 @@ Update configuration files to match existing subproject conventions
 
 ### Outcome
 
-`personal-site/` follows the same structural conventions as other
+`personal-website/` follows the same structural conventions as other
 subprojects in the monorepo.
 
 ---
@@ -123,13 +123,13 @@ subprojects in the monorepo.
 
 **PR 3 — Add GitHub Actions workflow for personal-site**
 
-Create `.github/workflows/personal-site.yml` following the established
+Create `.github/workflows/personal-website.yml` following the established
 pattern.
 
 ### Template
 
 ```yaml
-name: Personal Site CI
+name: Personal Website CI
 
 on:
   push:
@@ -138,8 +138,8 @@ on:
     branches: ["master"]
 
 jobs:
-  personal-site-ci:
-    name: Personal Site CI
+  personal-website-ci:
+    name: Personal Website CI
     runs-on: ubuntu-latest
 
     permissions:
@@ -147,7 +147,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: personal-site
+        working-directory: personal-website
 
     steps:
       - name: Checkout code
@@ -156,9 +156,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: "personal-site/.nvmrc"
+          node-version-file: "personal-website/.nvmrc"
           cache: "npm"
-          cache-dependency-path: "personal-site/package-lock.json"
+          cache-dependency-path: "personal-website/package-lock.json"
 
       - name: Install dependencies
         run: npm ci
@@ -177,18 +177,18 @@ jobs:
 
 ### Outcome
 
-Every push and PR runs CI for `personal-site/`, consistent with other
+Every push and PR runs CI for `personal-website/`, consistent with other
 subprojects.
 
 ---
 
 ## Phase 4: Update monorepo documentation
 
-**PR 4 — Add personal-site to repo docs**
+**PR 4 — Add personal-website to repo docs**
 
 ### Steps
 
-1. **Update `README.md`** — add `personal-site/` to the repository
+1. **Update `README.md`** — add `personal-website/` to the repository
    structure listing:
 
    ```text
@@ -198,13 +198,13 @@ subprojects.
    ├── docs/                   # Conventions and reference documentation
    ├── infra/                  # GCP infrastructure (Terraform)
    ├── personal-mobile-app/    # Expo/React Native mobile app
-   ├── personal-site/          # Gatsby blog (zach.lysobey.com)
    ├── personal-webapp/        # Next.js + React 19 + TypeScript
+   ├── personal-website/       # Gatsby blog (zach.lysobey.com)
    └── project-templates/      # Scaffolding templates
    ```
 
 2. **Update `docs/vision.md`** — the "Blog platform" bullet already
-   covers this conceptually; optionally add a note that personal-site
+   covers this conceptually; optionally add a note that personal-website
    now lives in the monorepo.
 
 3. **Clean up this migration plan** — mark phases as completed, or move
@@ -212,7 +212,7 @@ subprojects.
 
 ### Outcome
 
-New contributors and tooling can discover `personal-site/` from the
+New contributors and tooling can discover `personal-website/` from the
 top-level documentation.
 
 ---
@@ -243,7 +243,8 @@ Gatsby first.
 - Markdown content and frontmatter can be preserved with libraries like
   `next-mdx-remote` or `contentlayer`.
 - The `personal-webapp/` project could potentially absorb the blog
-  content, eliminating a separate subproject entirely.
+  content, eliminating `personal-website/` as a separate subproject
+  entirely.
 
 ### 5d. Deployment migration
 
