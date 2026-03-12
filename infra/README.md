@@ -1,7 +1,7 @@
 # infra/
 
 Infrastructure-as-code (Terraform) for GCP resources in the `z-megarepo`
-project.
+project. All Terraform modules are planned and applied via GitHub Actions CI.
 
 ## Directory layout
 
@@ -10,4 +10,4 @@ project.
 - **[`cloud-dev-vm/`](cloud-dev-vm/)** — Terraform root module for a remote
   development environment.
 - **[`billing/`](billing/)** — Monthly budget and email alerts (50%/90%/100%) for
-  the project; managed via GitHub Actions.
+  the project.
