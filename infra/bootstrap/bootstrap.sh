@@ -21,6 +21,7 @@ gcloud services enable \
   cloudresourcemanager.googleapis.com \
   iamcredentials.googleapis.com \
   sts.googleapis.com \
+  cloudbilling.googleapis.com \
   billingbudgets.googleapis.com
 
 # State bucket

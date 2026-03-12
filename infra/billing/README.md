@@ -38,7 +38,7 @@ infra modules in this repo).
 - Pushes to `master` touching `infra/billing/**` run `terraform apply`.
 - The workflow uses the dedicated `terraform-billing` service account rather
   than the project-level `terraform-ci` account.
-- Budget amount is currently hardcoded in workflow at `$50` per month.
+- Budget amount is hardcoded at `$50` per month in `main.tf`.
 
 ## When alerts fire
 
