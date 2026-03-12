@@ -51,9 +51,9 @@ jobs:
               '.github/scripts/terraform-plan-comment/index.ts',
             );
 
-            const { default: script } = await import(scriptPath);
+            const { terraformPlanComment } = await import(scriptPath);
 
-            await script(
+            await terraformPlanComment(
               { github, context, core },
               {
                 moduleName: 'cloud-dev-vm',

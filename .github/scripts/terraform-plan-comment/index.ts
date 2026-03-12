@@ -15,7 +15,7 @@ interface RunOptions {
   prUrl: string;
 }
 
-export default async function run(
+export async function terraformPlanComment(
   { github, context }: ActionToolkit,
   { moduleName, workingDirectory, actor, prUrl }: RunOptions,
 ) {
