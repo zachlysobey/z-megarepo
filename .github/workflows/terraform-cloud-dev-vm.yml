@@ -43,7 +43,7 @@ jobs:
         with:
           script: |
             const path = require('path');
-            const script = require(path.join(process.env.GITHUB_WORKSPACE || process.cwd(), '.github/scripts/terraform-plan-comment.js'));
+            const { default: script } = await import(path.join(process.env.GITHUB_WORKSPACE || process.cwd(), '.github/scripts/terraform-plan-comment.ts'));
             await script({github, context, core}, {
               moduleName: 'cloud-dev-vm',
               workingDirectory: 'infra/cloud-dev-vm',
