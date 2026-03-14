@@ -14,12 +14,10 @@ if needed.
 3. A `terraform-ci` service account with project-level roles
    (`compute.admin`, `iam.serviceAccountUser`) and bucket-scoped
    `storage.objectAdmin` on the state bucket.
-4. A `terraform-billing` service account with bucket-scoped
-   `storage.objectAdmin` on the state bucket (no project admin roles).
-5. **Workload Identity Federation** (WIF) so GitHub Actions can authenticate
-   as these service accounts with no long-lived keys.
-6. Optional billing account IAM binding (`roles/billing.costsManager`) for
-   `terraform-billing` when a billing account ID is provided.
+4. **Workload Identity Federation** (WIF) so GitHub Actions can authenticate
+   as the service account with no long-lived keys.
+5. Optional billing account IAM binding (`roles/billing.costsManager`) for
+   `terraform-ci` when a billing account ID is provided.
 
 ## Prerequisites
 
@@ -63,7 +61,6 @@ The script outputs values that are configured as **GitHub repo variables**
 - **`GCP_WIF_PROVIDER`** — the full provider path, e.g.
   `projects/<number>/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider`
 - **`GCP_SERVICE_ACCOUNT`** — `terraform-ci@z-megarepo.iam.gserviceaccount.com`
-- **`GCP_BILLING_SERVICE_ACCOUNT`** — `terraform-billing@z-megarepo.iam.gserviceaccount.com`
 - **`GCP_TF_STATE_BUCKET`** — `z-megarepo-tfstate`
 
 Also set this as a GitHub Actions secret:
