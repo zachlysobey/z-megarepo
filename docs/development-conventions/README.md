@@ -8,4 +8,5 @@ standards.
 - [JavaScript](./javascript/) - JavaScript/TypeScript development
   standards
 - [Markdown](./markdown/) - Markdown formatting and linting standards
+- [Terraform](./terraform/) - Terraform style and structure standards
 - [Git](./git/) - Git workflow and branch conventions
