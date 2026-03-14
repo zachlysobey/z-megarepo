@@ -34,8 +34,14 @@ git checkout <headRefName from step 1>
 git rebase origin/master
 ```
 
-- **Verify** the rebase is complete: `git log --oneline HEAD..origin/master`
-  must show no commits. If it does, fetch and rebase again.
+- **Verify** the rebase is complete:
+
+  ```
+  git fetch origin master
+  git log --oneline HEAD..FETCH_HEAD
+  ```
+
+  This must show no commits. If it does, fetch and rebase again.
 - If conflicts arise, resolve them (ask for clarification if unclear)
 - Push the rebased branch:
 
