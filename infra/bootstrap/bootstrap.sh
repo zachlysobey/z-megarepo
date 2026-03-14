@@ -8,8 +8,6 @@ BILLING_ACCOUNT_ID="${3:-}"
 STATE_BUCKET="${PROJECT_ID}-tfstate"
 SA_NAME="terraform-ci"
 SA_EMAIL="${SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
-SA_BILLING_NAME="terraform-billing"
-SA_BILLING_EMAIL="${SA_BILLING_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 WIF_POOL="github-actions-pool"
 WIF_PROVIDER="github-actions-provider"
 
@@ -46,15 +44,6 @@ done
 gcloud storage buckets add-iam-policy-binding "gs://${STATE_BUCKET}" \
   --member="serviceAccount:${SA_EMAIL}" --role="roles/storage.objectAdmin"
 
-# Billing service account (least privilege for billing module CI)
-if gcloud iam service-accounts describe "$SA_BILLING_EMAIL" &>/dev/null; then
-  echo "Service account ${SA_BILLING_EMAIL} already exists"
-else
-  gcloud iam service-accounts create "$SA_BILLING_NAME" --display-name="Terraform Billing CI"
-fi
-gcloud storage buckets add-iam-policy-binding "gs://${STATE_BUCKET}" \
-  --member="serviceAccount:${SA_BILLING_EMAIL}" --role="roles/storage.objectAdmin"
-
 # Workload Identity Federation
 if gcloud iam workload-identity-pools describe "$WIF_POOL" --location=global &>/dev/null; then
   echo "WIF pool ${WIF_POOL} already exists"
@@ -78,13 +67,10 @@ PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectN
 gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL" \
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/attribute.repository/${GITHUB_REPO}"
-gcloud iam service-accounts add-iam-policy-binding "$SA_BILLING_EMAIL" \
-  --role="roles/iam.workloadIdentityUser" \
-  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/attribute.repository/${GITHUB_REPO}"
 
 if [ -n "$BILLING_ACCOUNT_ID" ]; then
   gcloud billing accounts add-iam-policy-binding "$BILLING_ACCOUNT_ID" \
-    --member="serviceAccount:${SA_BILLING_EMAIL}" \
+    --member="serviceAccount:${SA_EMAIL}" \
     --role="roles/billing.costsManager" --quiet
 else
   echo ""
@@ -96,14 +82,12 @@ echo "Set these as GitHub repo variables:"
 echo "  GCP_PROJECT_ID:      ${PROJECT_ID}"
 echo "  GCP_WIF_PROVIDER:    projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/providers/${WIF_PROVIDER}"
 echo "  GCP_SERVICE_ACCOUNT: ${SA_EMAIL}"
-echo "  GCP_BILLING_SERVICE_ACCOUNT: ${SA_BILLING_EMAIL}"
 echo "  GCP_TF_STATE_BUCKET: ${STATE_BUCKET}"
 echo ""
 echo "Set these as GitHub variables/secrets (copy/paste):"
 echo "  gh variable set GCP_PROJECT_ID --body \"${PROJECT_ID}\""
 echo "  gh variable set GCP_WIF_PROVIDER --body \"projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/providers/${WIF_PROVIDER}\""
 echo "  gh variable set GCP_SERVICE_ACCOUNT --body \"${SA_EMAIL}\""
-echo "  gh variable set GCP_BILLING_SERVICE_ACCOUNT --body \"${SA_BILLING_EMAIL}\""
 echo "  gh variable set GCP_TF_STATE_BUCKET --body \"${STATE_BUCKET}\""
 if [ -n "$BILLING_ACCOUNT_ID" ]; then
   echo "  gh secret set GCP_BILLING_ACCOUNT_ID --body \"${BILLING_ACCOUNT_ID}\""

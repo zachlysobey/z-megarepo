@@ -17,7 +17,6 @@ jobs:
     with:
       module_name: billing
       terraform_vars: '-var="project_id=${{ vars.GCP_PROJECT_ID }}"'
-      gcp_service_account: ${{ vars.GCP_BILLING_SERVICE_ACCOUNT }}
     secrets:
       terraform_secret_vars: '-var="billing_account_id=${{ secrets.GCP_BILLING_ACCOUNT_ID }}"'
     permissions:

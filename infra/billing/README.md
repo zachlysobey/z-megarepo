@@ -16,15 +16,14 @@ infra modules in this repo).
    ```
 
    This ensures:
-   - `terraform-billing` service account exists
    - `billingbudgets.googleapis.com` is enabled
-   - state bucket access is granted
-   - billing IAM binding (`roles/billing.costsManager`) is set for billing CI
+   - billing IAM binding (`roles/billing.costsManager`) is set on the shared
+     `terraform-ci` service account
 
 2. Configure GitHub Actions variables/secrets:
    - Variable: `GCP_PROJECT_ID`
    - Variable: `GCP_WIF_PROVIDER`
-   - Variable: `GCP_BILLING_SERVICE_ACCOUNT`
+   - Variable: `GCP_SERVICE_ACCOUNT`
    - Variable: `GCP_TF_STATE_BUCKET`
    - Secret: `GCP_BILLING_ACCOUNT_ID`
 
@@ -36,8 +35,6 @@ infra modules in this repo).
 - Pull requests that touch `infra/billing/**` run `terraform plan` and post the
   plan as a PR comment.
 - Pushes to `master` touching `infra/billing/**` run `terraform apply`.
-- The workflow uses the dedicated `terraform-billing` service account rather
-  than the project-level `terraform-ci` account.
 - Budget amount is hardcoded at `$50` per month in `main.tf`.
 
 ## When alerts fire
