@@ -42,6 +42,7 @@ git rebase origin/master
   ```
 
   This must show no commits. If it does, fetch and rebase again.
+
 - If conflicts arise, resolve them (ask for clarification if unclear)
 - Push the rebased branch:
 
