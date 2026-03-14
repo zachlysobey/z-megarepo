@@ -1,7 +1,7 @@
 # infra/
 
 Infrastructure-as-code (Terraform) for GCP resources in the `z-megarepo`
-project. All Terraform modules are planned and applied via GitHub Actions CI.
+project.
 
 ## Directory layout
 
