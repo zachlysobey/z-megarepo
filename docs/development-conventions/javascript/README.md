@@ -24,6 +24,7 @@ See the [Node.js Version Management Guide](./node-version-management-guide.md)
   [Guidance for the `.npmrc` File](./npmrc-guidance.md))
 - Use `npm ci` in CI/CD pipelines
 - Use exact versions in package.json for dependencies
+- Dependency updates are automated via [Renovate](../../../renovate.json)
 
 ## Testing
 
