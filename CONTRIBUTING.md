@@ -70,8 +70,10 @@ See [testing guide] and [Jest style guide].
 - Use **npm** (not yarn or pnpm)
 - Check `.nvmrc` in each subproject for the expected Node.js version
 - Avoid directly editing `package.json`; use `npm install` or `npm pkg set`
+- Dependency updates are automated via [Renovate]
 
 See [package.json guide] and [npmrc guidance].
 
 [package.json guide]: ./docs/development-conventions/javascript/package-json-guide.md
 [npmrc guidance]: ./docs/development-conventions/javascript/npmrc-guidance.md
+[Renovate]: ./renovate.json
