@@ -1,4 +1,4 @@
-# Personal Mobile App
+# Personal Mobile App Prototype
 
 A bare bones Expo mobile application.
 
