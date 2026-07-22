@@ -17,7 +17,7 @@ other "as code" practices for maximum repeatability and automation.
 ## Project examples
 
 - Personal mobile app
-- Blog platform
+- Blog platform ([personal-website](../personal-website/))
 - Backstage instance for developer portal
 - Scaffolding tools and generators
 - Utility libraries

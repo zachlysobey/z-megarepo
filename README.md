@@ -14,6 +14,7 @@ z-megarepo/
 ├── infra/                  # GCP infrastructure (Terraform)
 ├── personal-mobile-app/    # Expo/React Native mobile app
 ├── personal-webapp/        # Next.js + React 19 + TypeScript
+├── personal-website/       # Gatsby blog (zach.lysobey.com)
 └── project-templates/      # Scaffolding templates for new projects
 ```
 
