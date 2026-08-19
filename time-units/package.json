@@ -37,5 +37,10 @@
       "version": ">=24 <25",
       "onFail": "error"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachlysobey/z-megarepo.git",
+    "directory": "time-units"
   }
 }
