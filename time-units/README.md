@@ -15,7 +15,7 @@ import {
   hoursToMinutes,
   millisecondsToSeconds,
   minutesToMilliseconds,
-} from "time-units";
+} from "@zachlysobey/time-units";
 
 minutesToMilliseconds(5); // 300_000
 millisecondsToSeconds(1_500); // 1.5
