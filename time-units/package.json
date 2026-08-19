@@ -1,0 +1,20 @@
+{
+  "name": "time-units",
+  "version": "0.0.1",
+  "description": "Tiny, dependency-free TypeScript library for converting between fixed units of elapsed time",
+  "scripts": {
+    "test": "node --test",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "Zachary Lysobey <zach@lysobey.com> (https://github.com/zachlysobey)",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "engines": {
+    "node": ">=24 < 25",
+    "npm": ">=10"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "typescript": "5.9.3"
+  }
+}

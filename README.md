@@ -14,7 +14,8 @@ z-megarepo/
 ├── infra/                  # GCP infrastructure (Terraform)
 ├── personal-mobile-app/    # Expo/React Native mobile app
 ├── personal-webapp/        # Next.js + React 19 + TypeScript
-└── project-templates/      # Scaffolding templates for new projects
+├── project-templates/      # Scaffolding templates for new projects
+└── time-units/             # Dependency-free time-unit conversions (TypeScript)
 ```
 
 Several subdirectories are Node-based subprojects, each self-contained with
