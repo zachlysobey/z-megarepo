@@ -1,5 +1,5 @@
 {
-  "name": "@zachlysobey/time-units",
+  "name": "z-time-units",
   "version": "1.0.0",
   "description": "Tiny, dependency-free TypeScript library for converting between fixed units of elapsed time",
   "scripts": {
@@ -42,8 +42,5 @@
     "type": "git",
     "url": "git+https://github.com/zachlysobey/z-megarepo.git",
     "directory": "time-units"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
