@@ -4,7 +4,7 @@ A tiny, dependency-free TypeScript library for converting between fixed
 units of elapsed time: milliseconds, seconds, minutes, hours, and days.
 
 The entire implementation is a single TypeScript file:
-[`index.ts`](./index.ts).
+[`index.ts`](https://github.com/zachlysobey/z-megarepo/blob/master/time-units/index.ts).
 
 ## Usage
 
@@ -90,8 +90,9 @@ daysToHours(-2); // -48
 
 ## Contributing
 
-See the [CONTRIBUTING guide](./docs/CONTRIBUTING.md) for setup and
-development scripts.
+See the
+[CONTRIBUTING guide](https://github.com/zachlysobey/z-megarepo/blob/master/time-units/docs/CONTRIBUTING.md)
+for setup and development scripts.
 
 ## Packaging
 
@@ -102,5 +103,6 @@ exports.
 
 ## License
 
-[MIT](./LICENSE) — unlike the rest of the surrounding monorepo, which is
-GPL-3.0-or-later, this package is MIT-licensed to encourage adoption.
+[MIT](https://github.com/zachlysobey/z-megarepo/blob/master/time-units/LICENSE)
+— unlike the rest of the surrounding monorepo, which is GPL-3.0-or-later,
+this package is MIT-licensed to encourage adoption.

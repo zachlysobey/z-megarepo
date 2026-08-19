@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Tiny, dependency-free TypeScript library for converting between fixed units of elapsed time",
   "scripts": {
-    "test": "node --test '*.test.ts'",
+    "test": "node --test \"*.test.ts\"",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
     "prepack": "npm run build"
