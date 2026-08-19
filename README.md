@@ -34,4 +34,6 @@ its own `package.json`, `.nvmrc`, and CI workflow.
 ## License
 
 All contents of this repository are licensed under the
-[GNU General Public License v3.0 or later](./LICENSE).
+[GNU General Public License v3.0 or later](./LICENSE), with the exception
+of [`time-units/`](./time-units/), which is licensed under the
+[MIT License](./time-units/LICENSE).

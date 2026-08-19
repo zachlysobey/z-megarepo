@@ -443,3 +443,8 @@ The published package is ESM-only with bundled type declarations, built by
 `npm run build` into `dist/` and exposed through the `exports` map. It is
 runtime-agnostic (browsers, Node, Bun, Deno, workers) and declares
 `sideEffects: false` so bundlers can tree-shake unused exports.
+
+## License
+
+[MIT](./LICENSE) — unlike the rest of the surrounding monorepo, which is
+GPL-3.0-or-later, this package is MIT-licensed to encourage adoption.
