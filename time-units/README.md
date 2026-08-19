@@ -3,6 +3,9 @@
 A tiny, dependency-free TypeScript library for converting between fixed
 units of elapsed time: milliseconds, seconds, minutes, hours, and days.
 
+The entire implementation is a single TypeScript file:
+[`index.ts`](./index.ts).
+
 ## Usage
 
 ```ts
@@ -42,9 +45,29 @@ Every smaller-per-larger relationship among the supported units:
 
 ### Conversion functions
 
-A `<pluralSource>To<PluralTarget>` function exists for every ordered pair
-of distinct units — 20 in total. For example: `secondsToMilliseconds`,
-`minutesToHours`, `daysToSeconds`, `millisecondsToDays`.
+One function for every ordered pair of distinct units, each with the
+signature `(value: number) => number`:
+
+- `millisecondsToSeconds`
+- `millisecondsToMinutes`
+- `millisecondsToHours`
+- `millisecondsToDays`
+- `secondsToMilliseconds`
+- `secondsToMinutes`
+- `secondsToHours`
+- `secondsToDays`
+- `minutesToMilliseconds`
+- `minutesToSeconds`
+- `minutesToHours`
+- `minutesToDays`
+- `hoursToMilliseconds`
+- `hoursToSeconds`
+- `hoursToMinutes`
+- `hoursToDays`
+- `daysToMilliseconds`
+- `daysToSeconds`
+- `daysToMinutes`
+- `daysToHours`
 
 Each performs a single multiplication or division against one of the
 constants above. Fractional, negative, and zero values flow through
@@ -65,14 +88,10 @@ daysToHours(-2); // -48
 - Dates, timestamps, structured durations, and calendar operations
   belong in higher-level libraries.
 
-## Development
+## Contributing
 
-```bash
-nvm use && npm install
-npm test
-npm run typecheck
-npm run build
-```
+See the [CONTRIBUTING guide](./docs/CONTRIBUTING.md) for setup and
+development scripts.
 
 ## Packaging
 
