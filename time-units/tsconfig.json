@@ -2,22 +2,15 @@
   "compilerOptions": {
     "target": "es2023",
     "module": "nodenext",
-    "moduleResolution": "nodenext",
     "strict": true,
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,
-    "forceConsistentCasingInFileNames": true,
+    "rewriteRelativeImportExtensions": true,
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ]
+    "types": ["node"],
+    "declaration": true,
+    "outDir": "dist"
   },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
