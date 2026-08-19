@@ -14,7 +14,8 @@ z-megarepo/
 ├── infra/                  # GCP infrastructure (Terraform)
 ├── personal-mobile-app/    # Expo/React Native mobile app
 ├── personal-webapp/        # Next.js + React 19 + TypeScript
-└── project-templates/      # Scaffolding templates for new projects
+├── project-templates/      # Scaffolding templates for new projects
+└── time-units/             # Dependency-free time-unit conversions (TypeScript)
 ```
 
 Several subdirectories are Node-based subprojects, each self-contained with
@@ -33,4 +34,6 @@ its own `package.json`, `.nvmrc`, and CI workflow.
 ## License
 
 All contents of this repository are licensed under the
-[GNU General Public License v3.0 or later](./LICENSE).
+[GNU General Public License v3.0 or later](./LICENSE), with the exception
+of [`time-units/`](./time-units/), which is licensed under the
+[MIT License](./time-units/LICENSE).

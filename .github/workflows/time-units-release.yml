@@ -1,0 +1,47 @@
+name: time-units-release
+
+on:
+  push:
+    tags: [ "time-units-v*" ]
+
+jobs:
+  release:
+    name: Publish time-units to npm
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      CI: true
+
+    defaults:
+      run:
+        working-directory: time-units
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'time-units/.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'time-units/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify tag matches package version
+        run: test "time-units-v$(npm pkg get version | tr -d '\"')" = "$GITHUB_REF_NAME"
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
+
+      - name: Publish
+        run: npm publish
