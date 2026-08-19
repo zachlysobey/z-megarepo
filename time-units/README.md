@@ -434,4 +434,12 @@ The ideal implementation of `time-units` should feel almost boring.
 nvm use && npm install
 npm test
 npm run typecheck
+npm run build
 ```
+
+## Packaging
+
+The published package is ESM-only with bundled type declarations, built by
+`npm run build` into `dist/` and exposed through the `exports` map. It is
+runtime-agnostic (browsers, Node, Bun, Deno, workers) and declares
+`sideEffects: false` so bundlers can tree-shake unused exports.

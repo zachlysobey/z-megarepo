@@ -4,17 +4,37 @@
   "description": "Tiny, dependency-free TypeScript library for converting between fixed units of elapsed time",
   "scripts": {
     "test": "node --test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
   },
   "author": "Zachary Lysobey <zach@lysobey.com> (https://github.com/zachlysobey)",
   "license": "GPL-3.0-or-later",
   "type": "module",
   "engines": {
-    "node": ">=24 < 25",
+    "node": ">=20",
     "npm": ">=10"
   },
   "devDependencies": {
     "@types/node": "24.13.3",
     "typescript": "7.0.2"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24 <25",
+      "onFail": "error"
+    }
   }
 }
