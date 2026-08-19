@@ -16,8 +16,8 @@
     "npm": ">=10"
   },
   "devDependencies": {
-    "@types/node": "24.13.3",
-    "typescript": "7.0.2"
+    "@types/node": "^24.13.3",
+    "typescript": "^7.0.2"
   },
   "sideEffects": false,
   "files": [
