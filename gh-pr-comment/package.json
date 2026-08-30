@@ -1,0 +1,15 @@
+{
+  "name": "gh-pr-comment",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "node --test src/**/*.test.ts"
+  },
+  "type": "module",
+  "bin": {
+    "gh-pr-comment": "bin/gh-pr-comment"
+  },
+  "engines": {
+    "node": ">=24 < 25",
+    "npm": ">=10"
+  }
+}

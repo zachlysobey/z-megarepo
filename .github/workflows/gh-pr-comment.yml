@@ -1,0 +1,41 @@
+name: "Tests: gh-pr-comment"
+
+on:
+  push:
+    branches: [master]
+    paths: [gh-pr-comment/**]
+  pull_request:
+    paths: [gh-pr-comment/**]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    defaults:
+      run:
+        working-directory: gh-pr-comment
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: gh-pr-comment/.nvmrc
+
+      - name: Run tests
+        run: npm test
+
+      - name: Dog-food (post comment on PR)
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          node bin/gh-pr-comment
+          --slot 'gh-pr-comment:ci'
+          --body '✅ gh-pr-comment built and tested successfully'
