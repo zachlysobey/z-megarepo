@@ -1,8 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-PROJECT_ID="${1:?Usage: ./bootstrap.sh <project-id> <github-repo>}"
-GITHUB_REPO="${2:?Usage: ./bootstrap.sh <project-id> <github-repo>}"
+PROJECT_ID="${1:?Usage: ./bootstrap.sh <project-id> <github-repo> [billing-account-id]}"
+GITHUB_REPO="${2:?Usage: ./bootstrap.sh <project-id> <github-repo> [billing-account-id]}"
+BILLING_ACCOUNT_ID="${3:-}"
 
 STATE_BUCKET="${PROJECT_ID}-tfstate"
 SA_NAME="terraform-ci"
@@ -17,7 +18,9 @@ gcloud services enable \
   iam.googleapis.com \
   cloudresourcemanager.googleapis.com \
   iamcredentials.googleapis.com \
-  sts.googleapis.com
+  sts.googleapis.com \
+  cloudbilling.googleapis.com \
+  billingbudgets.googleapis.com
 
 # State bucket
 if gcloud storage buckets describe "gs://${STATE_BUCKET}" &>/dev/null; then
@@ -65,9 +68,29 @@ gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL" \
   --role="roles/iam.workloadIdentityUser" \
   --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/attribute.repository/${GITHUB_REPO}"
 
+if [ -n "$BILLING_ACCOUNT_ID" ]; then
+  gcloud billing accounts add-iam-policy-binding "$BILLING_ACCOUNT_ID" \
+    --member="serviceAccount:${SA_EMAIL}" \
+    --role="roles/billing.costsManager" --quiet
+else
+  echo ""
+  echo "Skipping billing IAM binding (no billing-account-id argument provided)."
+fi
+
 echo ""
 echo "Set these as GitHub repo variables:"
 echo "  GCP_PROJECT_ID:      ${PROJECT_ID}"
 echo "  GCP_WIF_PROVIDER:    projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/providers/${WIF_PROVIDER}"
 echo "  GCP_SERVICE_ACCOUNT: ${SA_EMAIL}"
 echo "  GCP_TF_STATE_BUCKET: ${STATE_BUCKET}"
+echo ""
+echo "Set these as GitHub variables/secrets (copy/paste):"
+echo "  gh variable set GCP_PROJECT_ID --body \"${PROJECT_ID}\""
+echo "  gh variable set GCP_WIF_PROVIDER --body \"projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${WIF_POOL}/providers/${WIF_PROVIDER}\""
+echo "  gh variable set GCP_SERVICE_ACCOUNT --body \"${SA_EMAIL}\""
+echo "  gh variable set GCP_TF_STATE_BUCKET --body \"${STATE_BUCKET}\""
+if [ -n "$BILLING_ACCOUNT_ID" ]; then
+  echo "  gh secret set GCP_BILLING_ACCOUNT_ID --body \"${BILLING_ACCOUNT_ID}\""
+else
+  echo "  gh secret set GCP_BILLING_ACCOUNT_ID --body \"<billing-account-id>\""
+fi

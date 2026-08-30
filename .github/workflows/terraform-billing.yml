@@ -1,0 +1,25 @@
+name: "Terraform: billing"
+
+on:
+  push:
+    branches: [master]
+    paths: [infra/billing/**, .github/workflows/terraform-billing.yml, .github/workflows/terraform.yml]
+  pull_request:
+    paths: [infra/billing/**, .github/workflows/terraform-billing.yml, .github/workflows/terraform.yml]
+
+concurrency:
+  group: terraform-billing-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    with:
+      module_name: billing
+      terraform_vars: '-var="project_id=${{ vars.GCP_PROJECT_ID }}"'
+    secrets:
+      terraform_secret_vars: '-var="billing_account_id=${{ secrets.GCP_BILLING_ACCOUNT_ID }}"'
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write

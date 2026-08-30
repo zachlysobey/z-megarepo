@@ -10,6 +10,9 @@ on:
         required: false
         type: string
         default: ""
+    secrets:
+      terraform_secret_vars:
+        required: false
 
 permissions:
   contents: read
@@ -34,7 +37,7 @@ jobs:
       - run: terraform validate
       - name: Terraform plan
         id: plan
-        run: terraform plan ${{ inputs.terraform_vars }} -no-color -out=tfplan
+        run: terraform plan ${{ inputs.terraform_vars }} ${{ secrets.terraform_secret_vars }} -no-color -out=tfplan
         if: github.event_name == 'pull_request'
         continue-on-error: true
       - name: Comment plan on PR
@@ -91,5 +94,5 @@ jobs:
       - name: Fail if plan failed
         if: steps.plan.outcome == 'failure'
         run: exit 1
-      - run: terraform apply ${{ inputs.terraform_vars }} -auto-approve
+      - run: terraform apply ${{ inputs.terraform_vars }} ${{ secrets.terraform_secret_vars }} -auto-approve
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
