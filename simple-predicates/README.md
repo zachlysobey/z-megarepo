@@ -1,8 +1,8 @@
 # simple-predicates
 
 A tiny, dependency-free TypeScript library of type-narrowing predicates.
-Everything it exports is a one-argument function that answers a yes/no
-question about a single unknown value.
+Every function it exports takes one argument and answers a yes/no
+question about that single unknown value.
 
 The entire implementation is a single TypeScript file:
 [`index.ts`](https://github.com/zachlysobey/z-megarepo/blob/master/simple-predicates/index.ts).
@@ -38,7 +38,9 @@ type NarrowingPredicate<T> = (value: unknown) => value is T;
   `Array.prototype.filter` and `.every` callbacks.
 - **Total** — accepts any value and does not throw, so it is safe on
   untrusted input without a `try`/`catch`. The one exception is a value
-  engineered to throw when coerced, which no brand check can survive.
+  engineered to throw when it is read or coerced — a `Proxy` with a
+  throwing trap, say — which no check that has to look at the value can
+  survive.
 - **Pure** — no mutation, no I/O, no dependence on anything but the
   argument.
 
@@ -55,6 +57,8 @@ Narrowing is lost through the base type, so annotate with
 `NarrowingPredicate` wherever the call site should narrow:
 
 ```ts
+const mixed: unknown[] = ["a", 1, "b"];
+
 const strings = mixed.filter(isString); // string[]
 
 const asBase: SimplePredicate = isString;

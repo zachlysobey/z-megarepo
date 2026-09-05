@@ -2,8 +2,14 @@
  * A test on a single unknown value.
  *
  * Every predicate in this package satisfies this contract: it takes
- * exactly one argument of any type, returns a `boolean`, does not throw,
- * never mutates, and depends on nothing but its argument.
+ * exactly one argument of any type, returns a `boolean`, never mutates,
+ * and depends on nothing but its argument.
+ *
+ * Predicates do not throw, with one unavoidable exception: a value
+ * engineered to throw when its brand is read or when it is coerced — a
+ * `Proxy` with a throwing trap, say — defeats any check that has to look
+ * at it. These predicates describe shape, not provenance, and are not a
+ * security boundary.
  */
 export type SimplePredicate = (value: unknown) => boolean;
 

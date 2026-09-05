@@ -282,3 +282,24 @@ describe('isTruthy', () => {
     ]);
   });
 });
+
+describe('narrowing a union member', () => {
+  it('keeps a function callable with its required parameters', () => {
+    const call = (handler: string | ((a: string, b: number) => string)) =>
+      api.isFunction(handler) ? handler('x', 1) : handler;
+    assert.equal(
+      call((a, b) => `${a}${b}`),
+      'x1',
+    );
+  });
+  it('keeps a map usable at its own key and value types', () => {
+    const lookUp = (entries: string | Map<string, number>) =>
+      api.isMap(entries) ? entries.get('a') : entries.length;
+    assert.equal(lookUp(new Map([['a', 1]])), 1);
+  });
+  it('keeps a set usable at its own element type', () => {
+    const contains = (numbers: string | Set<number>) =>
+      api.isSet(numbers) ? numbers.has(1) : false;
+    assert.equal(contains(new Set([1])), true);
+  });
+});
