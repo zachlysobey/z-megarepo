@@ -22,7 +22,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "jest": "30.2.0",
-    "ts-jest": "29.4.5",
+    "ts-jest": "29.4.12",
     "typescript": "5.9.3"
   },
   "devDependencies": {
