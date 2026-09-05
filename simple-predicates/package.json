@@ -1,0 +1,46 @@
+{
+  "name": "z-simple-predicates",
+  "version": "1.0.0",
+  "description": "Tiny, dependency-free TypeScript library of type-narrowing predicates",
+  "scripts": {
+    "test": "node --test \"*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "prepack": "npm run build"
+  },
+  "author": "Zachary Lysobey <zach@lysobey.com> (https://github.com/zachlysobey)",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "typescript": "^7.0.2"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24 <25",
+      "onFail": "error"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zachlysobey/z-megarepo.git",
+    "directory": "simple-predicates"
+  }
+}

@@ -2,7 +2,7 @@
  * A test on a single unknown value.
  *
  * Every predicate in this package satisfies this contract: it takes
- * exactly one argument of any type, returns a `boolean`, never throws,
+ * exactly one argument of any type, returns a `boolean`, does not throw,
  * never mutates, and depends on nothing but its argument.
  */
 export type SimplePredicate = (value: unknown) => boolean;
@@ -18,32 +18,43 @@ export type SimplePredicate = (value: unknown) => boolean;
  */
 export type NarrowingPredicate<T> = (value: unknown) => value is T;
 
+const brandOf = (value: unknown): string =>
+  Object.prototype.toString.call(value).slice(8, -1);
+
 /** `typeof value === 'string'`. */
-export declare const isString: NarrowingPredicate<string>;
+export const isString = (value: unknown): value is string =>
+  typeof value === 'string';
 
 /** `typeof value === 'number'`, excluding `NaN`. */
-export declare const isNumber: NarrowingPredicate<number>;
+export const isNumber = (value: unknown): value is number =>
+  typeof value === 'number' && !Number.isNaN(value);
 
 /** `typeof value === 'boolean'`. */
-export declare const isBoolean: NarrowingPredicate<boolean>;
+export const isBoolean = (value: unknown): value is boolean =>
+  typeof value === 'boolean';
 
 /** `typeof value === 'bigint'`. */
-export declare const isBigInt: NarrowingPredicate<bigint>;
+export const isBigInt = (value: unknown): value is bigint =>
+  typeof value === 'bigint';
 
 /** `typeof value === 'symbol'`. */
-export declare const isSymbol: NarrowingPredicate<symbol>;
+export const isSymbol = (value: unknown): value is symbol =>
+  typeof value === 'symbol';
 
 /** `value === null`. */
-export declare const isNull: NarrowingPredicate<null>;
+export const isNull = (value: unknown): value is null => value === null;
 
 /** `value === undefined`. */
-export declare const isUndefined: NarrowingPredicate<undefined>;
+export const isUndefined = (value: unknown): value is undefined =>
+  value === undefined;
 
 /** `null` or `undefined`. */
-export declare const isNil: NarrowingPredicate<null | undefined>;
+export const isNil = (value: unknown): value is null | undefined =>
+  value === null || value === undefined;
 
 /** Anything other than `null` or `undefined`. */
-export declare const isNotNil: NarrowingPredicate<{}>;
+export const isNotNil = (value: unknown): value is {} =>
+  value !== null && value !== undefined;
 
 /**
  * A value that JavaScript coerces to `true`.
@@ -52,7 +63,7 @@ export declare const isNotNil: NarrowingPredicate<{}>;
  * does not narrow. Use `isNotNil` when the goal is to drop `null` and
  * `undefined` from a type.
  */
-export declare const isTruthy: SimplePredicate;
+export const isTruthy: SimplePredicate = (value) => Boolean(value);
 
 /**
  * A value that JavaScript coerces to `false`.
@@ -60,23 +71,43 @@ export declare const isTruthy: SimplePredicate;
  * Does not narrow: `NaN` is falsy, but its type is `number`, which no
  * union of falsy literal types can soundly express.
  */
-export declare const isFalsy: SimplePredicate;
+export const isFalsy: SimplePredicate = (value) => !value;
 
 /**
  * Any non-null object, including arrays, dates, and class instances, but
  * not functions.
  */
-export declare const isObject: NarrowingPredicate<object>;
+export const isObject = (value: unknown): value is object =>
+  typeof value === 'object' && value !== null;
 
 /**
  * An object literal or a `Object.create(null)` object — an object whose
  * prototype is `Object.prototype` or `null`. Arrays, dates, class
  * instances, and functions are not plain objects.
  */
-export declare const isPlainObject: NarrowingPredicate<Record<string, unknown>>;
+export const isPlainObject = (
+  value: unknown,
+): value is Record<string, unknown> => {
+  if (!isObject(value) || brandOf(value) !== 'Object') {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype === null) {
+    return true;
+  }
+  // Walking to the root rather than comparing against `Object.prototype`
+  // keeps this true for objects created in another realm, which have
+  // their own `Object.prototype`.
+  let root = prototype;
+  while (Object.getPrototypeOf(root) !== null) {
+    root = Object.getPrototypeOf(root);
+  }
+  return prototype === root;
+};
 
 /** An array of any element type. */
-export declare const isArray: NarrowingPredicate<readonly unknown[]>;
+export const isArray = (value: unknown): value is readonly unknown[] =>
+  Array.isArray(value);
 
 /**
  * Any callable value.
@@ -85,46 +116,62 @@ export declare const isArray: NarrowingPredicate<readonly unknown[]>;
  * so a guarded value can be passed around and identity-checked without
  * the guard implying anything false about how it may be called.
  */
-export declare const isFunction: NarrowingPredicate<(...args: never[]) => unknown>;
+export const isFunction = (
+  value: unknown,
+): value is (...args: never[]) => unknown => typeof value === 'function';
 
 /** A `Date`, excluding an invalid one (a `Date` whose time is `NaN`). */
-export declare const isDate: NarrowingPredicate<Date>;
+export const isDate = (value: unknown): value is Date =>
+  brandOf(value) === 'Date' && !Number.isNaN(Number(value));
 
 /** A `RegExp`. */
-export declare const isRegExp: NarrowingPredicate<RegExp>;
+export const isRegExp = (value: unknown): value is RegExp =>
+  brandOf(value) === 'RegExp';
 
 /** An `Error`, including subclasses such as `TypeError`. */
-export declare const isError: NarrowingPredicate<Error>;
+export const isError = (value: unknown): value is Error =>
+  brandOf(value) === 'Error';
 
 /** A native `Promise`. Non-native thenables are not promises. */
-export declare const isPromise: NarrowingPredicate<Promise<unknown>>;
+export const isPromise = (value: unknown): value is Promise<unknown> =>
+  brandOf(value) === 'Promise';
 
 /** A `Map`. */
-export declare const isMap: NarrowingPredicate<Map<unknown, unknown>>;
+export const isMap = (value: unknown): value is Map<unknown, unknown> =>
+  brandOf(value) === 'Map';
 
 /** A `Set`. */
-export declare const isSet: NarrowingPredicate<Set<unknown>>;
+export const isSet = (value: unknown): value is Set<unknown> =>
+  brandOf(value) === 'Set';
 
 /** A number that is neither `NaN` nor `Infinity` nor `-Infinity`. */
-export declare const isFiniteNumber: NarrowingPredicate<number>;
+export const isFiniteNumber = (value: unknown): value is number =>
+  Number.isFinite(value);
 
 /** A finite number with no fractional part. */
-export declare const isInteger: NarrowingPredicate<number>;
+export const isInteger = (value: unknown): value is number =>
+  Number.isInteger(value);
 
 /** An integer exactly representable as a JavaScript number. */
-export declare const isSafeInteger: NarrowingPredicate<number>;
+export const isSafeInteger = (value: unknown): value is number =>
+  Number.isSafeInteger(value);
 
 /** The empty string. */
-export declare const isEmptyString: NarrowingPredicate<string>;
+export const isEmptyString = (value: unknown): value is string =>
+  isString(value) && value.length === 0;
 
 /** A string with at least one character. */
-export declare const isNonEmptyString: NarrowingPredicate<string>;
+export const isNonEmptyString = (value: unknown): value is string =>
+  isString(value) && value.length > 0;
 
 /** A string that is empty or contains only whitespace. */
-export declare const isBlankString: NarrowingPredicate<string>;
+export const isBlankString = (value: unknown): value is string =>
+  isString(value) && value.trim().length === 0;
 
 /** An array with no elements. */
-export declare const isEmptyArray: NarrowingPredicate<readonly unknown[]>;
+export const isEmptyArray = (value: unknown): value is readonly unknown[] =>
+  isArray(value) && value.length === 0;
 
 /** An array with at least one element. */
-export declare const isNonEmptyArray: NarrowingPredicate<readonly unknown[]>;
+export const isNonEmptyArray = (value: unknown): value is readonly unknown[] =>
+  isArray(value) && value.length > 0;
