@@ -36,7 +36,8 @@ its own `package.json`, `.nvmrc`, and CI workflow.
 
 All contents of this repository are licensed under the
 [GNU General Public License v3.0 or later](./LICENSE), with the exception
-of [`time-units/`](./time-units/) and [`duration/`](./duration/), which
-are licensed under the MIT License
-([time-units/LICENSE](./time-units/LICENSE),
-[duration/LICENSE](./duration/LICENSE)).
+of [`time-units/`](./time-units/), [`duration/`](./duration/), and
+[`simple-predicates/`](./simple-predicates/), which are licensed under
+the MIT License ([time-units/LICENSE](./time-units/LICENSE),
+[duration/LICENSE](./duration/LICENSE),
+[simple-predicates/LICENSE](./simple-predicates/LICENSE)).
