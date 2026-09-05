@@ -25,13 +25,14 @@ if (isNonEmptyString(parsed)) {
 }
 ```
 
-## The `SimplePredicate` type
+## The predicate types
 
 ```ts
-type SimplePredicate<T = unknown> = (value: unknown) => value is T;
+type SimplePredicate = (value: unknown) => boolean;
+type NarrowingPredicate<T> = (value: unknown) => value is T;
 ```
 
-Every export satisfies the same contract:
+`SimplePredicate` is the contract every export satisfies:
 
 - **Unary** — exactly one argument, so predicates are directly usable as
   `Array.prototype.filter` and `.every` callbacks.
@@ -39,12 +40,25 @@ Every export satisfies the same contract:
   untrusted input without a `try`/`catch`.
 - **Pure** — no mutation, no I/O, no dependence on anything but the
   argument.
-- **Narrowing** — the return type is a type guard, so a `true` result
-  narrows the value at the call site.
 
-Because the contract is uniform, predicates are interchangeable:
-`SimplePredicate[]` is a meaningful type, and any predicate can stand in
-for any other.
+`NarrowingPredicate<T>` is a `SimplePredicate` that additionally reports
+what a `true` result proves, and TypeScript treats it as a subtype: a
+`NarrowingPredicate` is accepted anywhere a `SimplePredicate` is
+expected, and `SimplePredicate[]` types a mixed collection of both.
+
+Nearly every predicate here narrows. The base type exists for the ones
+that answer a question about a *value* rather than its type — `isTruthy`
+and `isFalsy` — where a type guard would be either unsound or vacuous.
+
+Narrowing is lost through the base type, so annotate with
+`NarrowingPredicate` wherever the call site should narrow:
+
+```ts
+const strings = mixed.filter(isString); // string[]
+
+const asBase: SimplePredicate = isString;
+const notStrings = mixed.filter(asBase); // unknown[]
+```
 
 ## API
 
@@ -56,6 +70,10 @@ for any other.
 ### Nullishness
 
 `isNil` (`null` or `undefined`), `isNotNil`
+
+### Truthiness
+
+`isTruthy`, `isFalsy` — the only two that do not narrow
 
 ### Objects and functions
 
@@ -74,8 +92,8 @@ for any other.
 
 `isEmptyArray`, `isNonEmptyArray`
 
-See [`index.ts`](./index.ts) for the exact narrowed type and semantics of
-each predicate.
+See [`index.ts`](./index.ts) for the exact type and semantics of each
+predicate.
 
 ## Semantics
 
