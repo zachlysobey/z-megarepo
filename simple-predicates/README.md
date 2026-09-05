@@ -37,7 +37,8 @@ type NarrowingPredicate<T> = (value: unknown) => value is T;
 - **Unary** — exactly one argument, so predicates are directly usable as
   `Array.prototype.filter` and `.every` callbacks.
 - **Total** — accepts any value and does not throw, so it is safe on
-  untrusted input without a `try`/`catch`.
+  untrusted input without a `try`/`catch`. The one exception is a value
+  engineered to throw when coerced, which no brand check can survive.
 - **Pure** — no mutation, no I/O, no dependence on anything but the
   argument.
 

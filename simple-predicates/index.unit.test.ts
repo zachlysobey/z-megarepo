@@ -195,3 +195,90 @@ describe('type narrowing', () => {
     assert.deepEqual([measure(new Date(0)), measure('abc')], [0, 3]);
   });
 });
+
+const spoofedMap = { [Symbol.toStringTag]: 'Map' };
+const spoofedDate = { [Symbol.toStringTag]: 'Date' };
+const hostileDate = {
+  [Symbol.toStringTag]: 'Date',
+  valueOf: () => {
+    throw new Error('engineered to throw');
+  },
+};
+const argumentsObject = (function (..._args: unknown[]) {
+  return arguments;
+})(1, 2);
+
+describe('brand spoofing', () => {
+  it('accepts a value that claims a brand it does not have', () => {
+    assert.equal(api.isMap(spoofedMap), true);
+  });
+  it('rejects a spoofed date, because its time still reads as NaN', () => {
+    assert.equal(api.isDate(spoofedDate), false);
+  });
+  it('does not count a tagged object literal as a plain object', () => {
+    assert.equal(api.isPlainObject(spoofedMap), false);
+  });
+});
+
+describe('documented limits', () => {
+  it('a value engineered to throw on coercion defeats isDate', () => {
+    assert.throws(() => api.isDate(hostileDate));
+  });
+});
+
+describe('isPlainObject', () => {
+  it('rejects an arguments object, which is neither plain nor an array', () => {
+    assert.deepEqual(
+      [
+        api.isObject(argumentsObject),
+        api.isPlainObject(argumentsObject),
+        api.isArray(argumentsObject),
+      ],
+      [true, false, false],
+    );
+  });
+});
+
+describe('isPromise', () => {
+  it('rejects a non-native thenable', () => {
+    assert.equal(api.isPromise({ then: () => {} }), false);
+  });
+});
+
+describe('isError', () => {
+  it('accepts a custom Error subclass', () => {
+    class CustomError extends Error {}
+    assert.equal(api.isError(new CustomError('sample')), true);
+  });
+});
+
+describe('isFunction', () => {
+  it('accepts every flavor of callable', () => {
+    const callables = [
+      class Thing {},
+      function named() {},
+      async () => {},
+      function* generator() {},
+    ];
+    assert.deepEqual(callables.map(api.isFunction), [true, true, true, true]);
+  });
+});
+
+describe('isTruthy', () => {
+  it('rejects falsy values', () => {
+    assert.deepEqual([0, '', false, NaN].map(api.isTruthy), [
+      false,
+      false,
+      false,
+      false,
+    ]);
+  });
+  it('rejects falsy values that isNotNil accepts, which is why both exist', () => {
+    assert.deepEqual([0, '', false, NaN].map(api.isNotNil), [
+      true,
+      true,
+      true,
+      true,
+    ]);
+  });
+});
