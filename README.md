@@ -11,6 +11,7 @@ z-megarepo/
 ├── architecture-tests/     # Architectural fitness tests (Jest + ts-jest)
 ├── book-reports/           # Marp markdown slideshows
 ├── docs/                   # Conventions and reference documentation
+├── duration/               # Structured fixed-duration library (TypeScript)
 ├── infra/                  # GCP infrastructure (Terraform)
 ├── personal-mobile-app/    # Expo/React Native mobile app
 ├── personal-webapp/        # Next.js + React 19 + TypeScript
@@ -35,5 +36,7 @@ its own `package.json`, `.nvmrc`, and CI workflow.
 
 All contents of this repository are licensed under the
 [GNU General Public License v3.0 or later](./LICENSE), with the exception
-of [`time-units/`](./time-units/), which is licensed under the
-[MIT License](./time-units/LICENSE).
+of [`time-units/`](./time-units/) and [`duration/`](./duration/), which
+are licensed under the MIT License
+([time-units/LICENSE](./time-units/LICENSE),
+[duration/LICENSE](./duration/LICENSE)).
