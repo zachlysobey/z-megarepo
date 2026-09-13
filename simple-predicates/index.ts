@@ -81,6 +81,17 @@ export const isFalsy: SimplePredicate = (value) => !value;
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null;
 
+/**
+ * An `Error`, including subclasses such as `TypeError` and user-defined
+ * ones. Identified by its `Object.prototype.toString` brand rather than
+ * by `instanceof`, so a value from another realm is recognized.
+ *
+ * The brand expression is inlined rather than shared, so this predicate
+ * stands on its own.
+ */
+export const isError = (value: unknown): value is Error =>
+  Object.prototype.toString.call(value).slice(8, -1) === 'Error';
+
 /** An array of any element type. */
 export const isArray = (value: unknown): value is readonly unknown[] =>
   Array.isArray(value);
