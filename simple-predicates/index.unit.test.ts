@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import vm from 'node:vm';
 import * as api from './index.ts';
 import { isNumber, isString, type SimplePredicate } from './index.ts';
 
@@ -100,6 +101,7 @@ const acceptance = {
   isArray: ['empty array', 'array'],
   isFunction: ['function'],
   isThenable: ['promise', 'thenable'],
+  isPromise: ['promise'],
   isFiniteNumber: numbers,
   isInteger: [
     'zero',
@@ -221,6 +223,24 @@ async function _thenableNarrowsWithoutOverClaiming(value: unknown) {
     return awaited;
   }
 }
+
+describe('isPromise', () => {
+  it('counts a non-native thenable as a thenable but not a promise', () => {
+    const thenable = { then: () => {} };
+    assert.deepEqual(
+      [api.isThenable(thenable), api.isPromise(thenable)],
+      [true, false],
+    );
+  });
+  it('rejects an object that only claims the Promise brand', () => {
+    assert.equal(api.isPromise({ [Symbol.toStringTag]: 'Promise' }), false);
+  });
+  it('accepts a promise from another realm, which instanceof rejects', () => {
+    const otherRealm = vm.runInNewContext('Promise.resolve()');
+    assert.equal(otherRealm instanceof Promise, false);
+    assert.equal(api.isPromise(otherRealm), true);
+  });
+});
 
 describe('isTruthy', () => {
   it('rejects falsy values', () => {

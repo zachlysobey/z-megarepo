@@ -125,6 +125,22 @@ export const isThenable = (
   'then' in value &&
   isFunction(value.then);
 
+/**
+ * A native `Promise`. Requires both the `Promise` brand and a callable
+ * `then`, so a value that merely claims the brand is rejected. A thenable
+ * that is not a native promise — one from another promise library, say —
+ * is a thenable but not a promise.
+ *
+ * The brand comes from `Object.prototype.toString` rather than
+ * `instanceof`, so a promise from another realm is recognized. The
+ * trade-off is that a value can claim a brand it does not have via
+ * `Symbol.toStringTag`; combined with the `then` check that narrows the
+ * gap, but this still describes shape, not provenance.
+ */
+export const isPromise = (value: unknown): value is Promise<unknown> =>
+  Object.prototype.toString.call(value).slice(8, -1) === 'Promise' &&
+  isThenable(value);
+
 /** A number that is neither `NaN` nor `Infinity` nor `-Infinity`. */
 export const isFiniteNumber = (value: unknown): value is number =>
   Number.isFinite(value);
