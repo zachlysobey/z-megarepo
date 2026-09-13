@@ -276,6 +276,27 @@ describe('isThenable and isPromise', () => {
   });
 });
 
+/**
+ * A type-level assertion, never invoked. `isThenable` proves only that
+ * `then` is callable, never that calling it returns another thenable, so
+ * chaining must not typecheck. The `@ts-expect-error` below fails
+ * `npm run typecheck` if that line ever starts compiling — which would
+ * mean the guard had gone back to claiming more than it checks.
+ */
+async function _thenableNarrowsWithoutOverClaiming(value: unknown) {
+  if (api.isThenable(value)) {
+    const awaited: unknown = await value;
+    value.then(() => {});
+    value.then(
+      () => {},
+      () => {},
+    );
+    // @ts-expect-error `then` returns `unknown`, so it cannot be chained.
+    value.then(() => {}).then(() => {});
+    return awaited;
+  }
+}
+
 describe('isError', () => {
   it('accepts a custom Error subclass', () => {
     class CustomError extends Error {}

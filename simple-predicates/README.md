@@ -117,6 +117,12 @@ predicate.
   `isPromise` additionally requires the native brand. A thenable from
   elsewhere is therefore a thenable but not a promise, and a value that
   only claims the brand is neither.
+- **`isThenable` narrows to `then`'s own shape, not to `PromiseLike`.** A
+  callable `then` does not prove that calling it returns another thenable,
+  and only calling it could. So `then`'s return type stays `unknown`:
+  `await` works and yields `unknown`, but `value.then(...).then(...)` does
+  not typecheck. Where the full `PromiseLike` contract is needed, use
+  `isPromise` — a native promise satisfies it by provenance.
 - **Refinements narrow to the base type**, not to a synthetic one:
   `isNonEmptyArray` narrows to `readonly unknown[]`, not to a
   `[unknown, ...unknown[]]` tuple. Encoding "non-empty" in the type
