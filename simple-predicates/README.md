@@ -83,7 +83,7 @@ const notStrings = mixed.filter(asBase); // unknown[]
 
 ### Objects and functions
 
-`isObject`, `isArray`, `isFunction`, `isThenable`
+`isObject`, `isArray`, `isFunction`, `isThenable`, `isPromise`
 
 ### Number refinements
 
@@ -115,6 +115,12 @@ predicate.
   and only calling it could. So `then`'s return type stays `unknown`:
   `await` works and yields `unknown`, but `value.then(...).then(...)` does
   not typecheck.
+- **`isPromise` is `isThenable` plus the `Promise` brand.** A thenable
+  from another library is a thenable but not a promise, and a value that
+  only claims the brand is neither. Built-ins are identified by brand
+  rather than `instanceof` so cross-realm values are recognized; the
+  trade-off is that a brand can be claimed via `Symbol.toStringTag`, so
+  these describe shape, not provenance, and are not a security boundary.
 - **Refinements narrow to the base type**, not to a synthetic one:
   `isNonEmptyArray` narrows to `readonly unknown[]`, not to a
   `[unknown, ...unknown[]]` tuple. Encoding "non-empty" in the type
@@ -133,7 +139,7 @@ The whole package is unary predicates over one value. Deliberately absent:
 - **Schemas, error messages, coercion, and parsing.** A predicate answers
   yes or no and says nothing about why.
 - **Built-in identification** — `isDate`, `isRegExp`, `isError`,
-  `isPromise`, `isMap`, `isSet`, `isPlainObject`. Answering
+  `isMap`, `isSet`, `isPlainObject`. Answering
   these properly means brand checks or internal-slot probes, prototype
   walks, cross-realm behaviour, and a spoofing trade-off to document —
   none of which is simple. They are worth having, but not here.
