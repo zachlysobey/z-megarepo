@@ -83,7 +83,7 @@ const notStrings = mixed.filter(asBase); // unknown[]
 ### Objects and functions
 
 `isObject`, `isPlainObject`, `isArray`, `isFunction`, `isDate`,
-`isRegExp`, `isError`, `isPromise`, `isMap`, `isSet`
+`isRegExp`, `isError`, `isThenable`, `isPromise`, `isMap`, `isSet`
 
 ### Number refinements
 
@@ -111,6 +111,12 @@ predicate.
   recognized correctly. The trade-off is that a value can claim a brand
   it does not have via `Symbol.toStringTag`: these predicates describe
   shape, not provenance, and are not a security boundary.
+- **`isPromise` is `isThenable` plus the `Promise` brand.** `isThenable`
+  asks the question `await` actually asks — is this an object or function
+  with a callable `then` — and so accepts a promise from any library.
+  `isPromise` additionally requires the native brand. A thenable from
+  elsewhere is therefore a thenable but not a promise, and a value that
+  only claims the brand is neither.
 - **Refinements narrow to the base type**, not to a synthetic one:
   `isNonEmptyArray` narrows to `readonly unknown[]`, not to a
   `[unknown, ...unknown[]]` tuple. Encoding "non-empty" in the type

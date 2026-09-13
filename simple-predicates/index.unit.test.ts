@@ -36,6 +36,7 @@ const samples = {
   error: new Error('sample'),
   'type error': new TypeError('sample'),
   promise: Promise.resolve(),
+  thenable: { then: () => {} },
   map: new Map(),
   set: new Set(),
 };
@@ -100,15 +101,22 @@ const acceptance = {
     'error',
     'type error',
     'promise',
+    'thenable',
     'map',
     'set',
   ],
-  isPlainObject: ['empty object', 'object', 'null-prototype object'],
+  isPlainObject: [
+    'empty object',
+    'object',
+    'null-prototype object',
+    'thenable',
+  ],
   isArray: ['empty array', 'array'],
   isFunction: ['function'],
   isDate: ['date'],
   isRegExp: ['regexp'],
   isError: ['error', 'type error'],
+  isThenable: ['promise', 'thenable'],
   isPromise: ['promise'],
   isMap: ['map'],
   isSet: ['set'],
@@ -198,6 +206,7 @@ describe('type narrowing', () => {
 
 const spoofedMap = { [Symbol.toStringTag]: 'Map' };
 const spoofedDate = { [Symbol.toStringTag]: 'Date' };
+const spoofedPromise = { [Symbol.toStringTag]: 'Promise' };
 const hostileDate = {
   [Symbol.toStringTag]: 'Date',
   valueOf: () => {
@@ -214,6 +223,9 @@ describe('brand spoofing', () => {
   });
   it('rejects a spoofed date, because its time still reads as NaN', () => {
     assert.equal(api.isDate(spoofedDate), false);
+  });
+  it('rejects a spoofed promise, because it has no callable then', () => {
+    assert.equal(api.isPromise(spoofedPromise), false);
   });
   it('does not count a tagged object literal as a plain object', () => {
     assert.equal(api.isPlainObject(spoofedMap), false);
@@ -239,9 +251,28 @@ describe('isPlainObject', () => {
   });
 });
 
-describe('isPromise', () => {
-  it('rejects a non-native thenable', () => {
-    assert.equal(api.isPromise({ then: () => {} }), false);
+describe('isThenable and isPromise', () => {
+  const callableThenable = Object.assign(function named() {}, {
+    then: (resolve: (value: number) => void) => resolve(42),
+  });
+
+  it('counts a non-native thenable as a thenable but not a promise', () => {
+    const thenable = { then: () => {} };
+    assert.deepEqual(
+      [api.isThenable(thenable), api.isPromise(thenable)],
+      [true, false],
+    );
+  });
+  it('counts a callable with a then as a thenable, as await does', async () => {
+    assert.equal(api.isThenable(callableThenable), true);
+    assert.equal(await callableThenable, 42);
+  });
+  it('counts a null-prototype object with a then as a thenable', () => {
+    const bare = Object.assign(Object.create(null), { then: () => {} });
+    assert.equal(api.isThenable(bare), true);
+  });
+  it('rejects a then that is present but not callable', () => {
+    assert.equal(api.isThenable({ then: 1 }), false);
   });
 });
 

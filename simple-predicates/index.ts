@@ -138,9 +138,26 @@ export const isRegExp = (value: unknown): value is RegExp =>
 export const isError = (value: unknown): value is Error =>
   brandOf(value) === 'Error';
 
-/** A native `Promise`. Non-native thenables are not promises. */
+/**
+ * A thenable — an object or function with a callable `then`. This is what
+ * `await` and `Promise.resolve` treat as a promise, whatever its origin.
+ */
+export const isThenable = (value: unknown): value is PromiseLike<unknown> =>
+  // `'then' in value` is what lets the property read typecheck without a
+  // type assertion. It changes nothing at runtime: a `then` that is
+  // present but not callable is still rejected by `isFunction` below.
+  (isObject(value) || isFunction(value)) &&
+  'then' in value &&
+  isFunction(value.then);
+
+/**
+ * A native `Promise`. Requires both the `Promise` brand and a callable
+ * `then`, so a value that merely claims the brand is rejected. A thenable
+ * that is not a native promise — one from another promise library, say —
+ * is a {@link isThenable} but not a promise.
+ */
 export const isPromise = (value: unknown): value is Promise<unknown> =>
-  brandOf(value) === 'Promise';
+  brandOf(value) === 'Promise' && isThenable(value);
 
 /** A `Map`. */
 export const isMap = (value: unknown): value is Map<unknown, unknown> =>
