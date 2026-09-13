@@ -20,6 +20,7 @@ const samples = {
   true: true,
   false: false,
   bigint: 1n,
+  'bigint zero': 0n,
   symbol: Symbol('sample'),
   null: null,
   undefined: undefined,
@@ -64,7 +65,7 @@ const acceptance = {
   isString: ['empty string', 'blank string', 'string'],
   isNumber: [...numbers, 'infinity', 'negative infinity'],
   isBoolean: ['true', 'false'],
-  isBigInt: ['bigint'],
+  isBigInt: ['bigint', 'bigint zero'],
   isSymbol: ['symbol'],
   isNull: ['null'],
   isUndefined: ['undefined'],
@@ -76,6 +77,7 @@ const acceptance = {
     'negative zero',
     'nan',
     'false',
+    'bigint zero',
     'null',
     'undefined',
   ),
@@ -85,6 +87,7 @@ const acceptance = {
     'negative zero',
     'nan',
     'false',
+    'bigint zero',
     'null',
     'undefined',
   ],
@@ -221,7 +224,7 @@ describe('brand spoofing', () => {
   it('accepts a value that claims a brand it does not have', () => {
     assert.equal(api.isMap(spoofedMap), true);
   });
-  it('rejects a spoofed date, because its time still reads as NaN', () => {
+  it('rejects a spoofed date, which has no internal time to read', () => {
     assert.equal(api.isDate(spoofedDate), false);
   });
   it('rejects a spoofed promise, because it has no callable then', () => {
@@ -233,8 +236,38 @@ describe('brand spoofing', () => {
 });
 
 describe('documented limits', () => {
-  it('a value engineered to throw on coercion defeats isDate', () => {
-    assert.throws(() => api.isDate(hostileDate));
+  it('a Proxy engineered to throw when read defeats the predicates', () => {
+    const hostileProxy = new Proxy(
+      {},
+      {
+        has: () => {
+          throw new Error('engineered to throw');
+        },
+      },
+    );
+    assert.throws(() => api.isThenable(hostileProxy));
+  });
+  it('isDate survives a hostile valueOf, because it never coerces', () => {
+    assert.equal(api.isDate(hostileDate), false);
+  });
+  it('isDate reads the internal time, not an overridden valueOf', () => {
+    const validButLies = new Date(0);
+    validButLies.valueOf = () => Number.NaN;
+    const invalidButLies = new Date(Number.NaN);
+    invalidButLies.valueOf = () => 0;
+    assert.deepEqual(
+      [api.isDate(validButLies), api.isDate(invalidButLies)],
+      [true, false],
+    );
+  });
+});
+
+describe('isPlainObject nested prototypes', () => {
+  it('rejects an object whose prototype is a null-prototype object', () => {
+    const nested = Object.create(
+      Object.assign(Object.create(null), { inherited: 1 }),
+    );
+    assert.equal(api.isPlainObject(nested), false);
   });
 });
 

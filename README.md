@@ -16,6 +16,7 @@ z-megarepo/
 ├── personal-mobile-app/    # Expo/React Native mobile app
 ├── personal-webapp/        # Next.js + React 19 + TypeScript
 ├── project-templates/      # Scaffolding templates for new projects
+├── simple-predicates/      # Dependency-free type-narrowing predicates (TypeScript)
 └── time-units/             # Dependency-free time-unit conversions (TypeScript)
 ```
 

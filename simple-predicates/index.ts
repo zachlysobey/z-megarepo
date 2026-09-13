@@ -87,7 +87,7 @@ export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null;
 
 /**
- * An object literal or a `Object.create(null)` object — an object whose
+ * An object literal or an `Object.create(null)` object — an object whose
  * prototype is `Object.prototype` or `null`. Arrays, dates, class
  * instances, and functions are not plain objects.
  */
@@ -103,12 +103,17 @@ export const isPlainObject = (
   }
   // Walking to the root rather than comparing against `Object.prototype`
   // keeps this true for objects created in another realm, which have
-  // their own `Object.prototype`.
+  // their own `Object.prototype`. The own `constructor` is what then
+  // separates a realm's `Object.prototype` from an ordinary
+  // `Object.create(null)` object, which is also its own chain root.
   let root = prototype;
   while (Object.getPrototypeOf(root) !== null) {
     root = Object.getPrototypeOf(root);
   }
-  return prototype === root;
+  return (
+    prototype === root &&
+    Object.prototype.hasOwnProperty.call(prototype, 'constructor')
+  );
 };
 
 /** An array of any element type. */
@@ -126,9 +131,23 @@ export const isFunction = (
   value: unknown,
 ): value is (...args: never[]) => unknown => typeof value === 'function';
 
-/** A `Date`, excluding an invalid one (a `Date` whose time is `NaN`). */
-export const isDate = (value: unknown): value is Date =>
-  brandOf(value) === 'Date' && !Number.isNaN(Number(value));
+/**
+ * A `Date`, excluding an invalid one (a `Date` whose time is `NaN`).
+ *
+ * Reads the internal time through `Date.prototype.getTime` rather than
+ * coercing with `Number`, which calls the value's own `valueOf` and so
+ * answers wrongly for a real `Date` that overrides it. The `catch` is how
+ * a missing internal slot is observed — a value that merely claims the
+ * `Date` brand has no time to read — which makes the brand check
+ * redundant here. Unlike coercion, this never runs the value's own code.
+ */
+export const isDate = (value: unknown): value is Date => {
+  try {
+    return !Number.isNaN(Date.prototype.getTime.call(value));
+  } catch {
+    return false;
+  }
+};
 
 /** A `RegExp`. */
 export const isRegExp = (value: unknown): value is RegExp =>

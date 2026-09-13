@@ -19,7 +19,7 @@ import { isNonEmptyString, isNumber } from "z-simple-predicates";
 isNumber("1"); // false
 isNumber(NaN); // false
 
-const parsed: unknown = JSON.parse(input);
+const parsed: unknown = JSON.parse('"hello"');
 if (isNonEmptyString(parsed)) {
   parsed.toUpperCase(); // narrowed to string
 }
@@ -38,9 +38,8 @@ type NarrowingPredicate<T> = (value: unknown) => value is T;
   `Array.prototype.filter` and `.every` callbacks.
 - **Total** — accepts any value and does not throw, so it is safe on
   untrusted input without a `try`/`catch`. The one exception is a value
-  engineered to throw when it is read or coerced — a `Proxy` with a
-  throwing trap, say — which no check that has to look at the value can
-  survive.
+  engineered to throw when it is read — a `Proxy` with a throwing trap,
+  say — which no check that has to look at the value can survive.
 - **Pure** — no mutation, no I/O, no dependence on anything but the
   argument.
 
@@ -111,6 +110,15 @@ predicate.
   recognized correctly. The trade-off is that a value can claim a brand
   it does not have via `Symbol.toStringTag`: these predicates describe
   shape, not provenance, and are not a security boundary.
+- **A check is corrected when an *honest* value gets the wrong answer, and
+  documented when only a *lying* one does.** `isDate` reads its internal
+  time through `Date.prototype.getTime` rather than coercing with
+  `Number`, because coercion runs the value's own `valueOf` and so answers
+  wrongly for a real `Date` that overrides it — an honest value, mistyped.
+  The `Symbol.toStringTag` spoofs above are left as they are: no honest
+  value fails those checks. Note also that a slot check is not always
+  available — neither `Error.prototype` nor `Promise.prototype` exposes
+  one that can be consulted without invoking the value.
 - **`isPromise` is `isThenable` plus the `Promise` brand.** `isThenable`
   asks the question `await` actually asks — is this an object or function
   with a callable `then` — and so accepts a promise from any library.
