@@ -1,0 +1,47 @@
+name: simple-predicates-release
+
+on:
+  push:
+    tags: [ "simple-predicates-v*" ]
+
+jobs:
+  release:
+    name: Publish simple-predicates to npm
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      CI: true
+
+    defaults:
+      run:
+        working-directory: simple-predicates
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'simple-predicates/.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'simple-predicates/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify tag matches package version
+        run: test "simple-predicates-v$(npm pkg get version | tr -d '\"')" = "$GITHUB_REF_NAME"
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
+
+      - name: Publish
+        run: npm publish
