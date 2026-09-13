@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import vm from 'node:vm';
 import * as api from './index.ts';
 import { isNumber, isString, type SimplePredicate } from './index.ts';
 
@@ -94,6 +95,7 @@ const acceptance = {
     'map',
   ],
   isArray: ['empty array', 'array'],
+  isPlainObject: ['empty object', 'object', 'null-prototype object'],
   isFunction: ['function'],
   isFiniteNumber: numbers,
   isInteger: [
@@ -175,6 +177,36 @@ describe('isFunction', () => {
     class Thing {}
     assert.equal(api.isFunction(Thing), true);
     assert.throws(() => (Thing as unknown as () => void)(), TypeError);
+  });
+});
+
+describe('isPlainObject', () => {
+  it('accepts a plain object from another realm, which instanceof cannot check', () => {
+    const otherRealm = vm.runInNewContext('({ a: 1 })');
+    assert.equal(Object.getPrototypeOf(otherRealm) === Object.prototype, false);
+    assert.equal(api.isPlainObject(otherRealm), true);
+  });
+  it('rejects an arguments object, whose prototype is Object.prototype', () => {
+    const argumentsObject = (function (..._args: unknown[]) {
+      return arguments;
+    })(1, 2);
+    assert.equal(
+      Object.getPrototypeOf(argumentsObject) === Object.prototype,
+      true,
+    );
+    assert.deepEqual(
+      [api.isObject(argumentsObject), api.isPlainObject(argumentsObject)],
+      [true, false],
+    );
+  });
+  it('rejects an object whose prototype is a null-prototype object', () => {
+    const nested = Object.create(
+      Object.assign(Object.create(null), { inherited: 1 }),
+    );
+    assert.equal(api.isPlainObject(nested), false);
+  });
+  it('does not count a tagged object literal as plain', () => {
+    assert.equal(api.isPlainObject({ [Symbol.toStringTag]: 'Map' }), false);
   });
 });
 
