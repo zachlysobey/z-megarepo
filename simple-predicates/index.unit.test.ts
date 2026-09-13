@@ -31,6 +31,8 @@ const samples = {
   'class instance': new (class Thing {})(),
   function: () => {},
   date: new Date(0),
+  promise: Promise.resolve(),
+  thenable: { then: () => {} },
   map: new Map(),
 };
 
@@ -91,10 +93,13 @@ const acceptance = {
     'null-prototype object',
     'class instance',
     'date',
+    'promise',
+    'thenable',
     'map',
   ],
   isArray: ['empty array', 'array'],
   isFunction: ['function'],
+  isThenable: ['promise', 'thenable'],
   isFiniteNumber: numbers,
   isInteger: [
     'zero',
@@ -177,6 +182,45 @@ describe('isFunction', () => {
     assert.throws(() => (Thing as unknown as () => void)(), TypeError);
   });
 });
+
+describe('isThenable', () => {
+  const callableThenable = Object.assign(function named() {}, {
+    then: (resolve: (value: number) => void) => resolve(42),
+  });
+
+  it('accepts a callable with a then, as await does', async () => {
+    assert.equal(api.isThenable(callableThenable), true);
+    assert.equal(await callableThenable, 42);
+  });
+  it('accepts a null-prototype object with a then', () => {
+    const bare = Object.assign(Object.create(null), { then: () => {} });
+    assert.equal(api.isThenable(bare), true);
+  });
+  it('rejects a then that is present but not callable', () => {
+    assert.equal(api.isThenable({ then: 1 }), false);
+  });
+});
+
+/**
+ * A type-level assertion, never invoked. `isThenable` proves only that
+ * `then` is callable, never that calling it returns another thenable, so
+ * chaining must not typecheck. The `@ts-expect-error` below fails
+ * `npm run typecheck` if that line ever starts compiling — which would
+ * mean the guard had gone back to claiming more than it checks.
+ */
+async function _thenableNarrowsWithoutOverClaiming(value: unknown) {
+  if (api.isThenable(value)) {
+    const awaited: unknown = await value;
+    value.then(() => {});
+    value.then(
+      () => {},
+      () => {},
+    );
+    // @ts-expect-error `then` returns `unknown`, so it cannot be chained.
+    value.then(() => {}).then(() => {});
+    return awaited;
+  }
+}
 
 describe('isTruthy', () => {
   it('rejects falsy values', () => {

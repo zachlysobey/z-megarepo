@@ -83,7 +83,7 @@ const notStrings = mixed.filter(asBase); // unknown[]
 
 ### Objects and functions
 
-`isObject`, `isArray`, `isFunction`
+`isObject`, `isArray`, `isFunction`, `isThenable`
 
 ### Number refinements
 
@@ -110,6 +110,11 @@ predicate.
   class constructors. Those are function values but are not callable —
   invoking one without `new` throws — so a `true` result proves the value
   is a function, not that calling it will work.
+- **`isThenable` narrows to `then`'s own shape, not to `PromiseLike`.** A
+  callable `then` does not prove that calling it returns another thenable,
+  and only calling it could. So `then`'s return type stays `unknown`:
+  `await` works and yields `unknown`, but `value.then(...).then(...)` does
+  not typecheck.
 - **Refinements narrow to the base type**, not to a synthetic one:
   `isNonEmptyArray` narrows to `readonly unknown[]`, not to a
   `[unknown, ...unknown[]]` tuple. Encoding "non-empty" in the type
@@ -128,7 +133,7 @@ The whole package is unary predicates over one value. Deliberately absent:
 - **Schemas, error messages, coercion, and parsing.** A predicate answers
   yes or no and says nothing about why.
 - **Built-in identification** — `isDate`, `isRegExp`, `isError`,
-  `isPromise`, `isMap`, `isSet`, `isPlainObject`, `isThenable`. Answering
+  `isPromise`, `isMap`, `isSet`, `isPlainObject`. Answering
   these properly means brand checks or internal-slot probes, prototype
   walks, cross-realm behaviour, and a spoofing trade-off to document —
   none of which is simple. They are worth having, but not here.
