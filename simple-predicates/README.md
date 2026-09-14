@@ -83,7 +83,7 @@ const notStrings = mixed.filter(asBase); // unknown[]
 
 ### Objects and functions
 
-`isObject`, `isArray`, `isFunction`
+`isObject`, `isArray`, `isFunction`, `isDate`
 
 ### Number refinements
 
@@ -110,6 +110,11 @@ predicate.
   class constructors. Those are function values but are not callable —
   invoking one without `new` throws — so a `true` result proves the value
   is a function, not that calling it will work.
+- **`isDate` rejects an invalid date**, and reads the internal time
+  rather than coercing. `isDate(new Date("nope"))` is `false`, and a real
+  `Date` that overrides `valueOf` is still a date. Reading the internal
+  slot also means a `Date` from another realm is recognized, where
+  `instanceof` would fail, and an object merely tagged `Date` is not.
 - **Refinements narrow to the base type**, not to a synthetic one:
   `isNonEmptyArray` narrows to `readonly unknown[]`, not to a
   `[unknown, ...unknown[]]` tuple. Encoding "non-empty" in the type
@@ -127,7 +132,7 @@ The whole package is unary predicates over one value. Deliberately absent:
   specs, edge cases, and opinions that go stale.
 - **Schemas, error messages, coercion, and parsing.** A predicate answers
   yes or no and says nothing about why.
-- **Built-in identification** — `isDate`, `isRegExp`, `isError`,
+- **Most built-in identification** — `isRegExp`, `isError`,
   `isPromise`, `isMap`, `isSet`, `isPlainObject`, `isThenable`. Answering
   these properly means brand checks or internal-slot probes, prototype
   walks, cross-realm behaviour, and a spoofing trade-off to document —
