@@ -3,8 +3,10 @@ name: simple-predicates
 on:
   push:
     branches: [ "**" ]
+    paths: [ simple-predicates/**, .github/workflows/simple-predicates.yml ]
   pull_request:
     branches: [ "master" ]
+    paths: [ simple-predicates/**, .github/workflows/simple-predicates.yml ]
 
 jobs:
   simple-predicates:
