@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import vm from 'node:vm';
 import * as api from './index.ts';
 import { isNumber, isString, type SimplePredicate } from './index.ts';
 
@@ -94,6 +95,7 @@ const acceptance = {
     'map',
   ],
   isArray: ['empty array', 'array'],
+  isMap: ['map'],
   isFunction: ['function'],
   isFiniteNumber: numbers,
   isInteger: [
@@ -175,6 +177,22 @@ describe('isFunction', () => {
     class Thing {}
     assert.equal(api.isFunction(Thing), true);
     assert.throws(() => (Thing as unknown as () => void)(), TypeError);
+  });
+});
+
+describe('isMap', () => {
+  it('accepts a Map from another realm, which instanceof rejects', () => {
+    const otherRealm = vm.runInNewContext('new Map()');
+    assert.equal(otherRealm instanceof Map, false);
+    assert.equal(api.isMap(otherRealm), true);
+  });
+  it('accepts a value that claims the brand, which is the documented trade-off', () => {
+    assert.equal(api.isMap({ [Symbol.toStringTag]: 'Map' }), true);
+  });
+  it('keeps a union member usable at its own key and value types', () => {
+    const lookUp = (entries: string | Map<string, number>) =>
+      api.isMap(entries) ? entries.get('a') : entries.length;
+    assert.equal(lookUp(new Map([['a', 1]])), 1);
   });
 });
 
