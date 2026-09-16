@@ -1,8 +1,7 @@
 # z-functional
 
-A tiny, dependency-free TypeScript library of curried functional helpers.
-Every export is curried and data-last, so partial application is the
-normal way to use it and point-free pipelines need no glue code.
+A tiny, dependency-free TypeScript library of curried functional helpers
+for point-free pipelines.
 
 The entire implementation is a single TypeScript file:
 [`index.ts`](https://github.com/zachlysobey/z-megarepo/blob/master/functional/index.ts).
@@ -37,38 +36,43 @@ Currying is strict — one argument per call. There is no Ramda-style
 auto-currying where `map(fn, values)` also works, because a single
 unambiguous shape is easier to type and to read.
 
+`compose` is the one exception: it is variadic rather than curried. See
+below for why.
+
 ## compose
 
 `compose` runs right to left, so `compose(a, b, c)(x)` is `a(b(c(x)))`.
 
-A pipeline can be built all at once or one function at a time. These are
-the same pipeline:
+The result is an ordinary unary function, which is what makes pipelines
+compose with each other. Building one up in stages needs no special
+support:
+
+```ts
+const inner = compose(stringify, double);
+const outer = compose(length, inner);
+```
+
+Composition is associative, so these are all the same pipeline:
 
 ```ts
 compose(a, b, c);
-compose(a, b)(c);
-compose(a)(b)(c);
+compose(compose(a, b), c);
+compose(a, compose(b, c));
 ```
 
-Calling a pipeline with a **function** extends it; calling it with
-**anything else** runs it. Each added function joins at the input end,
-so the reading order never changes.
+A single function is returned unwrapped, so `compose(a) === a`.
 
-### Running a pipeline over a function value
+### Why compose is not curried
 
-The extend-or-run decision is made at runtime with `typeof`, which leaves
-one ambiguity: a pipeline whose *input* is itself a function. Use `.run`,
-which always runs and never extends:
+The other helpers are curried because they take two different kinds of
+argument: configuration first, data last. `compose` takes only one kind,
+so there is no partially applied state worth stopping at — and the thing
+currying would buy, building a pipeline incrementally, already works
+because a pipeline is just a function.
 
-```ts
-const arity = compose((fn: Function) => fn.length);
-
-arity.run((a, b) => a + b); // 2
-arity((a, b) => a + b);     // a longer pipeline, not 2
-```
-
-This only matters when the value flowing into a pipeline is a function.
-For every other input, calling the pipeline directly is correct.
+A curried `compose(a)(b)` would also be undecidable at runtime: given a
+function, it cannot know whether you are extending the pipeline or
+running it on a function value. Staying variadic removes the question.
 
 ## filter, reject, and complement
 
@@ -94,14 +98,14 @@ reject(isString)(mixed); // unknown[]
 
 | Export | Signature | Notes |
 | --- | --- | --- |
-| `compose` | `compose(...fns)` | Right to left; extends on a function |
+| `compose` | `compose(...fns)(value)` | Right to left; associative |
 | `map` | `map(fn)(values)` | Calls `fn` with the element only |
 | `filter` | `filter(predicate)(values)` | Narrows through type guards |
 | `reject` | `reject(predicate)(values)` | `filter` of the complement |
 | `complement` | `complement(predicate)(value)` | Negates a predicate |
 | `isIn` | `isIn(allowed)(value)` | Membership; narrows to the element type |
 
-Types: `Unary<In, Out>`, `Composed<In, Out>`, `Compose`, `Filter`.
+Types: `Unary<In, Out>`, `Compose`, `Filter`.
 
 See [`index.ts`](./index.ts) for exact signatures and semantics.
 

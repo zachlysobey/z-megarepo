@@ -7,75 +7,46 @@
 export type Unary<In, Out> = (value: In) => Out;
 
 /**
- * A pipeline built by {@link compose}.
- *
- * Calling it with a function extends the pipeline; calling it with
- * anything else runs the pipeline on that value. So `compose(a, b, c)`,
- * `compose(a, b)(c)` and `compose(a)(b)(c)` all describe the same
- * pipeline, and each new function is added at the input end.
- *
- * The function/value distinction is made at runtime by `typeof`, so a
- * pipeline whose own input is a function value must be run via
- * {@link Composed.run}, which never extends.
- */
-export interface Composed<In, Out> {
-  <NewIn>(fn: Unary<NewIn, In>): Composed<NewIn, Out>;
-  (value: In): Out;
-  /** Runs the pipeline, even when its input is itself a function. */
-  readonly run: Unary<In, Out>;
-}
-
-/**
  * Composes unary functions right to left: `compose(a, b, c)(x)` is
  * `a(b(c(x)))`.
  *
- * The result is a {@link Composed} pipeline, so it can be extended one
- * function at a time instead of all at once.
+ * The result is an ordinary unary function, so pipelines nest without
+ * ceremony — `compose(a, compose(b, c))` is `compose(a, b, c)` — and a
+ * single function is returned unwrapped.
+ *
+ * Deliberately not curried: every argument is the same kind of thing, so
+ * there is no configuration to partially apply, and `compose(a)(b)` would
+ * be indistinguishable from running the pipeline on a function value.
  *
  * Throws a `TypeError` when called with no functions, as there is no
- * meaningful pipeline to build.
+ * pipeline to build.
  */
 export interface Compose {
-  <A, B>(a: Unary<A, B>): Composed<A, B>;
-  <A, B, C>(b: Unary<B, C>, a: Unary<A, B>): Composed<A, C>;
-  <A, B, C, D>(c: Unary<C, D>, b: Unary<B, C>, a: Unary<A, B>): Composed<A, D>;
+  <A, B>(a: Unary<A, B>): Unary<A, B>;
+  <A, B, C>(b: Unary<B, C>, a: Unary<A, B>): Unary<A, C>;
+  <A, B, C, D>(c: Unary<C, D>, b: Unary<B, C>, a: Unary<A, B>): Unary<A, D>;
   <A, B, C, D, E>(
     d: Unary<D, E>,
     c: Unary<C, D>,
     b: Unary<B, C>,
     a: Unary<A, B>,
-  ): Composed<A, E>;
+  ): Unary<A, E>;
   <A, B, C, D, E, F>(
     e: Unary<E, F>,
     d: Unary<D, E>,
     c: Unary<C, D>,
     b: Unary<B, C>,
     a: Unary<A, B>,
-  ): Composed<A, F>;
+  ): Unary<A, F>;
 }
-
-const composer = (
-  pipeline: Unary<unknown, unknown>,
-): Composed<unknown, unknown> => {
-  const composed = (arg: unknown) =>
-    typeof arg === 'function'
-      ? composer((value) => pipeline((arg as Unary<unknown, unknown>)(value)))
-      : pipeline(arg);
-  composed.run = pipeline;
-  return composed as Composed<unknown, unknown>;
-};
 
 const composeImpl = (
   ...fns: ReadonlyArray<Unary<unknown, unknown>>
-): Composed<unknown, unknown> => {
-  const [first, ...rest] = fns;
-  if (first === undefined) {
+): Unary<unknown, unknown> => {
+  if (fns.length === 0) {
     throw new TypeError('compose requires at least one function');
   }
-  return rest.reduce<Composed<unknown, unknown>>(
-    (pipeline, fn) => pipeline(fn),
-    composer(first),
-  );
+  return fns.reduce((outer, inner) => (value) => outer(inner(value)));
 };
 
 /** See {@link Compose}. */

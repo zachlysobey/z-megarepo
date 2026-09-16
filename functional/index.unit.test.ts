@@ -40,46 +40,38 @@ describe('compose', () => {
     assert.notEqual(compose(double, increment)(3), increment(double(3)));
   });
 
-  it('builds the same pipeline variadically, curried, or mixed', () => {
-    const variadic = compose(length, stringify, double);
-    const curried = compose(length)(stringify)(double);
-    const mixed = compose(length, stringify)(double);
+  it('returns a single function unwrapped', () => {
+    assert.equal(compose(double), double);
+  });
+
+  it('is associative, so pipelines nest freely', () => {
+    const flat = compose(length, stringify, double);
+    const leftNested = compose(compose(length, stringify), double);
+    const rightNested = compose(length, compose(stringify, double));
     assert.deepEqual(
-      [variadic(50), curried(50), mixed(50)],
+      [flat(50), leftNested(50), rightNested(50)],
       [length(stringify(double(50))), 3, 3],
     );
   });
 
-  it('adds each new function at the input end', () => {
-    const shout = (s: string) => `${s}!`;
-    const wrap = (s: string) => `[${s}]`;
-    assert.equal(compose(shout)(wrap)('hi'), '[hi]!');
+  it('builds a pipeline up incrementally without currying', () => {
+    const inner = compose(stringify, double);
+    const outer = compose(length, inner);
+    assert.deepEqual([inner(50), outer(50)], ['100', 3]);
   });
 
-  it('returns an equivalent of a single function unchanged', () => {
-    assert.equal(compose(double)(21), 42);
-  });
-
-  it('is reusable and does not mutate an existing pipeline', () => {
-    const base = compose(double);
-    const extended = base(increment);
-    assert.deepEqual([base(5), extended(5), base(5)], [10, 12, 10]);
+  it('is reusable and leaves the functions it composed untouched', () => {
+    const pipeline = compose(increment, double);
+    assert.deepEqual([pipeline(5), pipeline(5), double(5)], [11, 11, 10]);
   });
 
   it('throws when given no functions', () => {
     assert.throws(() => (compose as () => unknown)(), TypeError);
   });
 
-  it('runs a pipeline whose input is a function value via run', () => {
+  it('runs over a function value like any other input', () => {
     const arity = compose((fn: (...args: never[]) => unknown) => fn.length);
-    assert.equal(arity.run((_a: never, _b: never) => 0), 2);
-  });
-
-  it('extends rather than applies when handed a function, hence run', () => {
-    const arity = compose((fn: (...args: never[]) => unknown) => fn.length);
-    const extended = arity((_a: never, _b: never) => 0);
-    assert.equal(typeof extended, 'function');
-    assert.notEqual(extended, 2);
+    assert.equal(arity((_a: never, _b: never) => 0), 2);
   });
 
   it('composes curried helpers point-free', () => {
