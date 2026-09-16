@@ -3,8 +3,8 @@
 A tiny, dependency-free TypeScript library of curried functional helpers
 for point-free pipelines.
 
-The entire implementation is a single TypeScript file:
-[`index.ts`](https://github.com/zachlysobey/z-megarepo/blob/master/functional/index.ts).
+One module per helper, each named after its single export, re-exported
+from [`index.ts`](https://github.com/zachlysobey/z-megarepo/blob/master/functional/index.ts).
 
 ## Usage
 
@@ -105,9 +105,10 @@ reject(isString)(mixed); // unknown[]
 | `complement` | `complement(predicate)(value)` | Negates a predicate |
 | `isIn` | `isIn(allowed)(value)` | Membership; narrows to the element type |
 
-Types: `Unary<In, Out>`, `Compose`, `Filter`.
+The only exported type is `Unary<In, Out>`.
 
-See [`index.ts`](./index.ts) for exact signatures and semantics.
+Each helper lives in its own module — see `compose.ts`, `filter.ts` and
+friends for exact signatures and semantics.
 
 ## Semantics
 
@@ -120,6 +121,8 @@ See [`index.ts`](./index.ts) for exact signatures and semantics.
   itself and `0` matches `-0`. Objects compare by reference.
 - **`compose()` with no functions throws a `TypeError`**, as there is no
   pipeline to build.
+- **No type assertions.** The implementation contains no `as` casts, so
+  the types the API advertises are the types it actually enforces.
 
 ## Package boundaries
 

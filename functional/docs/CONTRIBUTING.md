@@ -10,8 +10,9 @@ nvm use && npm install
 
 - `npm test` - run the test suite with Node's native test runner
 - `npm run typecheck` - typecheck with `tsc --noEmit`
-- `npm run build` - compile `index.ts` to `dist/` (ESM + type
-  declarations) for publishing
+- `npm run build` - compile the modules to `dist/` (ESM + type
+  declarations) for publishing, via `tsconfig.build.json`, which excludes
+  the co-located tests
 
 ## Releasing
 
@@ -41,10 +42,21 @@ One-time setup (not yet done):
    configure GitHub Actions with user `zachlysobey`, repository
    `z-megarepo`, and workflow filename `functional-release.yml`.
 
+## Layout
+
+One module per export, named after the export it contains, with its tests
+co-located and the public surface re-exported from `index.ts`. Adding a
+helper means adding `<name>.ts`, `<name>.unit.test.ts`, and one line to
+`index.ts`.
+
 ## Notes
 
 - Tests use `node:test` and `node:assert/strict`, executed directly from
   TypeScript via Node's type stripping — no Jest, no build step.
+- Relative imports are written with `.ts` extensions; the
+  `rewriteRelativeImportExtensions` compiler option rewrites them to
+  `.js` on build, so the same source runs unbuilt under Node and ships as
+  valid ESM.
 - The `tsconfig.json` options `erasableSyntaxOnly` and
   `verbatimModuleSyntax` keep the code within what type stripping
   supports.

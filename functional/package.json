@@ -5,7 +5,7 @@
   "scripts": {
     "test": "node --test \"*.test.ts\"",
     "typecheck": "tsc --noEmit",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "prepack": "npm run build"
   },
   "author": "Zachary Lysobey <zach@lysobey.com> (https://github.com/zachlysobey)",
@@ -20,10 +20,6 @@
     "typescript": "^7.0.2"
   },
   "sideEffects": false,
-  "files": [
-    "dist/index.js",
-    "dist/index.d.ts"
-  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -42,5 +38,8 @@
     "type": "git",
     "url": "git+https://github.com/zachlysobey/z-megarepo.git",
     "directory": "functional"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
