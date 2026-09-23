@@ -12,6 +12,7 @@ z-megarepo/
 ├── book-reports/           # Marp markdown slideshows
 ├── docs/                   # Conventions and reference documentation
 ├── duration/               # Structured fixed-duration library (TypeScript)
+├── functional/             # Dependency-free curried functional helpers (TypeScript)
 ├── infra/                  # GCP infrastructure (Terraform)
 ├── personal-mobile-app/    # Expo/React Native mobile app
 ├── personal-webapp/        # Next.js + React 19 + TypeScript
@@ -37,8 +38,10 @@ its own `package.json`, `.nvmrc`, and CI workflow.
 
 All contents of this repository are licensed under the
 [GNU General Public License v3.0 or later](./LICENSE), with the exception
-of [`time-units/`](./time-units/), [`duration/`](./duration/), and
-[`simple-predicates/`](./simple-predicates/), which are licensed under
-the MIT License ([time-units/LICENSE](./time-units/LICENSE),
+of [`time-units/`](./time-units/), [`duration/`](./duration/),
+[`simple-predicates/`](./simple-predicates/), and
+[`functional/`](./functional/), which are licensed under the MIT License
+([time-units/LICENSE](./time-units/LICENSE),
 [duration/LICENSE](./duration/LICENSE),
-[simple-predicates/LICENSE](./simple-predicates/LICENSE)).
+[simple-predicates/LICENSE](./simple-predicates/LICENSE),
+[functional/LICENSE](./functional/LICENSE)).

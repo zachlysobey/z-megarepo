@@ -1,0 +1,47 @@
+name: functional
+
+on:
+  push:
+    branches: [ "**" ]
+    paths: [ functional/**, .github/workflows/functional.yml ]
+  pull_request:
+    branches: [ "master" ]
+    paths: [ functional/**, .github/workflows/functional.yml ]
+
+jobs:
+  functional:
+    name: Run functional Tests
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    env:
+      CI: true
+
+    defaults:
+      run:
+        working-directory: functional
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'functional/.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'functional/package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
