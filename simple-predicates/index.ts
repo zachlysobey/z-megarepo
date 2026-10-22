@@ -81,6 +81,16 @@ export const isFalsy: SimplePredicate = (value) => !value;
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null;
 
+/**
+ * A `RegExp`, identified by its `Object.prototype.toString` brand rather
+ * than by `instanceof`, so a value from another realm is recognized.
+ *
+ * The brand expression is inlined rather than shared, so this predicate
+ * stands on its own.
+ */
+export const isRegExp = (value: unknown): value is RegExp =>
+  Object.prototype.toString.call(value).slice(8, -1) === 'RegExp';
+
 /** An array of any element type. */
 export const isArray = (value: unknown): value is readonly unknown[] =>
   Array.isArray(value);
