@@ -81,6 +81,23 @@ export const isFalsy: SimplePredicate = (value) => !value;
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null;
 
+/**
+ * A `Map`, identified by its `Object.prototype.toString` brand rather
+ * than by `instanceof`, so a value from another realm is recognized.
+ *
+ * Narrows to `Map<unknown, unknown>` rather than `Map<any, any>`: from a
+ * genuinely unknown value it yields `Map<unknown, unknown>`, which makes
+ * callers check what they read back, where `any` would hand them an
+ * unchecked value. Narrowing a union member still preserves that member's
+ * own key and value types, because `Map`'s parameters appear in method
+ * positions, which are bivariant.
+ *
+ * The brand expression is inlined rather than shared, so this predicate
+ * stands on its own.
+ */
+export const isMap = (value: unknown): value is Map<unknown, unknown> =>
+  Object.prototype.toString.call(value).slice(8, -1) === 'Map';
+
 /** An array of any element type. */
 export const isArray = (value: unknown): value is readonly unknown[] =>
   Array.isArray(value);
