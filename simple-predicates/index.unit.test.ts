@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import vm from 'node:vm';
 import * as api from './index.ts';
 import { isNumber, isString, type SimplePredicate } from './index.ts';
 
@@ -31,6 +32,7 @@ const samples = {
   'class instance': new (class Thing {})(),
   function: () => {},
   date: new Date(0),
+  'invalid date': new Date('not a date'),
   map: new Map(),
 };
 
@@ -91,10 +93,12 @@ const acceptance = {
     'null-prototype object',
     'class instance',
     'date',
+    'invalid date',
     'map',
   ],
   isArray: ['empty array', 'array'],
   isFunction: ['function'],
+  isDate: ['date'],
   isFiniteNumber: numbers,
   isInteger: [
     'zero',
@@ -175,6 +179,40 @@ describe('isFunction', () => {
     class Thing {}
     assert.equal(api.isFunction(Thing), true);
     assert.throws(() => (Thing as unknown as () => void)(), TypeError);
+  });
+});
+
+describe('isDate', () => {
+  it('reads the internal time, not an overridden valueOf', () => {
+    const validButLies = new Date(0);
+    validButLies.valueOf = () => Number.NaN;
+    const invalidButLies = new Date(Number.NaN);
+    invalidButLies.valueOf = () => 0;
+    assert.deepEqual(
+      [api.isDate(validButLies), api.isDate(invalidButLies)],
+      [true, false],
+    );
+  });
+  it('rejects an object that merely claims the Date brand', () => {
+    assert.equal(api.isDate({ [Symbol.toStringTag]: 'Date' }), false);
+  });
+  it('survives a hostile valueOf, because it never coerces', () => {
+    const hostile = {
+      [Symbol.toStringTag]: 'Date',
+      valueOf: () => {
+        throw new Error('engineered to throw');
+      },
+    };
+    assert.equal(api.isDate(hostile), false);
+  });
+  it('accepts a Date from another realm, which instanceof rejects', () => {
+    const otherRealmDate = vm.runInNewContext('new Date(0)');
+    assert.equal(otherRealmDate instanceof Date, false);
+    assert.equal(api.isDate(otherRealmDate), true);
+  });
+  it('accepts a Date subclass', () => {
+    class Timestamp extends Date {}
+    assert.equal(api.isDate(new Timestamp(0)), true);
   });
 });
 

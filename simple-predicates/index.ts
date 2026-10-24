@@ -100,6 +100,25 @@ export const isFunction = (
   value: unknown,
 ): value is (...args: never[]) => unknown => typeof value === 'function';
 
+/**
+ * A `Date`, excluding an invalid one (a `Date` whose time is `NaN`).
+ *
+ * Reads the internal time through `Date.prototype.getTime` rather than
+ * coercing with `Number`, which calls the value's own `valueOf` and so
+ * answers wrongly for a real `Date` that overrides it. The `catch` is how
+ * a missing internal slot is observed: `getTime` throws for anything that
+ * is not a `Date`, which is also what makes this correct across realms
+ * and immune to a spoofed `Symbol.toStringTag`. Unlike coercion, it never
+ * runs the value's own code.
+ */
+export const isDate = (value: unknown): value is Date => {
+  try {
+    return !Number.isNaN(Date.prototype.getTime.call(value));
+  } catch {
+    return false;
+  }
+};
+
 /** A number that is neither `NaN` nor `Infinity` nor `-Infinity`. */
 export const isFiniteNumber = (value: unknown): value is number =>
   Number.isFinite(value);
