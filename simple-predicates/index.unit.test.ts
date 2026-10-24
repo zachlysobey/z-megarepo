@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import vm from 'node:vm';
 import * as api from './index.ts';
 import { isNumber, isString, type SimplePredicate } from './index.ts';
 
@@ -32,6 +33,7 @@ const samples = {
   function: () => {},
   date: new Date(0),
   map: new Map(),
+  set: new Set(),
 };
 
 const numbers = [
@@ -92,8 +94,10 @@ const acceptance = {
     'class instance',
     'date',
     'map',
+    'set',
   ],
   isArray: ['empty array', 'array'],
+  isSet: ['set'],
   isFunction: ['function'],
   isFiniteNumber: numbers,
   isInteger: [
@@ -175,6 +179,22 @@ describe('isFunction', () => {
     class Thing {}
     assert.equal(api.isFunction(Thing), true);
     assert.throws(() => (Thing as unknown as () => void)(), TypeError);
+  });
+});
+
+describe('isSet', () => {
+  it('accepts a Set from another realm, which instanceof rejects', () => {
+    const otherRealm = vm.runInNewContext('new Set()');
+    assert.equal(otherRealm instanceof Set, false);
+    assert.equal(api.isSet(otherRealm), true);
+  });
+  it('accepts a value that claims the brand, which is the documented trade-off', () => {
+    assert.equal(api.isSet({ [Symbol.toStringTag]: 'Set' }), true);
+  });
+  it('keeps a union member usable at its own element type', () => {
+    const contains = (numbers: string | Set<number>) =>
+      api.isSet(numbers) ? numbers.has(1) : false;
+    assert.equal(contains(new Set([1])), true);
   });
 });
 
