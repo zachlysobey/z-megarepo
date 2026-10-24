@@ -81,6 +81,45 @@ export const isFalsy: SimplePredicate = (value) => !value;
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value !== null;
 
+/**
+ * An object literal or an `Object.create(null)` object — an object whose
+ * prototype is `Object.prototype` or `null`. Arrays, dates, class
+ * instances, functions, and `arguments` objects are not plain objects.
+ *
+ * The prototype is compared against the chain's root rather than against
+ * `Object.prototype` directly, so an object from another realm — which
+ * has its own `Object.prototype` — is still plain. An `Object.create(null)`
+ * object is also its own chain root, so the own `constructor` is what
+ * separates a realm's `Object.prototype` from one of those.
+ *
+ * The brand check is load-bearing and not redundant with the prototype
+ * walk: an `arguments` object's prototype *is* `Object.prototype`, and
+ * only its brand distinguishes it. The expression is inlined rather than
+ * shared, so this predicate stands on its own.
+ */
+export const isPlainObject = (
+  value: unknown,
+): value is Record<string, unknown> => {
+  if (
+    !isObject(value) ||
+    Object.prototype.toString.call(value).slice(8, -1) !== 'Object'
+  ) {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype === null) {
+    return true;
+  }
+  let root = prototype;
+  while (Object.getPrototypeOf(root) !== null) {
+    root = Object.getPrototypeOf(root);
+  }
+  return (
+    prototype === root &&
+    Object.prototype.hasOwnProperty.call(prototype, 'constructor')
+  );
+};
+
 /** An array of any element type. */
 export const isArray = (value: unknown): value is readonly unknown[] =>
   Array.isArray(value);
