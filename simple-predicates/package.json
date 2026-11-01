@@ -1,6 +1,6 @@
 {
   "name": "z-simple-predicates",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tiny, dependency-free TypeScript library of type-narrowing predicates",
   "scripts": {
     "test": "node --test \"*.test.ts\"",
