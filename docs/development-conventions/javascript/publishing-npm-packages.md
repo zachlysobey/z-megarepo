@@ -1,35 +1,43 @@
 # Publishing npm packages
 
 Packages with a `.github/workflows/<package>-release.yml` workflow
-publish to npm when a version bump is merged to `master`.
+publish to npm automatically for every merged PR that touches them.
 
 ## Releasing
 
-Bump the version as part of your PR, from the package directory:
+The merged PR's title, a [Conventional Commit], picks the bump:
 
-```bash
-npm version <major|minor|patch> --no-git-tag-version
-```
+| PR title      | Release |
+| ------------- | ------- |
+| `<type>!: …`  | major   |
+| `feat: …`     | minor   |
+| anything else | patch   |
 
-Merging runs the package's `<package>-release` GitHub Actions workflow,
-which triggers whenever `package.json` changes on `master`. If that
-version is not yet on npm, it re-runs typecheck and tests, runs
-`npm publish` using
-[trusted publishing](https://docs.npmjs.com/trusted-publishers)
-(OIDC — no token secrets; provenance attestations are generated
-automatically), and tags the commit `<package>-v<version>`.
+Don't bump versions by hand. On merge, the package's `<package>-release`
+workflow re-runs typecheck and tests, bumps the version, adds a
+`CHANGELOG.md` entry from the PR title, and runs `npm publish` using
+[trusted publishing] (OIDC — no token secrets; provenance attestations
+are generated automatically). It then pushes a
+`chore(<package>): release v<version> [skip ci]` commit and a
+`<package>-v<version>` tag to `master` with the `RELEASE_DEPLOY_KEY`
+deploy key, which bypasses the `master` ruleset.
 
-Merges that leave the version unchanged publish nothing.
+Re-running a failed release is safe; each PR is released at most once.
+
+[Conventional Commit]: https://www.conventionalcommits.org/
+[trusted publishing]: https://docs.npmjs.com/trusted-publishers
 
 ## Adding a new package
 
 1. Copy an existing package's `<package>-release.yml` workflow and
    rename it for the new package.
-2. Trusted publishing cannot create a package, so publish once manually
-   to create it: `npm login && npm publish`. A throwaway placeholder
-   version such as `0.0.0-stage` works, leaving the first real version
-   to the workflow.
-3. Configure the trusted publisher (requires 2FA), where `<npm-name>`
+2. Start the package at version `0.0.0` and list `CHANGELOG.md` in
+   `files`; the release workflow creates the changelog. The `feat` PR
+   that adds the package releases `0.1.0`.
+3. Before merging, create the package on npm, which trusted publishing
+   cannot do: publish a throwaway `0.0.0-stage` version by hand with
+   `npm login && npm publish`.
+4. Configure the trusted publisher (requires 2FA), where `<npm-name>`
    is the `name` in `package.json`, e.g. `z-time-units`:
 
    ```bash
