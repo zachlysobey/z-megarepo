@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Tiny, dependency-free TypeScript library of curried functional helpers",
   "scripts": {
-    "test": "node --test \"*.test.ts\"",
+    "test": "node --test \"src/*.test.ts\"",
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "prepack": "npm run build"

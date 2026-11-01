@@ -44,10 +44,10 @@ One-time setup (not yet done):
 
 ## Layout
 
-One module per export, named after the export it contains, with its tests
-co-located and the public surface re-exported from `index.ts`. Adding a
-helper means adding `<name>.ts`, `<name>.unit.test.ts`, and one line to
-`index.ts`.
+Sources live in `src/`: one module per export, named after the export it
+contains, with its tests co-located and the public surface re-exported
+from `src/index.ts`. Adding a helper means adding `src/<name>.ts`,
+`src/<name>.unit.test.ts`, and one line to `src/index.ts`.
 
 ## Notes
 

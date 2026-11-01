@@ -4,7 +4,7 @@ A tiny, dependency-free TypeScript library of curried functional helpers
 for point-free pipelines.
 
 One module per helper, each named after its single export, re-exported
-from [`index.ts`](https://github.com/zachlysobey/z-megarepo/blob/master/functional/index.ts).
+from [`index.ts`](https://github.com/zachlysobey/z-megarepo/blob/master/functional/src/index.ts).
 
 ## Usage
 
@@ -107,8 +107,8 @@ reject(isString)(mixed); // unknown[]
 
 The only exported type is `Unary<In, Out>`.
 
-Each helper lives in its own module — see `compose.ts`, `filter.ts` and
-friends for exact signatures and semantics.
+Each helper lives in its own module under `src/` — see `compose.ts`,
+`filter.ts` and friends for exact signatures and semantics.
 
 ## Semantics
 
