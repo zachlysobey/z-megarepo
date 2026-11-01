@@ -1,6 +1,6 @@
 {
   "name": "z-functional",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tiny, dependency-free TypeScript library of curried functional helpers",
   "scripts": {
     "test": "node --test \"src/*.test.ts\"",
