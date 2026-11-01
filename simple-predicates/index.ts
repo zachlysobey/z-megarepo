@@ -100,6 +100,31 @@ export const isFunction = (
   value: unknown,
 ): value is (...args: never[]) => unknown => typeof value === 'function';
 
+/**
+ * A thenable — an object or function with a callable `then`. This is what
+ * `await` and `Promise.resolve` treat as a promise, whatever its origin.
+ *
+ * Narrows to `then`'s own shape rather than to `PromiseLike`, which
+ * additionally promises that calling `then` returns another thenable.
+ * Only calling `then` could establish that, so the return type stays
+ * `unknown` and `value.then(...).then(...)` does not typecheck. `await`
+ * still yields `unknown`, and a real `Promise` still satisfies the shape.
+ */
+export const isThenable = (
+  value: unknown,
+): value is {
+  then: (
+    onfulfilled?: (value: unknown) => unknown,
+    onrejected?: (reason: unknown) => unknown,
+  ) => unknown;
+} =>
+  // `'then' in value` is what lets the property read typecheck without a
+  // type assertion. It changes nothing at runtime: a `then` that is
+  // present but not callable is still rejected by `isFunction` below.
+  (isObject(value) || isFunction(value)) &&
+  'then' in value &&
+  isFunction(value.then);
+
 /** A number that is neither `NaN` nor `Infinity` nor `-Infinity`. */
 export const isFiniteNumber = (value: unknown): value is number =>
   Number.isFinite(value);
