@@ -25,10 +25,14 @@ Common types: feat, fix, docs, chore, refactor, test, ci
 
 - **Primary branch**: `master` (not `main`)
 - Trunk-based development; keep branches up-to-date with `master`
+- **Published packages**: keep PRs that change a published package (one
+  with a `<package>-release.yml` workflow) to that one package. Its PR
+  title picks the release; see [Publishing npm packages].
 
 See [git conventions] for branch naming and workflow details.
 
 [git conventions]: ./docs/development-conventions/git/README.md
+[Publishing npm packages]: ./docs/development-conventions/javascript/publishing-npm-packages.md
 
 ## Code style
 

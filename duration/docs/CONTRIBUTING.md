@@ -15,9 +15,9 @@ nvm use && npm install
 
 ## Releasing
 
-Bump the version in your PR with
-`npm version <major|minor|patch> --no-git-tag-version`; merging it to
-`master` publishes to npm via the `duration-release` workflow. See
+Merging a `fix` or `feat` PR to `master` publishes to npm via the
+`duration-release` workflow, with the version bump taken from the PR
+title. See
 [Publishing npm packages](../../docs/development-conventions/javascript/publishing-npm-packages.md).
 
 ## Notes
