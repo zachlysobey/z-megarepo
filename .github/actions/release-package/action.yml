@@ -1,0 +1,121 @@
+name: Release package
+description: >-
+  Releases a package to npm for every merged PR that touches it, with the
+  bump taken from the PR title (breaking: major, feat: minor, anything
+  else: patch), then pushes the version bump, changelog entry, and tag to
+  master. Expects master to be checked out with full history and push
+  access.
+
+inputs:
+  package:
+    description: Package directory, e.g. time-units
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Find the merged PR
+      id: pr
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" \
+          --jq 'map(select(.merged_at != null)) | .[0] // empty
+            | "number=\(.number)\ntitle=\(.title)"' >> "$GITHUB_OUTPUT"
+
+    - name: Choose the version bump
+      id: bump
+      shell: bash
+      env:
+        PACKAGE: ${{ inputs.package }}
+        NUMBER: ${{ steps.pr.outputs.number }}
+        TITLE: ${{ steps.pr.outputs.title }}
+      run: |
+        if [ -z "$NUMBER" ]; then
+          echo "No merged PR for $GITHUB_SHA"
+          exit 0
+        fi
+        breaking='^[a-z]+(\([^)]*\))?!:'
+        feat='^feat(\([^)]*\))?:'
+        if [[ $TITLE =~ $breaking ]]; then bump=major
+        elif [[ $TITLE =~ $feat ]]; then bump=minor
+        else bump=patch
+        fi
+        if [ -n "$(git log --format=%H --grep="^Release-For: #$NUMBER$" -- "$PACKAGE")" ]; then
+          echo "#$NUMBER was already released"
+          exit 0
+        fi
+        echo "bump=$bump" >> "$GITHUB_OUTPUT"
+
+    - name: Setup Node.js
+      if: steps.bump.outputs.bump
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ${{ inputs.package }}/.nvmrc
+        cache: npm
+        cache-dependency-path: ${{ inputs.package }}/package-lock.json
+
+    - name: Install, typecheck, and test
+      if: steps.bump.outputs.bump
+      shell: bash
+      working-directory: ${{ inputs.package }}
+      run: npm ci && npm run typecheck && npm test
+
+    - name: Bump the version and changelog
+      id: version
+      if: steps.bump.outputs.bump
+      shell: bash
+      working-directory: ${{ inputs.package }}
+      env:
+        BUMP: ${{ steps.bump.outputs.bump }}
+        NUMBER: ${{ steps.pr.outputs.number }}
+        TITLE: ${{ steps.pr.outputs.title }}
+      run: |
+        version=$(npm version "$BUMP" --no-git-tag-version | tr -d v)
+        summary=$(sed -E 's/^[a-z]+(\([^)]*\))?!?: *//' <<< "$TITLE")
+        summary="$(tr '[:lower:]' '[:upper:]' <<< "${summary:0:1}")${summary:1}"
+        if [ "$BUMP" = major ]; then summary="**Breaking:** $summary"; fi
+        url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/pull/$NUMBER"
+        previous=$(tail -n +2 CHANGELOG.md 2> /dev/null || true)
+        {
+          printf '# Changelog\n\n## %s (%s)\n\n- %s\n  ([#%s](%s))\n' \
+            "$version" "$(date -u +%F)" "$summary" "$NUMBER" "$url"
+          if [ -n "$previous" ]; then printf '%s\n' "$previous"; fi
+        } > CHANGELOG.md.next
+        mv CHANGELOG.md.next CHANGELOG.md
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Publish
+      if: steps.bump.outputs.bump
+      shell: bash
+      working-directory: ${{ inputs.package }}
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        name=$(npm pkg get name | tr -d '"')
+        if npm view "$name@$VERSION" version > /dev/null 2>&1; then
+          echo "$name@$VERSION is already on npm"
+        else
+          npm publish
+        fi
+
+    - name: Push the release commit and tag
+      if: steps.bump.outputs.bump
+      shell: bash
+      env:
+        PACKAGE: ${{ inputs.package }}
+        NUMBER: ${{ steps.pr.outputs.number }}
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+        git add "$PACKAGE/package.json" "$PACKAGE/package-lock.json" "$PACKAGE/CHANGELOG.md"
+        git commit -q -m "chore($PACKAGE): release v$VERSION [skip ci]" -m "Release-For: #$NUMBER"
+        for attempt in 1 2 3; do
+          git push origin HEAD:master && break
+          if [ "$attempt" = 3 ]; then exit 1; fi
+          git pull --rebase origin master
+        done
+        git tag "$PACKAGE-v$VERSION"
+        git push origin "$PACKAGE-v$VERSION"

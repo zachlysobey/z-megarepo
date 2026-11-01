@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1 (2026-11-01)
+
+- Bump versions and changelogs from PR titles on release
+  ([#148](https://github.com/zachlysobey/z-megarepo/pull/148))
+
 ## 2.0.0 (2026-11-01)
 
 - **Breaking:** requires Node.js >=22, up from >=20

@@ -1,6 +1,6 @@
 {
   "name": "z-duration",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tiny TypeScript library for representing, converting, and normalizing fixed durations",
   "scripts": {
     "test": "node --test \"*.test.ts\"",
