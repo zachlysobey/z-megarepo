@@ -16,7 +16,7 @@ export function filter<In, Out extends In>(
 export function filter<In>(
   predicate: Unary<In, boolean>,
 ): Unary<readonly In[], In[]>;
-// Implementation signature — not visible to callers.
+/** Implementation signature — not visible to callers. */
 export function filter<In>(
   predicate: Unary<In, boolean>,
 ): Unary<readonly In[], In[]> {
