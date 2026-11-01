@@ -1,9 +1,10 @@
 name: Release package
 description: >-
-  Releases a package to npm when the merged PR's title is a fix, feat, or
-  breaking Conventional Commit, then pushes the version bump, changelog
-  entry, and tag to master. Expects master to be checked out with full
-  history and push access.
+  Releases a package to npm for every merged PR that touches it, with the
+  bump taken from the PR title (breaking: major, feat: minor, anything
+  else: patch), then pushes the version bump, changelog entry, and tag to
+  master. Expects master to be checked out with full history and push
+  access.
 
 inputs:
   package:
@@ -31,15 +32,15 @@ runs:
         NUMBER: ${{ steps.pr.outputs.number }}
         TITLE: ${{ steps.pr.outputs.title }}
       run: |
+        if [ -z "$NUMBER" ]; then
+          echo "No merged PR for $GITHUB_SHA"
+          exit 0
+        fi
         breaking='^[a-z]+(\([^)]*\))?!:'
         feat='^feat(\([^)]*\))?:'
-        fix='^fix(\([^)]*\))?:'
         if [[ $TITLE =~ $breaking ]]; then bump=major
         elif [[ $TITLE =~ $feat ]]; then bump=minor
-        elif [[ $TITLE =~ $fix ]]; then bump=patch
-        else
-          echo "Not a release: \"$TITLE\""
-          exit 0
+        else bump=patch
         fi
         if [ -n "$(git log --format=%H --grep="^Release-For: #$NUMBER$" -- "$PACKAGE")" ]; then
           echo "#$NUMBER was already released"

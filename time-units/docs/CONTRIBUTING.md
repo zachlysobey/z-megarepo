@@ -15,7 +15,7 @@ nvm use && npm install
 
 ## Releasing
 
-Merging a `fix` or `feat` PR to `master` publishes to npm via the
+Every merged PR that touches this package publishes it to npm via the
 `time-units-release` workflow, with the version bump taken from the PR
 title. See
 [Publishing npm packages](../../docs/development-conventions/javascript/publishing-npm-packages.md).

@@ -1,19 +1,17 @@
 # Publishing npm packages
 
 Packages with a `.github/workflows/<package>-release.yml` workflow
-publish to npm automatically when PRs that touch them are merged to
-`master`.
+publish to npm automatically for every merged PR that touches them.
 
 ## Releasing
 
-The merged PR's title, a [Conventional Commit], picks the release:
+The merged PR's title, a [Conventional Commit], picks the bump:
 
 | PR title      | Release |
 | ------------- | ------- |
-| `fix: …`      | patch   |
-| `feat: …`     | minor   |
 | `<type>!: …`  | major   |
-| anything else | none    |
+| `feat: …`     | minor   |
+| anything else | patch   |
 
 Don't bump versions by hand. On merge, the package's `<package>-release`
 workflow re-runs typecheck and tests, bumps the version, adds a
