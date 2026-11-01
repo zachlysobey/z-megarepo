@@ -37,13 +37,6 @@ Merges that leave the version unchanged publish nothing.
      --repo zachlysobey/z-megarepo --allow-publish --yes
    ```
 
-   Check it with `npm trust list <npm-name>`.
-
-## Troubleshooting
-
-If the workflow's `npm publish` step fails with `ENEEDAUTH`, the
-trusted publisher is missing or doesn't match the workflow — npm
-reports the rejected token exchange only at verbose log level. Run
-`npm trust list <npm-name>`, fix the configuration, then re-run the
-failed workflow run; it is safe to re-run, since it skips versions
-already on npm.
+   Check it with `npm trust list <npm-name>`. Without it, the workflow's
+   `npm publish` fails with `ENEEDAUTH`; fix it and re-run the failed
+   run.
