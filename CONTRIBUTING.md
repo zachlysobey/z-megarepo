@@ -24,7 +24,6 @@ Format: `<type>[(<scope>)]: <description>` (scope is optional)
 Common types: feat, fix, docs, chore, refactor, test, ci
 
 - **Primary branch**: `master` (not `main`)
-- **Merging**: use `merge` (not squash or rebase) when merging PRs
 - Trunk-based development; keep branches up-to-date with `master`
 
 See [git conventions] for branch naming and workflow details.
