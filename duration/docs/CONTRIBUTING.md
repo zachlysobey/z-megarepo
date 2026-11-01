@@ -15,29 +15,10 @@ nvm use && npm install
 
 ## Releasing
 
-Merging to `master` publishes to npm. The `duration-release`
-GitHub Actions workflow runs whenever `package.json` changes on
-`master`. If that version is not yet on npm, it re-runs typecheck and
-tests, runs `npm publish` using
-[trusted publishing](https://docs.npmjs.com/trusted-publishers)
-(OIDC — no token secrets; provenance attestations are generated
-automatically), and tags the commit `duration-v<version>`.
-
-To release, bump the version as part of your PR:
-
-```bash
-npm version <major|minor|patch> --no-git-tag-version
-```
-
-Merges that leave the version unchanged publish nothing.
-
-One-time setup for a new package:
-
-1. Trusted publishing cannot create a package, so publish once manually
-   from `duration/`: `npm login && npm publish`.
-2. On npmjs.com, under the package's Settings → Trusted publisher,
-   configure GitHub Actions with user `zachlysobey`, repository
-   `z-megarepo`, and workflow filename `duration-release.yml`.
+Bump the version in your PR with
+`npm version <major|minor|patch> --no-git-tag-version`; merging it to
+`master` publishes to npm via the `duration-release` workflow. See
+[Publishing npm packages](../../docs/development-conventions/javascript/publishing-npm-packages.md).
 
 ## Notes
 
