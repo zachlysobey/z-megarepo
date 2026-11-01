@@ -62,4 +62,12 @@ describe('compose', () => {
     const pipeline = compose(stringify, length, stringify, double, increment);
     assert.equal(pipeline(4), '2');
   });
+
+  it('extends past five functions by nesting', () => {
+    const pipeline = compose(
+      double,
+      compose(increment, increment, increment, increment, increment),
+    );
+    assert.equal(pipeline(0), 10);
+  });
 });

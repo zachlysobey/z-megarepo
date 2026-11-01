@@ -8,6 +8,10 @@ import type { Unary } from './Unary.ts';
  * ceremony — `compose(a, compose(b, c))` is `compose(a, b, c)` — and a
  * single function is returned unwrapped.
  *
+ * Typed for up to five functions. For longer pipelines, nest calls —
+ * `compose(f, compose(e, d, c, b, a))` — which associativity makes
+ * equivalent.
+ *
  * Deliberately not curried: every argument is the same kind of thing, so
  * there is no configuration to partially apply, and `compose(a)(b)` would
  * be indistinguishable from running the pipeline on a function value.

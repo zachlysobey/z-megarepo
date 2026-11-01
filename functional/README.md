@@ -62,6 +62,10 @@ compose(a, compose(b, c));
 
 A single function is returned unwrapped, so `compose(a) === a`.
 
+`compose` is typed for up to five functions. For longer pipelines, nest
+calls — associativity makes `compose(f, compose(e, d, c, b, a))` the same
+pipeline.
+
 ### Why compose is not curried
 
 The other helpers are curried because they take two different kinds of
@@ -98,7 +102,7 @@ reject(isString)(mixed); // unknown[]
 
 | Export | Signature | Notes |
 | --- | --- | --- |
-| `compose` | `compose(...fns)(value)` | Right to left; associative |
+| `compose` | `compose(...fns)(value)` | Right to left; up to five functions |
 | `map` | `map(fn)(values)` | Calls `fn` with the element only |
 | `filter` | `filter(predicate)(values)` | Narrows through type guards |
 | `reject` | `reject(predicate)(values)` | `filter` of the complement |
