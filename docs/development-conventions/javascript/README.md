@@ -26,6 +26,10 @@ See the [Node.js Version Management Guide](./node-version-management-guide.md)
 - Use exact versions in package.json for dependencies
 - Dependency updates are automated via [Renovate](../../../renovate.json)
 
+### Publishing
+
+See [Publishing npm packages](./publishing-npm-packages.md)
+
 ## Testing
 
 - [JavaScript Testing Guide](./testing-guide.md)

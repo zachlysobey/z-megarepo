@@ -15,31 +15,10 @@ nvm use && npm install
 
 ## Releasing
 
-Releases publish to npm automatically via the `duration-release`
-GitHub Actions workflow, which triggers on tags named
-`duration-v<version>`, verifies the tag matches `package.json`,
-re-runs typecheck and tests, and runs `npm publish` using
-[trusted publishing](https://docs.npmjs.com/trusted-publishers)
-(OIDC — no token secrets; provenance attestations are generated
-automatically).
-
-To cut a release:
-
-```bash
-npm version <major|minor|patch> --no-git-tag-version
-git commit -am "chore(duration): release v<version>"
-git tag duration-v<version>
-git push && git push origin duration-v<version>
-```
-
-One-time setup (not yet done):
-
-1. The very first version must be published manually — npm does not
-   allow trusted publishing to create a new package. From `duration/`:
-   `npm login && npm publish`.
-2. On npmjs.com, under the package's Settings → Trusted publisher,
-   configure GitHub Actions with user `zachlysobey`, repository
-   `z-megarepo`, and workflow filename `duration-release.yml`.
+Bump the version in your PR with
+`npm version <major|minor|patch> --no-git-tag-version`; merging it to
+`master` publishes to npm via the `duration-release` workflow. See
+[Publishing npm packages](../../docs/development-conventions/javascript/publishing-npm-packages.md).
 
 ## Notes
 
