@@ -50,7 +50,7 @@ runs:
 
     - name: Setup Node.js
       if: steps.bump.outputs.bump
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         node-version-file: ${{ inputs.package }}/.nvmrc
         cache: npm
