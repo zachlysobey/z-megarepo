@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import vm from 'node:vm';
 import * as api from './index.ts';
 import { isNumber, isString, type SimplePredicate } from './index.ts';
 
@@ -31,6 +32,8 @@ const samples = {
   'class instance': new (class Thing {})(),
   function: () => {},
   date: new Date(0),
+  error: new Error('sample'),
+  'type error': new TypeError('sample'),
   map: new Map(),
 };
 
@@ -91,9 +94,12 @@ const acceptance = {
     'null-prototype object',
     'class instance',
     'date',
+    'error',
+    'type error',
     'map',
   ],
   isArray: ['empty array', 'array'],
+  isError: ['error', 'type error'],
   isFunction: ['function'],
   isFiniteNumber: numbers,
   isInteger: [
@@ -175,6 +181,21 @@ describe('isFunction', () => {
     class Thing {}
     assert.equal(api.isFunction(Thing), true);
     assert.throws(() => (Thing as unknown as () => void)(), TypeError);
+  });
+});
+
+describe('isError', () => {
+  it('accepts a custom Error subclass', () => {
+    class CustomError extends Error {}
+    assert.equal(api.isError(new CustomError('sample')), true);
+  });
+  it('accepts an Error from another realm, which instanceof rejects', () => {
+    const otherRealm = vm.runInNewContext("new Error('sample')");
+    assert.equal(otherRealm instanceof Error, false);
+    assert.equal(api.isError(otherRealm), true);
+  });
+  it('accepts a value that claims the brand, which is the documented trade-off', () => {
+    assert.equal(api.isError({ [Symbol.toStringTag]: 'Error' }), true);
   });
 });
 
