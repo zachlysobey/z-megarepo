@@ -78,9 +78,3 @@ When asked to make changes on a branch that has an open PR:
    updates via `gh pr edit <number> --title "..." --body "..."`
 4. **If misaligned**: tell the user the new changes seem to serve a different
    purpose than the open PR, and suggest creating a new branch and PR instead
-
-## Merging
-
-- Use `merge` (not squash or rebase) when merging PRs
-- This is a repo convention — see
-  [git conventions](../../../docs/development-conventions/git/README.md)
