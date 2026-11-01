@@ -1,6 +1,6 @@
 {
   "name": "z-time-units",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Tiny, dependency-free TypeScript library for converting between fixed units of elapsed time",
   "scripts": {
     "test": "node --test \"*.test.ts\"",
@@ -22,7 +22,8 @@
   "sideEffects": false,
   "files": [
     "dist/index.js",
-    "dist/index.d.ts"
+    "dist/index.d.ts",
+    "CHANGELOG.md"
   ],
   "exports": {
     ".": {
