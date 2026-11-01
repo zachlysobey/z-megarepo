@@ -83,7 +83,7 @@ const notStrings = mixed.filter(asBase); // unknown[]
 
 ### Objects and functions
 
-`isObject`, `isArray`, `isFunction`
+`isObject`, `isArray`, `isFunction`, `isRegExp`
 
 ### Number refinements
 
@@ -110,6 +110,11 @@ predicate.
   class constructors. Those are function values but are not callable —
   invoking one without `new` throws — so a `true` result proves the value
   is a function, not that calling it will work.
+- **Built-ins are identified by brand, not by `instanceof`**, so values
+  that cross a realm boundary (an iframe, a worker, `node:vm`) are
+  recognized correctly. The trade-off is that a value can claim a brand
+  it does not have via `Symbol.toStringTag`: these predicates describe
+  shape, not provenance, and are not a security boundary.
 - **Refinements narrow to the base type**, not to a synthetic one:
   `isNonEmptyArray` narrows to `readonly unknown[]`, not to a
   `[unknown, ...unknown[]]` tuple. Encoding "non-empty" in the type
@@ -127,7 +132,7 @@ The whole package is unary predicates over one value. Deliberately absent:
   specs, edge cases, and opinions that go stale.
 - **Schemas, error messages, coercion, and parsing.** A predicate answers
   yes or no and says nothing about why.
-- **Built-in identification** — `isDate`, `isRegExp`, `isError`,
+- **Built-in identification** — `isDate`, `isError`,
   `isPromise`, `isMap`, `isSet`, `isPlainObject`, `isThenable`. Answering
   these properly means brand checks or internal-slot probes, prototype
   walks, cross-realm behaviour, and a spoofing trade-off to document —

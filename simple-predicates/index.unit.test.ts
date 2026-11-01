@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import vm from 'node:vm';
 import * as api from './index.ts';
 import { isNumber, isString, type SimplePredicate } from './index.ts';
 
@@ -31,6 +32,7 @@ const samples = {
   'class instance': new (class Thing {})(),
   function: () => {},
   date: new Date(0),
+  regexp: /x/,
   map: new Map(),
 };
 
@@ -91,9 +93,11 @@ const acceptance = {
     'null-prototype object',
     'class instance',
     'date',
+    'regexp',
     'map',
   ],
   isArray: ['empty array', 'array'],
+  isRegExp: ['regexp'],
   isFunction: ['function'],
   isFiniteNumber: numbers,
   isInteger: [
@@ -175,6 +179,17 @@ describe('isFunction', () => {
     class Thing {}
     assert.equal(api.isFunction(Thing), true);
     assert.throws(() => (Thing as unknown as () => void)(), TypeError);
+  });
+});
+
+describe('isRegExp', () => {
+  it('accepts a RegExp from another realm, which instanceof rejects', () => {
+    const otherRealm = vm.runInNewContext('/x/');
+    assert.equal(otherRealm instanceof RegExp, false);
+    assert.equal(api.isRegExp(otherRealm), true);
+  });
+  it('accepts a value that claims the brand, which is the documented trade-off', () => {
+    assert.equal(api.isRegExp({ [Symbol.toStringTag]: 'RegExp' }), true);
   });
 });
 
