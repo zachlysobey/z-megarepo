@@ -37,8 +37,7 @@ Merges that leave the version unchanged publish nothing.
      --repo zachlysobey/z-megarepo --allow-publish --yes
    ```
 
-   Check it with `npm trust list <npm-name>`. Leave out `--env`; the
-   release workflows don't use a GitHub environment.
+   Check it with `npm trust list <npm-name>`.
 
 ## Troubleshooting
 
