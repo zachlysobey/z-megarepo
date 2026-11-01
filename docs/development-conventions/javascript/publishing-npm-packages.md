@@ -29,6 +29,14 @@ Merges that leave the version unchanged publish nothing.
    to create it: `npm login && npm publish`. A throwaway placeholder
    version such as `0.0.0-stage` works, leaving the first real version
    to the workflow.
-3. On npmjs.com, under the package's Settings → Trusted publisher,
-   configure GitHub Actions with user `zachlysobey`, repository
-   `z-megarepo`, and workflow filename `<package>-release.yml`.
+3. Configure the trusted publisher (requires 2FA), where `<npm-name>`
+   is the `name` in `package.json`, e.g. `z-time-units`:
+
+   ```bash
+   npm trust github <npm-name> --file <package>-release.yml \
+     --repo zachlysobey/z-megarepo --allow-publish --yes
+   ```
+
+   Check it with `npm trust list <npm-name>`. Without it, the workflow's
+   `npm publish` fails with `ENEEDAUTH`; fix it and re-run the failed
+   run.
